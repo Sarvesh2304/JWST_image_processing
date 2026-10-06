@@ -242,8 +242,15 @@ class ProvenanceStore:
                 """
             )
 
-    def _connect(self) -> sqlite3.Connection:
-        return sqlite3.connect(self.path)
+    @contextlib.contextmanager
+    def _connect(self) -> Iterator[sqlite3.Connection]:
+        """Connection that commits on success, rolls back on error, and is always closed."""
+        connection = sqlite3.connect(self.path)
+        try:
+            with connection:
+                yield connection
+        finally:
+            connection.close()
 
     def add(self, activity: Activity) -> None:
         rows = [("input", k, v) for k, v in activity.inputs.items()]

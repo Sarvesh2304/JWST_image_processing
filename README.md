@@ -8,6 +8,13 @@ research-grade environment that combines:
 - simulations;
 - an AI assistant that separates measurement from interpretation.
 
+![NGC 3132 · JWST NIRCam F356W/F405N/F470N, made with astroledger from public archive data](docs/images/ngc3132_nircam_f356w_f405n_f470n_rgb.jpg)
+
+*NGC 3132 from public JWST program 2733 data, built by astroledger: R F470N (H₂), G F405N
+(Brackett-α), B F356W, representative colour. How it was made and validated:
+[update report](docs/lab-roadmap/update-2026-10-06.md); reproduce with
+[`examples/ngc3132_example.py`](examples/ngc3132_example.py).*
+
 ## Status
 
 **Phase 0 (honest baseline) is complete. Phase 1–2 tasks 5–12 are done; no full analysis pipeline yet.**
@@ -34,6 +41,7 @@ src/astroledger/    the new package (working name): core, io, viz, provenance, a
 tests/              unit tests, science tests (incl. documented legacy defects), legacy freeze check
 docs/lab-roadmap/   audit, architecture, roadmap, prioritised tasks (start here)
 legacy/             original prototype, frozen (checksummed)
+examples/           end-to-end examples on authentic archive data
 .github/workflows/  CI: lint + offline tests on Python 3.11 and 3.13
 .claude/            setup hook for Claude Code cloud sessions
 CLAUDE.md           project rules for AI-assisted development

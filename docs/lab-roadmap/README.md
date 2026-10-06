@@ -72,6 +72,8 @@ own-data pipeline → planning → assisted control → science workflows → sp
 | 29 | Example AI interactions | [08](08-workflows-and-interactions.md#29-example-ai-interactions-designed-behaviour) |
 | 30 | Long-term vision | [08](08-workflows-and-interactions.md#30-long-term-vision) |
 
+Progress report: [update-2026-10-06.md](update-2026-10-06.md) (tasks 1–12, validated on authentic JWST data).
+
 Supporting files:
 - [`audit_checks.py`](audit_checks.py): reproducible evidence for the audit.
 - [`etc_estimates.py`](etc_estimates.py): the exposure-time numbers behind the hardware configurations.

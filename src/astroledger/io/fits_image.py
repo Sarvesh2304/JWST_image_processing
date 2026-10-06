@@ -137,7 +137,12 @@ def open_images(
             products = [
                 _read_one(hdul, hdu, path, sha256, bad_bits) for hdu in _science_hdus(hdul, path)
             ]
-    reader_warnings = _unique(f"{w.category.__name__}: {w.message}" for w in caught)
+    unrelated = [w for w in caught if issubclass(w.category, ResourceWarning | DeprecationWarning)]
+    for w in unrelated:  # not about this file (e.g. garbage collection elsewhere): pass them on
+        warnings.warn_explicit(w.message, w.category, w.filename, w.lineno)
+    reader_warnings = _unique(
+        f"{w.category.__name__}: {w.message}" for w in caught if w not in unrelated
+    )
     for text in reader_warnings:
         log.warning("%s: %s", path.name, text)
     for product in products:
