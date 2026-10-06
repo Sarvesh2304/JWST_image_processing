@@ -1,0 +1,98 @@
+# %ECSV 1.0
+# ---
+# datatype:
+# - {name: label, datatype: int32, description: Unique source identification label number}
+# - {name: xcentroid, datatype: float64, format: .4f, description: X pixel value of the source centroid (0 indexed)}
+# - {name: ycentroid, datatype: float64, format: .4f, description: Y pixel value of the source centroid (0 indexed)}
+# - {name: sky_centroid.ra, unit: deg, datatype: float64}
+# - {name: sky_centroid.dec, unit: deg, datatype: float64}
+# - {name: aper_bkg_flux, unit: Jy, datatype: float64, format: .6e, description: The local background value calculated as the sigma-clipped
+#     median value in the background annulus aperture}
+# - {name: aper_bkg_flux_err, unit: Jy, datatype: float64, format: .6e, description: The standard error of the sigma-clipped median background
+#     value}
+# - {name: aper30_flux, unit: Jy, datatype: float64, format: .6e, description: Flux within the 30% encircled energy circular aperture}
+# - {name: aper30_flux_err, unit: Jy, datatype: float64, format: .6e, description: Flux error within the 30% encircled energy circular
+#     aperture}
+# - {name: aper50_flux, unit: Jy, datatype: float64, format: .6e, description: Flux within the 50% encircled energy circular aperture}
+# - {name: aper50_flux_err, unit: Jy, datatype: float64, format: .6e, description: Flux error within the 50% encircled energy circular
+#     aperture}
+# - {name: aper70_flux, unit: Jy, datatype: float64, format: .6e, description: Flux within the 70% encircled energy circular aperture}
+# - {name: aper70_flux_err, unit: Jy, datatype: float64, format: .6e, description: Flux error within the 70% encircled energy circular
+#     aperture}
+# - {name: aper_total_flux, unit: Jy, datatype: float64, format: .6e, description: Total aperture-corrected flux based on the 70% encircled
+#     energy circular aperture; should be used only for unresolved sources.}
+# - {name: aper_total_flux_err, unit: Jy, datatype: float64, format: .6e, description: Total aperture-corrected flux error based on the
+#     70% encircled energy circular aperture; should be used only for unresolved sources.}
+# - {name: aper70_abmag, datatype: float64, format: .6f, description: AB magnitude within the 70% encircled energy circular aperture}
+# - {name: is_extended, datatype: bool, description: Flag indicating whether the source is extended}
+# meta: !!omap
+# - {source: jw02733-o001_t001_nircam_f405n-f444w_cat.ecsv (JWST pipeline 2.0.1)}
+# - aperture_params:
+#     aperture_corrections: [3.338454246520996, 2.0038108825683594, 1.4280991554260254]
+#     aperture_ee: [30, 50, 70]
+#     aperture_radii: [1.1894677877426147, 1.7098894119262695, 3.0]
+#     bkg_aperture_inner_radius: 8.0
+#     bkg_aperture_outer_radius: 13.0
+# - version: {Python: 3.13.13, astropy: 7.2.0, gwcs: 1.0.3, jwst: 2.0.1, numpy: 2.4.4, photutils: 2.3.0, scipy: 1.17.1}
+# - __serialized_columns__:
+#     aper30_flux:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: &id001 !astropy.units.Unit {unit: Jy}
+#       value: !astropy.table.SerializedColumn {name: aper30_flux}
+#     aper30_flux_err:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper30_flux_err}
+#     aper50_flux:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper50_flux}
+#     aper50_flux_err:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper50_flux_err}
+#     aper70_flux:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper70_flux}
+#     aper70_flux_err:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper70_flux_err}
+#     aper_bkg_flux:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper_bkg_flux}
+#     aper_bkg_flux_err:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper_bkg_flux_err}
+#     aper_total_flux:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper_total_flux}
+#     aper_total_flux_err:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: aper_total_flux_err}
+#     sky_centroid:
+#       __class__: astropy.coordinates.sky_coordinate.SkyCoord
+#       __info__: {description: ICRS Sky coordinate of the source centroid}
+#       dec: !astropy.table.SerializedColumn
+#         __class__: astropy.coordinates.angles.core.Latitude
+#         unit: &id002 !astropy.units.Unit {unit: deg}
+#         value: !astropy.table.SerializedColumn {name: sky_centroid.dec}
+#       frame: icrs
+#       ra: !astropy.table.SerializedColumn
+#         __class__: astropy.coordinates.angles.core.Longitude
+#         unit: *id002
+#         value: !astropy.table.SerializedColumn {name: sky_centroid.ra}
+#         wrap_angle: !astropy.coordinates.Angle
+#           unit: *id002
+#           value: 360.0
+#       representation_type: spherical
+# schema: astropy-2.0
+label xcentroid ycentroid sky_centroid.ra sky_centroid.dec aper_bkg_flux aper_bkg_flux_err aper30_flux aper30_flux_err aper50_flux aper50_flux_err aper70_flux aper70_flux_err aper_total_flux aper_total_flux_err aper70_abmag is_extended
+102 321.18868532411284 634.9919199502467 151.73848869646224 -40.446827420389965 6.512075145792551e-08 5.718352265999408e-09 0.00023884405493408576 2.430100594967729e-07 0.00039957263403726453 3.0990437172804135e-07 0.000569120283524024 3.6450231521077774e-07 0.0008127601962364788 5.205454485033426e-07 17.011989839504146 False
+225 1714.2141908280034 1632.9934860084295 151.77178800566787 -40.430772583150784 3.202767118182237e-08 1.926091423457865e-09 8.631677248092564e-05 1.3970616672211649e-07 0.0001414108915178965 1.7824476792218798e-07 0.00019622380179145924 2.1036268241057611e-07 0.00028022704561286675 3.0041876908369693e-07 18.168120785461905 False
+122 609.105506615296 809.8887803557569 151.7447034141935 -40.44330384315524 3.1475043016371274e-08 1.007810997413804e-09 3.3582115263133305e-05 9.014539819366873e-08 5.548987819511053e-05 1.1563519426568465e-07 7.740121813703677e-05 1.3793724420357684e-07 0.00011053661425044776 1.969880619489215e-07 19.178130510888685 False
