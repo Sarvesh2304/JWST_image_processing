@@ -37,6 +37,7 @@ packages = ["src/astroledger"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["tests"]  # test helpers such as fits_factory.py
 addopts = ["-ra", "--strict-markers", "-m", "not remote"]
 xfail_strict = true
 markers = [

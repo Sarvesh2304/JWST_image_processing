@@ -10,7 +10,7 @@ research-grade environment that combines:
 
 ## Status
 
-**Phase 0 (honest baseline) is complete; Phase 1 (JWST/HST product core) is next. There is no working science pipeline yet.**
+**Phase 0 (honest baseline) is complete; Phase 1 (JWST/HST product core) is in progress.** The package can read JWST, HST and plain FITS images correctly (`astroledger.io.open_image`); there is no measurement pipeline yet.
 
 - A code and scientific audit of the original prototype found that it cannot produce trustworthy
   measurements:
@@ -28,8 +28,8 @@ research-grade environment that combines:
 ## Repository layout
 
 ```
-src/astroledger/    the new package (working name; skeleton only so far)
-tests/              test suite: legacy freeze check, documented legacy defects (tests/science/)
+src/astroledger/    the new package (working name): core product types and the FITS image reader
+tests/              unit tests, science tests (incl. documented legacy defects), legacy freeze check
 docs/lab-roadmap/   audit, architecture, roadmap, prioritised tasks (start here)
 legacy/             original prototype, frozen (checksummed)
 .github/workflows/  CI: lint + offline tests on Python 3.11 and 3.13

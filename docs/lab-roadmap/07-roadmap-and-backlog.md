@@ -262,7 +262,9 @@ Each task is sized for one or two sessions with Claude Code, and has a concrete 
 **Progress:**
 - Tasks 1–2 done: README corrected, fabricated filenames removed, legacy frozen in `legacy/` with a checksum test.
 - Tasks 3–4 done: `pyproject.toml` + `uv.lock` + `src/astroledger/`, ruff, CI on Python 3.11/3.13; `tests/science/test_legacy_defects.py` documents 7 legacy defects as strict expected failures.
-- **Phase 0 complete. Next: task 5.**
+- **Phase 0 complete.**
+- Task 5 done: `astroledger.io.open_image` / `open_images` → `ImageProduct` (SCI/ERR/DQ by EXTNAME, unchanged pixels, NaN + mission-aware DQ mask, raw DQ kept, BUNIT incl. HST/camera forms, celestial WCS or None, both headers, file SHA-256, reader notes); tested on JWST cal/i2d/rate/uncal, HST two-chip flt and drz, and plain camera frames.
+- **Next: task 6** (`Bandpass.from_header`).
 
 | # | Task | Done when |
 |--:|------|-----------|
