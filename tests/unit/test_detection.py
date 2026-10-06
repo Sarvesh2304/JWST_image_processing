@@ -82,3 +82,23 @@ def test_parameters_are_recorded(tmp_path, nsigma):
     det = detect(_field(tmp_path / "f.fits"), nsigma=nsigma)
     assert det.catalog.meta["params"]["nsigma"] == nsigma
     assert det.params["threshold"] == "nsigma x unconvolved background RMS"
+
+
+def test_bright_neighbour_flag(tmp_path):
+    stars = [(100.0, 100.0), (120.0, 100.0), (200.0, 200.0)]
+    img = _field(tmp_path / "f.fits", stars=stars)
+    ny, nx = img.data.shape
+    yy, xx = np.mgrid[:ny, :nx]
+    img.data[:] += (400.0 * np.exp(-((xx - 100.0) ** 2 + (yy - 100.0) ** 2) / (2 * 1.2**2))).astype(
+        "float32"
+    )
+    cat = detect(img).catalog
+    near = cat[np.hypot(cat["x"] - 120.0, cat["y"] - 100.0) < 1]
+    far = cat[np.hypot(cat["x"] - 200.0, cat["y"] - 200.0) < 1]
+    assert near["near_bright_source"][0] and not far["near_bright_source"][0]
+
+
+def test_deblending_is_opt_in(tmp_path):
+    img = _field(tmp_path / "f.fits")
+    assert detect(img).params["deblend"] is False
+    assert detect(img, deblend=True).params["deblend"] is True

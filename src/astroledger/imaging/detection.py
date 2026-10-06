@@ -11,8 +11,14 @@ Method (photutils conventions):
    Smoothing lowers the noise of the convolved image, so this threshold is conservative. Using
    the convolved image's own RMS instead would inflate false detections (see
    ``tests/science/test_legacy_defects.py``).
-4. **Segmentation.** At least ``n_pixels`` connected pixels above threshold, then deblending.
-5. **False-positive estimate.** The same detection run on the negated background-subtracted
+4. **Segmentation.** At least ``n_pixels`` connected pixels above threshold. Deblending is
+   optional and off by default (as in the JWST pipeline): on JWST data it splits bright stars'
+   wings and diffraction spikes into many spurious sources.
+5. **Bright-neighbour flag.** ``near_bright_source`` marks detections within
+   ``bright_radius`` pixels of a source more than ``bright_ratio`` times brighter: candidate
+   PSF wings or diffraction-spike fragments. It is a heuristic flag, not a removal, and it
+   cannot catch spikes from bright stars that lie outside the image.
+6. **False-positive estimate.** The same detection run on the negated background-subtracted
    image. Real sources are positive, so detections there estimate how many positive
    detections are noise.
 
@@ -50,7 +56,8 @@ class Detections:
     ----------
     catalog : astropy.table.QTable
         One row per source: ``label, x, y, ra, dec, area, semimajor_axis, semiminor_axis,
-        ellipticity, fwhm, flux, flux_err, snr``. Flux in Jy when the image is flux-calibrated.
+        ellipticity, fwhm, flux, flux_err, snr, near_bright_source``. Flux in Jy when the image
+        is flux-calibrated.
     segmentation : photutils.segmentation.SegmentationImage or None
         Segment labels (None when nothing was detected).
     background, background_rms : numpy.ndarray
@@ -112,6 +119,16 @@ def _background(data, mask, box_size, filter_size, exclude_percentile=10.0):
     )
 
 
+def _near_bright(table: QTable, ratio: float, radius: float) -> np.ndarray:
+    flux = np.asarray(table["flux"].value, dtype=float)
+    x, y = np.asarray(table["x"], dtype=float), np.asarray(table["y"], dtype=float)
+    flag = np.zeros(len(table), dtype=bool)
+    for i in np.flatnonzero(np.isfinite(flux) & (flux > 0)):
+        distance = np.hypot(x - x[i], y - y[i])
+        flag |= (distance > 0) & (distance < radius) & (flux * ratio < flux[i])
+    return flag
+
+
 @step("imaging.detect", version="1")
 def detect(
     image: ImageProduct,
@@ -121,8 +138,10 @@ def detect(
     n_pixels: int = 5,
     box_size: int = 64,
     filter_size: int = 3,
-    deblend: bool = True,
+    deblend: bool = False,
     estimate_false_positives: bool = True,
+    bright_ratio: float = 50.0,
+    bright_radius: float = 60.0,
 ) -> Detections:
     """Detect sources in an image (see module docstring for the method).
 
@@ -139,9 +158,11 @@ def detect(
     box_size, filter_size : int
         Background mesh size and median-filter size, in pixels / meshes.
     deblend : bool
-        Split blended sources.
+        Split blended sources (off by default; see module notes).
     estimate_false_positives : bool
         Also run the detection on the negated image.
+    bright_ratio, bright_radius : float
+        Settings of the ``near_bright_source`` flag (flux ratio, radius in pixels).
     """
     mask = np.asarray(image.mask) if image.mask is not None else ~np.isfinite(image.data)
     data = np.where(mask, 0.0, np.asarray(image.data, dtype=float))
@@ -177,6 +198,8 @@ def detect(
         "box_size": box_size,
         "filter_size": filter_size,
         "deblend": deblend,
+        "bright_ratio": bright_ratio,
+        "bright_radius_pix": bright_radius,
         "threshold": "nsigma x unconvolved background RMS",
         "unit_conversion": conversion,
     }
@@ -217,6 +240,7 @@ def detect(
             table["flux_err"] = np.asarray(cat.segment_flux_err, dtype=float) * unit
             with np.errstate(divide="ignore", invalid="ignore"):
                 table["snr"] = table["flux"] / table["flux_err"]
+        table["near_bright_source"] = _near_bright(table, bright_ratio, bright_radius)
     table.meta.update(
         {
             "params": params,

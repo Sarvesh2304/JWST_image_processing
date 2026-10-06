@@ -270,7 +270,7 @@ Each task is sized for one or two sessions with Claude Code, and has a concrete 
 - Task 9 done: `astroledger.archives.mast` (astroquery search with bandpass resolution) and `archives.cloud` (MAST's public AWS copy: listing, ETag-verified fetch, range-request cutouts with budget ledger). Live MAST API search is untested here because the environment blocks `mast.stsci.edu`; S3 access is live-tested.
 - Task 10 done: `astroledger inspect FILE [--json]`.
 - Task 11 done: `astroledger.photometry.aperture_photometry_table`; on authentic NGC 3132 F405N data it reproduces the JWST pipeline catalogue (jwst 2.0.1) to <1e-6 in flux and identically in error; authentic stamps in `tests/data/real` keep this in CI.
-- Task 12 done: `astroledger.imaging.detect` (two-pass background, matched filter, threshold from unconvolved RMS, deblending, negative-image false-positive estimate with locations). On real data: 34/34 pipeline sources on clean sky recovered, 4 negative-image detections there; inside the nebula, false positives concentrate where the background model cannot follow structured emission.
+- Task 12 done: `astroledger.imaging.detect` (two-pass background, matched filter, threshold from unconvolved RMS, optional deblending (off by default, as in the JWST pipeline, because it shreds bright stars' wings), `near_bright_source` heuristic flag for PSF wings/spike fragments, negative-image false-positive estimate with locations). On real data: 34/34 pipeline sources on clean sky recovered, 4 negative-image detections there; inside the nebula, false positives concentrate where the background model cannot follow structured emission.
 - **Next: task 13** (injection–recovery completeness).
 
 | # | Task | Done when |
