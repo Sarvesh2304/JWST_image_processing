@@ -42,12 +42,15 @@ New code goes into the package described in `docs/lab-roadmap/02-target-architec
    Trusted-Automation plan is running. Actions toward a safe state (park, close, abort) are always allowed.
 
 ## Environment notes (Claude Code cloud sessions, including the iPad app)
-- The SessionStart hook (`.claude/hooks/session-start.sh`) creates `.venv` from `legacy/requirements.txt` plus ruff and pytest, and puts it on `PATH` with `MPLBACKEND=Agg`.
+- The SessionStart hook (`.claude/hooks/session-start.sh`) creates `.venv` with `pip install -e ".[dev,legacy]"` and puts it on `PATH` with `MPLBACKEND=Agg`.
+- Dependencies are declared in `pyproject.toml` (extras: `archives`, `imaging`, `legacy`, `dev`) and locked in `uv.lock`. After changing dependencies, run `uv lock`; CI uses `uv sync --locked`.
 - Commands:
   - audit checks: `python docs/lab-roadmap/audit_checks.py`;
   - estimates: `python docs/lab-roadmap/etc_estimates.py`;
-  - lint: `ruff check <file>`;
-  - tests: `pytest` (once `tests/` exists).
+  - lint: `ruff check .` and `ruff format --check src tests`;
+  - tests: `pytest` (offline; tests needing archives are marked `remote` and excluded by default).
+- `tests/science/test_legacy_defects.py` holds strict expected failures against `legacy/`. When new
+  code replaces a legacy function, add a *passing* test for it citing the same audit item.
 - Archive access needs the cloud environment's network policy to allow the astronomy hosts listed in
   `docs/lab-roadmap/README.md` ("Using this from the iPad"). The default policy blocks `mast.stsci.edu`.
 - The container is ephemeral. Commit and push work. Never commit FITS data (`*.fits` is gitignored).

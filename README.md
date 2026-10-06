@@ -10,7 +10,7 @@ research-grade environment that combines:
 
 ## Status
 
-**Phase 0 (honest baseline) is in progress. There is no working science pipeline yet.**
+**Phase 0 (honest baseline) is complete; Phase 1 (JWST/HST product core) is next. There is no working science pipeline yet.**
 
 - A code and scientific audit of the original prototype found that it cannot produce trustworthy
   measurements:
@@ -28,11 +28,14 @@ research-grade environment that combines:
 ## Repository layout
 
 ```
+src/astroledger/    the new package (working name; skeleton only so far)
+tests/              test suite: legacy freeze check, documented legacy defects (tests/science/)
 docs/lab-roadmap/   audit, architecture, roadmap, prioritised tasks (start here)
 legacy/             original prototype, frozen (checksummed)
-tests/              test suite (currently: the legacy freeze check)
+.github/workflows/  CI: lint + offline tests on Python 3.11 and 3.13
 .claude/            setup hook for Claude Code cloud sessions
 CLAUDE.md           project rules for AI-assisted development
+pyproject.toml, uv.lock   package metadata, optional extras, locked dependencies
 ```
 
 ## Working on it
@@ -41,11 +44,15 @@ CLAUDE.md           project rules for AI-assisted development
 - **Run the checks locally:**
 
   ```bash
-  python -m venv .venv && source .venv/bin/activate
-  pip install -r legacy/requirements.txt pytest
-  pytest                                  # freeze check
-  python docs/lab-roadmap/audit_checks.py # reproduces the audit's findings
+  uv sync --extra dev --extra legacy      # or: pip install -e ".[dev,legacy]"
+  uv run pytest                           # freeze check + documented legacy defects (expected failures)
+  uv run ruff check .
+  uv run python docs/lab-roadmap/audit_checks.py   # the audit's original evidence script
   ```
+
+  `tests/science/test_legacy_defects.py` states what correct code must do. Each test fails
+  against the frozen legacy code and is marked as an expected failure. The new package must
+  pass equivalent tests.
 
 - **Claude Code** sessions (including from the Claude iPad app) install these dependencies automatically.
   Access to astronomy archives requires allowing their hosts in the cloud environment's network

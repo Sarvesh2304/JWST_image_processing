@@ -1,7 +1,7 @@
 #!/bin/bash
 # SessionStart hook for Claude Code cloud sessions (claude.ai/code, Claude app on iPad/phone/desktop).
-# Creates a project virtualenv with the scientific Python stack so the code, the audit checks and
-# (later) the test suite run immediately in a fresh cloud container. Idempotent and non-interactive.
+# Creates a project virtualenv with the package and its test dependencies so the code, the audit
+# checks and the test suite run immediately in a fresh cloud container. Idempotent and non-interactive.
 set -euo pipefail
 
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
@@ -16,9 +16,9 @@ if [ ! -x "$VENV/bin/python" ]; then
 fi
 
 "$VENV/bin/python" -m pip install --quiet --upgrade pip
-"$VENV/bin/python" -m pip install --quiet -r legacy/requirements.txt
-# Developer tools: linter and test runner
-"$VENV/bin/python" -m pip install --quiet ruff pytest
+# The package in editable mode, with developer tools (pytest, ruff) and the frozen legacy
+# prototype's dependencies (needed by tests/science/test_legacy_defects.py).
+"$VENV/bin/python" -m pip install --quiet -e ".[dev,legacy]"
 
 # Make the venv the default python for the rest of the session; use a headless matplotlib backend.
 {

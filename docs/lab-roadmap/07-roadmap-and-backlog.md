@@ -259,7 +259,10 @@ Scores 1–5. Priority: P0 (now) → P3 (later). Dependency impact = how much la
 
 Each task is sized for one or two sessions with Claude Code, and has a concrete "done when".
 
-**Progress:** tasks 1–2 done (README corrected, fabricated filenames removed, legacy frozen in `legacy/` with a checksum test).
+**Progress:**
+- Tasks 1–2 done: README corrected, fabricated filenames removed, legacy frozen in `legacy/` with a checksum test.
+- Tasks 3–4 done: `pyproject.toml` + `uv.lock` + `src/astroledger/`, ruff, CI on Python 3.11/3.13; `tests/science/test_legacy_defects.py` documents 7 legacy defects as strict expected failures.
+- **Phase 0 complete. Next: task 5.**
 
 | # | Task | Done when |
 |--:|------|-----------|
