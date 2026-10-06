@@ -1,5 +1,11 @@
 # 🌌 JWST Image Processing Pipeline
 
+> **2026-10 audit and roadmap:** a code and scientific review of this repository, plus the plan to evolve it into a
+> personal AI astrophysics laboratory, is in [`docs/lab-roadmap/`](docs/lab-roadmap/README.md). The audit found that the
+> scripts below are a visualisation prototype: several claims in this README ("publication-quality", NIRSpec/MIRI support,
+> a complete calibration pipeline) are not met, and the sample image below is **synthetic**. See
+> [the audit](docs/lab-roadmap/01-repository-audit.md) before using any output scientifically.
+
 A comprehensive Python toolkit for downloading, processing, and visualizing **REAL** James Webb Space Telescope (JWST) data using Astropy and other scientific Python libraries. **Successfully tested with actual JWST observations!**
 
 ![Sample JWST Processing](jwst_data/visualizations/sample_jwst_processing.png)

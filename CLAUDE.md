@@ -1,0 +1,57 @@
+# CLAUDE.md: context for Claude sessions on this repository
+
+## What this project is
+A JWST image-processing prototype that is being evolved into a **personal AI astrophysics laboratory**:
+- real archive data (JWST, HST, Gaia, …);
+- the owner's future telescope;
+- literature;
+- simulations;
+- an evidence-graded AI assistant.
+
+The full analysis and plan are in `docs/lab-roadmap/`. **Read `docs/lab-roadmap/README.md` first.**
+The implementation task list is in `docs/lab-roadmap/07-roadmap-and-backlog.md` §27.
+
+## Current state (audit of commit cccbb2c)
+The nine top-level `*.py` scripts are the **legacy prototype**. They are scientifically invalid:
+- negative clipping causes false detections;
+- the main pipeline cannot read JWST multi-extension FITS;
+- bandpasses are mislabelled;
+- `jwst_real_data_demo.py` saves archive files under fabricated target/filter names.
+
+Do not build on them. `docs/lab-roadmap/audit_checks.py` reproduces the defects.
+New code goes into the package described in `docs/lab-roadmap/02-target-architecture.md` §21 (`src/astrolab/`).
+
+## Scientific rules (non-negotiable)
+1. **Never invent data.** No fabricated measurements, catalogue matches, object identities, papers,
+   bibcodes, DOIs, program IDs or telescope metadata. Unknown means "unknown".
+2. **Evidence levels.** Label claims L1 Observation (measured), L2 Inference (measurement + cited
+   knowledge), or L3 Hypothesis (possible; state how to test). Never present L3 as L1.
+3. **Units, uncertainties, masks, WCS and bandpass travel with every array.** Never clip, smooth or
+   stretch science arrays. Display transforms belong in the display layer only.
+4. **Respect instrument specifics:**
+   - JWST data are in the `SCI`/`ERR`/`DQ` extensions;
+   - the NIRISS bandpass is in `PUPIL` when `FILTER=CLEAR`;
+   - NIRCam pupil-wheel filters pair with filter-wheel elements (e.g. `F444W`+`F405N` means F405N);
+   - wrap official pipelines (`jwst`, `calwf3`, drizzlepac); don't reinvent calibration.
+5. **Never rename archive files.** Keep `obs_id`, product URIs, `CAL_VER` and `CRDS_CTX` in provenance.
+6. **Deterministic algorithms for measurement.** LLMs and ML are for interfaces, retrieval,
+   classification and anomaly ranking, never for producing photometry or astrometry.
+7. **Hardware (future):** the AI only proposes plans in the typed DSL. A safety kernel validates
+   them, and consequential physical actions require the user's confirmation unless a signed
+   Trusted-Automation plan is running. Actions toward a safe state (park, close, abort) are always allowed.
+
+## Environment notes (Claude Code cloud sessions, including the iPad app)
+- The SessionStart hook (`.claude/hooks/session-start.sh`) creates `.venv` from `requirements.txt` plus ruff and pytest, and puts it on `PATH` with `MPLBACKEND=Agg`.
+- Commands:
+  - audit checks: `python docs/lab-roadmap/audit_checks.py`;
+  - estimates: `python docs/lab-roadmap/etc_estimates.py`;
+  - lint: `ruff check <file>`;
+  - tests: `pytest` (once `tests/` exists).
+- Archive access needs the cloud environment's network policy to allow the astronomy hosts listed in
+  `docs/lab-roadmap/README.md` ("Using this from the iPad"). The default policy blocks `mast.stsci.edu`.
+- The container is ephemeral. Commit and push work. Never commit FITS data (`*.fits` is gitignored).
+
+## Conventions
+- British spelling in documentation.
+- Code style: NumPy-style docstrings; `ruff` clean; type hints on public functions.
+- Network-dependent tests are marked and excluded from default CI.

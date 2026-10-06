@@ -67,3 +67,6 @@ coverage.xml
 
 # Logs
 *.log
+
+# Local virtual environment created by the Claude Code SessionStart hook
+.venv/
