@@ -15,6 +15,9 @@ dependencies = [
     "astropy>=6.0",
 ]
 
+[project.scripts]
+astroledger = "astroledger.cli:main"
+
 [project.optional-dependencies]
 # Archive access (Phase 1+).
 archives = ["astroquery>=0.4.7", "pyvo>=1.5", "requests>=2.31"]
