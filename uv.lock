@@ -20,6 +20,7 @@ dependencies = [
 archives = [
     { name = "astroquery" },
     { name = "pyvo" },
+    { name = "requests" },
 ]
 dev = [
     { name = "pytest" },
@@ -57,6 +58,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "pyvo", marker = "extra == 'archives'", specifier = ">=1.5" },
     { name = "reproject", marker = "extra == 'imaging'", specifier = ">=0.13" },
+    { name = "requests", marker = "extra == 'archives'", specifier = ">=2.31" },
     { name = "requests", marker = "extra == 'legacy'", specifier = ">=2.31" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.6" },
     { name = "scikit-image", marker = "extra == 'legacy'", specifier = ">=0.21" },

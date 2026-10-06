@@ -17,7 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # Archive access (Phase 1+).
-archives = ["astroquery>=0.4.7", "pyvo>=1.5"]
+archives = ["astroquery>=0.4.7", "pyvo>=1.5", "requests>=2.31"]
 # Image measurement (Phase 2+).
 imaging = ["photutils>=2.0", "reproject>=0.13", "scipy>=1.11", "matplotlib>=3.8"]
 # Dependencies of the frozen legacy prototype (legacy/requirements.txt), used by the defect tests.
