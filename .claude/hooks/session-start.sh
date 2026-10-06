@@ -18,7 +18,7 @@ fi
 "$VENV/bin/python" -m pip install --quiet --upgrade pip
 # The package in editable mode, with developer tools (pytest, ruff) and the frozen legacy
 # prototype's dependencies (needed by tests/science/test_legacy_defects.py).
-"$VENV/bin/python" -m pip install --quiet -e ".[dev,legacy]"
+"$VENV/bin/python" -m pip install --quiet -e ".[dev,legacy,imaging,archives]"
 
 # Make the venv the default python for the rest of the session; use a headless matplotlib backend.
 {
