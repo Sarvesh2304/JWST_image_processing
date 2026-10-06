@@ -4,7 +4,8 @@ Needs: astropy, photutils, scipy, scikit-image, matplotlib (no network access).
 Each check prints REPRODUCED (defect confirmed) or NOT REPRODUCED."""
 import os, sys, tempfile
 import numpy as np
-sys.path.insert(0, os.getcwd())
+LEGACY = os.path.join(os.getcwd(), "legacy")  # the frozen original scripts
+sys.path.insert(0, LEGACY)
 import matplotlib; matplotlib.use("Agg")
 from astropy.io import fits
 
@@ -93,12 +94,12 @@ def c5():
 check("Filter identity read from FILTER only; results keyed by filter overwrite each other", c5)
 
 def c6():
-    req = open("requirements.txt").read().lower()
+    req = open(os.path.join(LEGACY, "requirements.txt")).read().lower()
     return "astroquery" not in req, "astroquery (the only working MAST path, used by find_jwst_data.py) is absent from requirements.txt"
 check("requirements.txt omits astroquery", c6)
 
 def c7():
-    src = open("jwst_data_downloader.py").read()
+    src = open(os.path.join(LEGACY, "jwst_data_downloader.py")).read()
     bad = '"ra": 0' in src and "Invoke/Mast.Caom.Cone" in src
     return bad, ("JWSTDataDownloader posts JSON to a non-existent endpoint path with ra=0, dec=0 and "
                  "unsupported 'target'/'instrument' params; Mast.Caom.Cone returns observations, not 'productFilename' rows")

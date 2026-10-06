@@ -158,7 +158,7 @@ Relations: used, wasGeneratedBy, wasDerivedFrom, wasAssociatedWith, wasInformedB
 | Field | Example |
 |-------|---------|
 | `activity_id` | ULID (time-sortable) |
-| `type`, `function` | `photometry.aperture`, `astrolab.photometry.aperture:measure@0.3.1` |
+| `type`, `function` | `photometry.aperture`, `astroledger.photometry.aperture:measure@0.3.1` |
 | Inputs | entity IDs plus **SHA-256** of each file or array (array hash over the canonical bytes) |
 | Archive identity | archive, `obs_id`, product URI, dataset DOI where minted (MAST mints DOIs under `10.17909`), download time |
 | Calibration context | `CAL_VER`, `CRDS_CTX`, reference file names (JWST); `CAL_VER` / IDCTAB / DRZCAL (HST); own master bias/dark/flat entity IDs |
@@ -270,16 +270,16 @@ Each choice was evaluated against the alternatives. "Why" gives the deciding rea
 
 This evolves the current repository rather than starting another one. Git history and the "JWST
 image processing" origin are preserved, and the legacy scripts remain runnable for comparison. The
-package name `astrolab` is a working name.
+package name `astroledger` is a working name (the names `astrolab` and `astrolabium` were already taken on PyPI).
 
 ```
-JWST_image_processing/                # rename later (e.g. "astrolab") once Phase 3 lands
+JWST_image_processing/                # rename later if wanted, once Phase 3 lands
 ├── pyproject.toml                    # one package, optional extras: [jwst] [hst] [observatory] [ai] [sim] [ml]
 ├── uv.lock
 ├── CLAUDE.md                         # rules + context for Claude sessions (exists now)
 ├── README.md  CITATION.cff  LICENSE
 ├── .claude/                          # SessionStart hook for cloud sessions (exists now)
-├── src/astrolab/
+├── src/astroledger/
 │   ├── core/            # Product types (Image, Spectrum, Cube, TimeSeries, Catalog), Bandpass,
 │   │                    # units helpers, IDs, EvidenceLevel enum, errors
 │   ├── provenance/      # @step decorator, PROV records, hashing, RO-Crate export, reproduce()
@@ -316,7 +316,7 @@ JWST_image_processing/                # rename later (e.g. "astrolab") once Phas
 │   ├── simulation/      # wrappers: REBOUND, galpy/gala, synthetic images (GalSim/STPSF), injection
 │   ├── ml/              # classifiers, anomaly detection, model cards
 │   ├── viz/             # display stretches, WCS plots, Lupton RGB, comparison figures
-│   └── cli/             # `astrolab fetch | inspect | measure | explain | plan | observe | reproduce`
+│   └── cli/             # `astroledger fetch | inspect | measure | explain | plan | observe | reproduce`
 ├── pipelines/           # declarative workflow definitions (YAML) for recurring analyses
 ├── configs/             # site.yaml, equipment/*.yaml, archives.yaml, safety_limits.yaml (versioned)
 ├── notebooks/           # tutorials/ (learning), analyses/ (reproduced results, exported by provenance)
@@ -331,5 +331,5 @@ JWST_image_processing/                # rename later (e.g. "astrolab") once Phas
 **Why this shape:**
 - `core` and `provenance` are dependencies of everything and depend on nothing in the package.
 - `missions/` (knowledge about instruments) is kept separate from `archives/` (how to fetch). HST data can come from MAST or from ESA's eHST, and the instrument knowledge is the same.
-- `observatory/` is importable on its own (`pip install astrolab[observatory]`) so the controller machine does not need JWST pipelines or LLM libraries.
+- `observatory/` is importable on its own (`pip install astroledger[observatory]`) so the controller machine does not need JWST pipelines or LLM libraries.
 - `interpret/` is separate from `assistant/`. The evidence engine is deterministic and testable without an LLM; the assistant only renders and discusses its output.

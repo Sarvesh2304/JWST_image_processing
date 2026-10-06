@@ -12,14 +12,15 @@ The full analysis and plan are in `docs/lab-roadmap/`. **Read `docs/lab-roadmap/
 The implementation task list is in `docs/lab-roadmap/07-roadmap-and-backlog.md` §27.
 
 ## Current state (audit of commit cccbb2c)
-The nine top-level `*.py` scripts are the **legacy prototype**. They are scientifically invalid:
+The original scripts now live in `legacy/` as the **frozen legacy prototype**. `tests/test_legacy_frozen.py`
+checks them against `legacy/MANIFEST.sha256`, so never edit them or the manifest. They are scientifically invalid:
 - negative clipping causes false detections;
 - the main pipeline cannot read JWST multi-extension FITS;
 - bandpasses are mislabelled;
-- `jwst_real_data_demo.py` saves archive files under fabricated target/filter names.
+- `jwst_real_data_demo.py` saved archive files under fabricated target/filter names (fixed before freezing).
 
 Do not build on them. `docs/lab-roadmap/audit_checks.py` reproduces the defects.
-New code goes into the package described in `docs/lab-roadmap/02-target-architecture.md` §21 (`src/astrolab/`).
+New code goes into the package described in `docs/lab-roadmap/02-target-architecture.md` §21 (`src/astroledger/`).
 
 ## Scientific rules (non-negotiable)
 1. **Never invent data.** No fabricated measurements, catalogue matches, object identities, papers,
@@ -41,7 +42,7 @@ New code goes into the package described in `docs/lab-roadmap/02-target-architec
    Trusted-Automation plan is running. Actions toward a safe state (park, close, abort) are always allowed.
 
 ## Environment notes (Claude Code cloud sessions, including the iPad app)
-- The SessionStart hook (`.claude/hooks/session-start.sh`) creates `.venv` from `requirements.txt` plus ruff and pytest, and puts it on `PATH` with `MPLBACKEND=Agg`.
+- The SessionStart hook (`.claude/hooks/session-start.sh`) creates `.venv` from `legacy/requirements.txt` plus ruff and pytest, and puts it on `PATH` with `MPLBACKEND=Agg`.
 - Commands:
   - audit checks: `python docs/lab-roadmap/audit_checks.py`;
   - estimates: `python docs/lab-roadmap/etc_estimates.py`;

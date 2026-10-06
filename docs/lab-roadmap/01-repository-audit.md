@@ -7,6 +7,7 @@
 > **[verified]** was reproduced by running the code (see [`audit_checks.py`](audit_checks.py), which reproduced
 > 8 of 8 defects on commit `cccbb2c` with astropy 8.0.1, photutils 3.0.0, matplotlib 3.11.2, numpy 2.5.3;
 > check 6 now passes because this commit adds `astroquery` to `requirements.txt`).
+> File paths refer to the audited commit. The original scripts have since moved, frozen, to `legacy/`.
 > Claims marked **[static]** come from reading the source. **[external]** claims were checked against
 > official or published sources.
 
@@ -413,8 +414,8 @@ These make the repository **honest and installable** before any new capability i
    - Link to `docs/lab-roadmap/`.
 3. **Correct the provenance errors.** Delete the renaming in `jwst_real_data_demo.py` (or delete the
    script), and correct the program-01063 "ERS" statement.
-4. **Create a package skeleton:** `pyproject.toml`, `src/astrolab/` (working name; check PyPI
-   availability before publishing), `uv.lock`, Python ≥ 3.11, `ruff`, `pytest`, GitHub Actions running
+4. **Create a package skeleton:** `pyproject.toml`, `src/astroledger/` (working name, free on PyPI;
+   `astrolab` was taken), `uv.lock`, Python ≥ 3.11, `ruff`, `pytest`, GitHub Actions running
    offline tests.
 5. **Write the first core types and tests:**
    - `io.open_product(path)`: reads MEF by `EXTNAME`; returns an `NDData` subclass carrying `SCI`, `ERR`, `DQ`-mask, `unit`, WCS and header.

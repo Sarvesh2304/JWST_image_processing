@@ -45,7 +45,7 @@ Phase:  0   1   2   3   4   5   6   7   8   9   10  11
   - legacy freeze;
   - README corrections;
   - removal of the fabricated filenames;
-  - package skeleton (`pyproject`, `src/astrolab`, uv lock, ruff, pytest, CI);
+  - package skeleton (`pyproject`, `src/astroledger`, uv lock, ruff, pytest, CI);
   - `CLAUDE.md` + SessionStart hook *(done)*;
   - audit checks become tests.
 - **Architecture:** `core`, `provenance` (v0 sidecars).
@@ -70,7 +70,7 @@ Phase:  0   1   2   3   4   5   6   7   8   9   10  11
   - B1 photometry agrees with pipeline catalogues within errors;
   - bandpass resolver passes header test fixtures;
   - units preserved end-to-end.
-- **Deliverables:** `astrolab inspect file.fits` prints the L1 fact sheet (§14.2); notebook B1; science tests.
+- **Deliverables:** `astroledger inspect file.fits` prints the L1 fact sheet (§14.2); notebook B1; science tests.
 - **Difficulty:** 3. **Risks:** heavy dependencies (jwst/CRDS); mitigate with optional extras and Stage-3 products first.
 - **Do NOT build yet:** running the JWST pipeline locally, spectroscopy, other archives, AI.
 
@@ -89,7 +89,7 @@ Phase:  0   1   2   3   4   5   6   7   8   9   10  11
   - negative-image false-positive rate reported;
   - injection–recovery completeness curves;
   - astrometric residuals vs Gaia reported per image.
-- **Deliverables:** `astrolab measure`; validation report notebook; science test suite.
+- **Deliverables:** `astroledger measure`; validation report notebook; science test suite.
 - **Difficulty:** 3–4. **Risks:** correlated noise and crowded fields; scope to isolated sources first.
 - **Do NOT build yet:** PSF photometry for crowded fields (that is A1), ML.
 
@@ -108,7 +108,7 @@ Phase:  0   1   2   3   4   5   6   7   8   9   10  11
   - zero fabricated identities on the evaluation images;
   - every L2 statement has evidence refs;
   - conflicts surfaced.
-- **Deliverables:** `astrolab explain file.fits` → structured evidence report (JSON + Markdown); I2 notebook.
+- **Deliverables:** `astroledger explain file.fits` → structured evidence report (JSON + Markdown); I2 notebook.
 - **Difficulty:** 4. **Risks:** rule coverage; start with stars, galaxies, nebulae and artefacts.
 - **Do NOT build yet:** an LLM narrative layer, X-ray/radio analysis, web UI.
 - **Decision point:** telescope purchase (use §22, measure your site's seeing and sky brightness first).
@@ -217,14 +217,14 @@ Scores 1–5. Priority: P0 (now) → P3 (later). Dependency impact = how much la
 |--:|------|:--:|:--:|:--:|------|:--:|
 | 1 | Remove fabricated filenames; correct README claims and synthetic-image label | 5 | 2 | 1 | — | **P0** |
 | 2 | Freeze legacy scripts in `legacy/` with a README linking to the audit | 2 | 3 | 1 | — | **P0** |
-| 3 | Package skeleton (`pyproject`, `src/astrolab`, uv lock, ruff, pytest, CI) | 2 | 5 | 2 | — | **P0** |
+| 3 | Package skeleton (`pyproject`, `src/astroledger`, uv lock, ruff, pytest, CI) | 2 | 5 | 2 | — | **P0** |
 | 4 | Convert `audit_checks.py` into science-invariant regression tests | 4 | 4 | 1 | 3 | **P0** |
 | 5 | MEF reader → `ImageProduct` with SCI/ERR/DQ mask, unit, WCS | 5 | 5 | 2 | 3 | **P0** |
 | 6 | `Bandpass` resolver (FILTER+PUPIL; NIRISS, NIRCam pairs; HST) with header fixtures | 5 | 4 | 2 | 3 | **P0** |
 | 7 | Display layer separated from data (stretches, Lupton RGB with chromatic ordering, WCSAxes) | 3 | 4 | 2 | 5 | **P0** |
 | 8 | MAST adapter: target search → observation table → product levels → checksummed fetch | 4 | 5 | 3 | 3 | **P0** |
 | 9 | Provenance v1 (`@step`, SQLite, sidecars, file hashes, CAL_VER/CRDS_CTX) | 5 | 5 | 3 | 3 | **P0** |
-| 10 | `astrolab inspect`: L1 fact sheet for any FITS | 4 | 4 | 2 | 5, 6 | **P1** |
+| 10 | `astroledger inspect`: L1 fact sheet for any FITS | 4 | 4 | 2 | 5, 6 | **P1** |
 | 11 | Aperture photometry with errors; JWST unit conversion + aperture corrections; validate vs `_cat.ecsv` | 5 | 4 | 3 | 5, 6 | **P1** |
 | 12 | Background2D + matched-filter detection + deblending; negative-image test | 5 | 4 | 3 | 5 | **P1** |
 | 13 | Injection–recovery completeness tooling (STPSF) | 5 | 3 | 3 | 12 | **P1** |
@@ -236,7 +236,7 @@ Scores 1–5. Priority: P0 (now) → P3 (later). Dependency impact = how much la
 | 19 | CDS adapters (Sesame, SIMBAD TAP incl. bibliography, VizieR, XMatch) | 5 | 4 | 2 | 18 | **P1** |
 | 20 | Cross-match engine (error-based radius, P_chance, conflicts) | 5 | 4 | 3 | 14, 19 | **P1** |
 | 21 | Evidence engine (`Statement`, rules for star/galaxy/nebula/artefact; downgrade-only) | 5 | 5 | 4 | 10, 20 | **P1** |
-| 22 | `astrolab explain` report (JSON + Markdown) | 4 | 4 | 2 | 21 | **P1** |
+| 22 | `astroledger explain` report (JSON + Markdown) | 4 | 4 | 2 | 21 | **P1** |
 | 23 | Comparison engine (resolution, depth, bandpass table; convolved views) | 4 | 3 | 3 | 17, 18 | **P2** |
 | 24 | ADS/SciX + arXiv clients; RAG index with passages | 4 | 4 | 3 | 9 | **P2** |
 | 25 | MCP server exposing tools (Tier 0) | 3 | 5 | 2 | 10, 22 | **P2** |
@@ -259,28 +259,30 @@ Scores 1–5. Priority: P0 (now) → P3 (later). Dependency impact = how much la
 
 Each task is sized for one or two sessions with Claude Code, and has a concrete "done when".
 
+**Progress:** tasks 1–2 done (README corrected, fabricated filenames removed, legacy frozen in `legacy/` with a checksum test).
+
 | # | Task | Done when |
 |--:|------|-----------|
 | 1 | Delete the renaming in `jwst_real_data_demo.py`, label the README hero image as synthetic, and remove unsupported claims | README states actual capabilities; no file is renamed from archive names |
 | 2 | Move the nine scripts to `legacy/` unchanged + `legacy/README.md` | `python legacy/jwst_demo.py` still runs; README links to the audit |
-| 3 | Create `pyproject.toml` (`astrolab`, Python ≥ 3.11, extras `[jwst]`, `[dev]`), `src/astrolab/__init__.py`, `uv.lock`, ruff config, GitHub Actions running `pytest -m "not remote"` | CI green on an empty test suite |
+| 3 | Create `pyproject.toml` (`astroledger`, Python ≥ 3.11, extras `[jwst]`, `[dev]`), `src/astroledger/__init__.py`, `uv.lock`, ruff config, GitHub Actions running `pytest -m "not remote"` | CI green on an empty test suite |
 | 4 | Port `docs/lab-roadmap/audit_checks.py` into `tests/science/test_legacy_defects.py` as **xfail-documented** checks | Tests document the defects; they are referenced by the new implementations |
-| 5 | Implement `astrolab.io.open_image(path) -> ImageProduct` (SCI/ERR/DQ by EXTNAME, NaN+DQ → mask, unit from BUNIT, WCS from SCI header, full header kept) | Tests on generated JWST-like and HST-like fixtures (including 2-chip HST) |
-| 6 | Implement `astrolab.core.Bandpass.from_header()` with a table of NIRCam/NIRISS/MIRI/HST elements and pivot wavelengths from synphot/SVO | Fixtures: NIRISS `CLEAR`+`F150W` → F150W; NIRCam `F444W`+`F405N` → F405N; three NIRISS bands → three keys |
-| 7 | `astrolab.viz`: `show(image)` with WCSAxes + `PercentileInterval`/`AsinhStretch`; `rgb(images)` with reprojection, chromatic ordering and `make_lupton_rgb` | Data arrays provably unchanged (hash before and after display) |
-| 8 | `astrolab.provenance.step` decorator + SQLite store + JSON sidecars | Every output has a sidecar with inputs' SHA-256, params, versions, git commit |
-| 9 | `astrolab.archives.mast`: `search(target, instrument=…, level=3)` → table with program, PI, instrument, mode, resolved bandpass, exposure, calib level, rights; `fetch(product)` with checksum | Network-marked integration test reproduces a MAST Portal query |
-| 10 | CLI `astrolab inspect <file>` → L1 fact sheet (§14.2) | Correct on real NIRCam, NIRISS, MIRI, WFC3 and ACS files |
-| 11 | `astrolab.photometry.aperture()` with errors and JWST MJy/sr → AB conversion (PIXAR_SR + APCORR) | Agrees with a pipeline `_cat.ecsv` within errors on a validation image (notebook B1) |
-| 12 | `astrolab.imaging.detect()` (Background2D, matched filter, threshold from unconvolved RMS, deblend) + negative-image FP estimate | On pure noise, detections ≤ expected FP count; the legacy test flips from failing to passing |
+| 5 | Implement `astroledger.io.open_image(path) -> ImageProduct` (SCI/ERR/DQ by EXTNAME, NaN+DQ → mask, unit from BUNIT, WCS from SCI header, full header kept) | Tests on generated JWST-like and HST-like fixtures (including 2-chip HST) |
+| 6 | Implement `astroledger.core.Bandpass.from_header()` with a table of NIRCam/NIRISS/MIRI/HST elements and pivot wavelengths from synphot/SVO | Fixtures: NIRISS `CLEAR`+`F150W` → F150W; NIRCam `F444W`+`F405N` → F405N; three NIRISS bands → three keys |
+| 7 | `astroledger.viz`: `show(image)` with WCSAxes + `PercentileInterval`/`AsinhStretch`; `rgb(images)` with reprojection, chromatic ordering and `make_lupton_rgb` | Data arrays provably unchanged (hash before and after display) |
+| 8 | `astroledger.provenance.step` decorator + SQLite store + JSON sidecars | Every output has a sidecar with inputs' SHA-256, params, versions, git commit |
+| 9 | `astroledger.archives.mast`: `search(target, instrument=…, level=3)` → table with program, PI, instrument, mode, resolved bandpass, exposure, calib level, rights; `fetch(product)` with checksum | Network-marked integration test reproduces a MAST Portal query |
+| 10 | CLI `astroledger inspect <file>` → L1 fact sheet (§14.2) | Correct on real NIRCam, NIRISS, MIRI, WFC3 and ACS files |
+| 11 | `astroledger.photometry.aperture()` with errors and JWST MJy/sr → AB conversion (PIXAR_SR + APCORR) | Agrees with a pipeline `_cat.ecsv` within errors on a validation image (notebook B1) |
+| 12 | `astroledger.imaging.detect()` (Background2D, matched filter, threshold from unconvolved RMS, deblend) + negative-image FP estimate | On pure noise, detections ≤ expected FP count; the legacy test flips from failing to passing |
 | 13 | Injection–recovery utility | Completeness curve plotted and stored with provenance |
 | 14 | Gaia DR3 cross-match with epoch propagation + astrometric QA report | Residual statistics reported per image (I1) |
 | 15 | Mode router (`EXP_TYPE`) with explicit refusals | Spectroscopic, coronagraphic and TSO files refused with a clear message |
 | 16 | CDS adapters: Sesame resolve, SIMBAD TAP (otype, ids, bibliography), VizieR query | Cached, provenance-recorded; no identity field generated outside a retrieved record |
 | 17 | Cross-match engine with error-based radius, P_chance, conflict reporting | Unit tests with synthetic catalogues of known density |
-| 18 | `interpret` evidence engine v1 (star/galaxy/nebula/artefact rules) + `astrolab explain` | Evaluation images: zero fabricated identities; every L2 has evidence |
+| 18 | `interpret` evidence engine v1 (star/galaxy/nebula/artefact rules) + `astroledger explain` | Evaluation images: zero fabricated identities; every L2 has evidence |
 | 19 | Minimal MCP server exposing `inspect`, `search`, `explain` (read-only) | Usable from Claude Code; then from the Claude app via a remote connector |
-| 20 | Notebook I2 (NGC 3132 narrow bands, program 2733), the first public "reproduced analysis" | Notebook regenerated from provenance by `astrolab reproduce` |
+| 20 | Notebook I2 (NGC 3132 narrow bands, program 2733), the first public "reproduced analysis" | Notebook regenerated from provenance by `astroledger reproduce` |
 
 To start: open a Claude Code session on this repository (from the iPad app or anywhere) and say
 *"Do task 1 from docs/lab-roadmap/07-roadmap-and-backlog.md §27"*. `CLAUDE.md` provides the rules each session needs.

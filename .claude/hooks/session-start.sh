@@ -16,7 +16,7 @@ if [ ! -x "$VENV/bin/python" ]; then
 fi
 
 "$VENV/bin/python" -m pip install --quiet --upgrade pip
-"$VENV/bin/python" -m pip install --quiet -r requirements.txt
+"$VENV/bin/python" -m pip install --quiet -r legacy/requirements.txt
 # Developer tools: linter and test runner
 "$VENV/bin/python" -m pip install --quiet ruff pytest
 
