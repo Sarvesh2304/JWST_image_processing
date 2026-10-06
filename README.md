@@ -10,25 +10,27 @@ research-grade environment that combines:
 
 ## Status
 
-**Phase 0 (honest baseline) is complete; Phase 1 (JWST/HST product core) is in progress.** The package can read JWST, HST and plain FITS images correctly (`astroledger.io.open_image`); there is no measurement pipeline yet.
+**Phase 0 (honest baseline) is complete. Phase 1–2 tasks 5–12 are done; no full analysis pipeline yet.**
 
-- A code and scientific audit of the original prototype found that it cannot produce trustworthy
-  measurements:
-  - it cannot open JWST science files;
-  - its "calibration" creates false sources;
-  - it mislabels filters.
+What works now (all tested; numbers below are on authentic JWST data of NGC 3132, program 2733):
 
-  Details: [audit](docs/lab-roadmap/01-repository-audit.md). Reproducible evidence:
-  [`docs/lab-roadmap/audit_checks.py`](docs/lab-roadmap/audit_checks.py).
-- The original scripts are **frozen** in [`legacy/`](legacy/README.md), kept for comparison only.
-  Do not use their output scientifically.
-- The plan (architecture, data sources, telescope strategy, AI design, projects, roadmap) is in
-  [`docs/lab-roadmap/`](docs/lab-roadmap/README.md).
+| Capability | Module / command | Real-data check |
+|---|---|---|
+| Read JWST/HST/plain FITS with units, ERR, DQ mask, WCS | `astroledger.io.open_image` | MIRI F770W `cal` file, verified against its archive checksum |
+| Resolve the true bandpass (NIRCam pupil wheel, NIRISS CLEAR/PUPIL, HST ACS) | `astroledger.core.Bandpass` | F444W+F405N → F405N, F444W+F470N → F470N |
+| Sky-axis display and chromatic colour composites (data untouched) | `astroledger.viz` | F356W/F405N/F470N composite |
+| Provenance of every step (inputs' checksums, parameters, versions, git commit) | `astroledger.provenance` | all downloads and measurements recorded |
+| Archive access: MAST search; MAST's public AWS copy with verified downloads and range-request cutouts | `astroledger.archives` | cutout pixels byte-identical, WCS exact |
+| Fact sheet of a file | `astroledger inspect FILE` | — |
+| Aperture photometry in Jy/AB with uncertainties | `astroledger.photometry` | matches JWST pipeline catalogue to <1e-6 |
+| Source detection with false-positive estimate | `astroledger.imaging.detect` | 34/34 pipeline sources on clean sky |
+
+The original scripts are **frozen** in [`legacy/`](legacy/README.md) and documented as scientifically invalid. The audit is in [`docs/lab-roadmap/01-repository-audit.md`](docs/lab-roadmap/01-repository-audit.md), and the plan in [`docs/lab-roadmap/`](docs/lab-roadmap/README.md).
 
 ## Repository layout
 
 ```
-src/astroledger/    the new package (working name): core product types and the FITS image reader
+src/astroledger/    the new package (working name): core, io, viz, provenance, archives, photometry, imaging, cli
 tests/              unit tests, science tests (incl. documented legacy defects), legacy freeze check
 docs/lab-roadmap/   audit, architecture, roadmap, prioritised tasks (start here)
 legacy/             original prototype, frozen (checksummed)

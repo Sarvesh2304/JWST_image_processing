@@ -264,7 +264,14 @@ Each task is sized for one or two sessions with Claude Code, and has a concrete 
 - Tasks 3–4 done: `pyproject.toml` + `uv.lock` + `src/astroledger/`, ruff, CI on Python 3.11/3.13; `tests/science/test_legacy_defects.py` documents 7 legacy defects as strict expected failures.
 - **Phase 0 complete.**
 - Task 5 done: `astroledger.io.open_image` / `open_images` → `ImageProduct` (SCI/ERR/DQ by EXTNAME, unchanged pixels, NaN + mission-aware DQ mask, raw DQ kept, BUNIT incl. HST/camera forms, celestial WCS or None, both headers, file SHA-256, reader notes); tested on JWST cal/i2d/rate/uncal, HST two-chip flt and drz, and plain camera frames.
-- **Next: task 6** (`Bandpass.from_header`).
+- Task 6 done: `Bandpass.from_header` (NIRCam pupil-wheel filters, NIRISS CLEAR/PUPIL, HST ACS wheels); nominal wavelength from the filter-naming convention, pivot only from `PHOTPLAM`; tested on authentic NGC 3132 headers.
+- Task 7 done: `astroledger.viz` (`show`, `make_rgb` with reprojection and chromatic ordering, `show_rgb`); data proven unchanged. Composites use independent per-channel asinh scaling (representative colour), not a Lupton stretch.
+- Task 8 done: `astroledger.provenance` (`@step`, SQLite `ProvenanceStore`, JSON sidecars, git/package versions).
+- Task 9 done: `astroledger.archives.mast` (astroquery search with bandpass resolution) and `archives.cloud` (MAST's public AWS copy: listing, ETag-verified fetch, range-request cutouts with budget ledger). Live MAST API search is untested here because the environment blocks `mast.stsci.edu`; S3 access is live-tested.
+- Task 10 done: `astroledger inspect FILE [--json]`.
+- Task 11 done: `astroledger.photometry.aperture_photometry_table`; on authentic NGC 3132 F405N data it reproduces the JWST pipeline catalogue (jwst 2.0.1) to <1e-6 in flux and identically in error; authentic stamps in `tests/data/real` keep this in CI.
+- Task 12 done: `astroledger.imaging.detect` (two-pass background, matched filter, threshold from unconvolved RMS, deblending, negative-image false-positive estimate with locations). On real data: 34/34 pipeline sources on clean sky recovered, 4 negative-image detections there; inside the nebula, false positives concentrate where the background model cannot follow structured emission.
+- **Next: task 13** (injection–recovery completeness).
 
 | # | Task | Done when |
 |--:|------|-----------|
