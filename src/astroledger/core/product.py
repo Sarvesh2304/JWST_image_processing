@@ -9,6 +9,7 @@ those stored in the file: readers never fill, clip, smooth or rescale them.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,8 @@ from astropy.io.fits import Header
 from astropy.nddata import NDData, NDUncertainty
 from astropy.units import UnitBase
 from astropy.wcs import WCS
+
+from astroledger.core.bandpass import Bandpass
 
 
 @dataclass(frozen=True)
@@ -112,6 +115,11 @@ class ImageProduct(NDData):
     def detector(self) -> str | None:
         return self.keyword("DETECTOR")
 
+    @cached_property
+    def bandpass(self) -> Bandpass:
+        """Bandpass resolved from the optical-element keywords (see :class:`Bandpass`)."""
+        return Bandpass.from_header(self.primary_header, self.header)
+
     @property
     def n_masked(self) -> int:
         return 0 if self.mask is None else int(np.count_nonzero(self.mask))
@@ -121,7 +129,9 @@ class ImageProduct(NDData):
         shape = "x".join(str(n) for n in self.data.shape)
         unit = str(self.unit) if self.unit is not None else "unit unknown"
         origin = "/".join(str(v) for v in (self.telescope, self.instrument, self.detector) if v)
+        band = self.bandpass.name or "band unknown"
+        where = f"{self.source.filename}[{name},{ver}]"
         return (
-            f"<ImageProduct {origin or 'unknown origin'} {self.source.filename}[{name},{ver}] "
+            f"<ImageProduct {origin or 'unknown origin'} {band} {where} "
             f"{shape} {unit}, {self.n_masked} masked, wcs={'yes' if self.wcs else 'no'}>"
         )

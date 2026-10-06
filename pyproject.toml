@@ -54,3 +54,6 @@ extend-exclude = ["legacy", "docs"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "NPY", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["astroledger", "fits_factory"]
