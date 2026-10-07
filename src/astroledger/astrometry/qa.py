@@ -32,6 +32,7 @@ from scipy.special import erf
 from scipy.stats import chi2
 
 from astroledger.astrometry.epoch import observation_epoch, propagate
+from astroledger.core.mode import require_imaging
 from astroledger.core.product import ImageProduct
 from astroledger.crossmatch import match_nearest
 from astroledger.provenance import step
@@ -172,6 +173,8 @@ def astrometric_qa(
     min_fit : int
         Minimum stars for the shift/rotation/scale fit.
     """
+    if image is not None:
+        require_imaging(image, "astrometric QA")
     if epoch is None:
         if image is None:
             raise ValueError("give an image or an epoch")

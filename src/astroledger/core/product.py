@@ -120,6 +120,13 @@ class ImageProduct(NDData):
         """Bandpass resolved from the optical-element keywords (see :class:`Bandpass`)."""
         return Bandpass.from_header(self.primary_header, self.header)
 
+    @cached_property
+    def mode(self):
+        """Observing mode from ``EXP_TYPE`` / ``OBSTYPE`` (see :mod:`astroledger.core.mode`)."""
+        from astroledger.core.mode import observing_mode
+
+        return observing_mode(self.primary_header, self.header)
+
     @property
     def n_masked(self) -> int:
         return 0 if self.mask is None else int(np.count_nonzero(self.mask))

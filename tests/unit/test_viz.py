@@ -30,7 +30,13 @@ def _band_file(path, band, crval, scale, seed, shape=ff.SHAPE):
         [
             fits.PrimaryHDU(
                 header=fits.Header(
-                    {"TELESCOP": "JWST", "INSTRUME": "NIRCAM", "FILTER": filt, "PUPIL": pupil}
+                    {
+                        "TELESCOP": "JWST",
+                        "INSTRUME": "NIRCAM",
+                        "FILTER": filt,
+                        "PUPIL": pupil,
+                        "EXP_TYPE": "NRC_IMAGE",
+                    }
                 )
             ),
             fits.ImageHDU(

@@ -98,7 +98,13 @@ def jwst_i2d(path: Path) -> Path:
     sci[:, :5] = np.nan
     fits.HDUList(
         [
-            _primary(TELESCOP="JWST", INSTRUME="NIRCAM", DETECTOR="MULTIPLE", FILTER="F444W"),
+            _primary(
+                TELESCOP="JWST",
+                INSTRUME="NIRCAM",
+                DETECTOR="MULTIPLE",
+                FILTER="F444W",
+                EXP_TYPE="NRC_IMAGE",
+            ),
             _image(sci, "SCI", BUNIT="MJy/sr", **tan_wcs((10.0, -30.0), 0.063)),
             _image(np.full(SHAPE, 0.05, "float32"), "ERR", BUNIT="MJy/sr"),
             _image(np.ones((1, *SHAPE), "int32"), "CON"),
@@ -117,7 +123,12 @@ def jwst_rate(path: Path) -> Path:
     fits.HDUList(
         [
             _primary(
-                TELESCOP="JWST", INSTRUME="NIRISS", DETECTOR="NIS", FILTER="CLEAR", PUPIL="F150W"
+                TELESCOP="JWST",
+                INSTRUME="NIRISS",
+                DETECTOR="NIS",
+                FILTER="CLEAR",
+                PUPIL="F150W",
+                EXP_TYPE="NIS_IMAGE",
             ),
             _image(_noise(3), "SCI", BUNIT="DN/s"),
             _image(np.full(SHAPE, 0.2, "float32"), "ERR", BUNIT="DN/s"),
@@ -131,7 +142,7 @@ def jwst_uncal(path: Path) -> Path:
     """JWST Stage-0 ``_uncal``: 4-D ramps (nints, ngroups, ny, nx)."""
     fits.HDUList(
         [
-            _primary(TELESCOP="JWST", INSTRUME="NIRCAM", DETECTOR="NRCA1"),
+            _primary(TELESCOP="JWST", INSTRUME="NIRCAM", DETECTOR="NRCA1", EXP_TYPE="NRC_IMAGE"),
             _image(np.zeros((1, 3, *SHAPE), "uint16"), "SCI", BUNIT="DN"),
         ]
     ).writeto(path)

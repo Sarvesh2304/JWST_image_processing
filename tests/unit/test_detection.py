@@ -27,7 +27,14 @@ def _field(path, *, stars=STARS, amplitude=2.0, noise=0.1, shape=(256, 256), see
     )
     hdus = [
         fits.PrimaryHDU(
-            header=fits.Header({"TELESCOP": "JWST", "INSTRUME": "NIRCAM", "FILTER": "F356W"})
+            header=fits.Header(
+                {
+                    "TELESCOP": "JWST",
+                    "INSTRUME": "NIRCAM",
+                    "FILTER": "F356W",
+                    "EXP_TYPE": "NRC_IMAGE",
+                }
+            )
         ),
         fits.ImageHDU(data.astype("float32"), name="SCI", header=sci),
     ]

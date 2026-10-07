@@ -86,7 +86,11 @@ def fact_sheet(image: ImageProduct) -> dict[str, Any]:
             "telescope": image.telescope,
             "instrument": image.instrument,
             "detector": image.detector,
-            "mode": _first(image, "EXP_TYPE", "OBSMODE"),
+            "mode": _first(image, "EXP_TYPE", "OBSTYPE", "OBSMODE"),
+            "mode_category": image.mode.category.value,
+            "image_analysis": (
+                "supported" if image.mode.supported else f"refused: {image.mode.reason}"
+            ),
             "bandpass": band.key,
             "optical_elements": band.elements,
             "nominal_wavelength_um": (
@@ -115,7 +119,9 @@ def fact_sheet(image: ImageProduct) -> dict[str, Any]:
             "masked_fraction": round(image.n_masked / image.data.size, 4),
         },
         "measured": {},
-        "notes": list(image.notes) + [f"bandpass: {n}" for n in band.notes],
+        "notes": list(image.notes)
+        + [f"bandpass: {n}" for n in band.notes]
+        + [f"mode: {n}" for n in image.mode.notes],
     }
     if image.wcs is not None:
         scales = proj_plane_pixel_scales(image.wcs.celestial) * 3600.0

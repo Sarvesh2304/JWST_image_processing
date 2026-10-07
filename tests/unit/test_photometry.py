@@ -27,7 +27,14 @@ def _star_image(path, *, flux_jy=1e-5, bkg=0.5, noise=0.01, unit="MJy/sr", extra
     fits.HDUList(
         [
             fits.PrimaryHDU(
-                header=fits.Header({"TELESCOP": "JWST", "INSTRUME": "NIRCAM", "FILTER": "F356W"})
+                header=fits.Header(
+                    {
+                        "TELESCOP": "JWST",
+                        "INSTRUME": "NIRCAM",
+                        "FILTER": "F356W",
+                        "EXP_TYPE": "NRC_IMAGE",
+                    }
+                )
             ),
             fits.ImageHDU(data.astype("float32"), name="SCI", header=sci),
             fits.ImageHDU(

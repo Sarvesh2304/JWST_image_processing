@@ -41,6 +41,7 @@ from photutils.segmentation import SegmentationImage, SourceCatalog, deblend_sou
 from photutils.utils.exceptions import NoDetectionsWarning
 from scipy import ndimage
 
+from astroledger.core.mode import require_imaging
 from astroledger.core.product import ImageProduct
 from astroledger.photometry.aperture import flux_conversion
 from astroledger.provenance import step
@@ -164,6 +165,7 @@ def detect(
     bright_ratio, bright_radius : float
         Settings of the ``near_bright_source`` flag (flux ratio, radius in pixels).
     """
+    require_imaging(image, "source detection")
     mask = np.asarray(image.mask) if image.mask is not None else ~np.isfinite(image.data)
     data = np.where(mask, 0.0, np.asarray(image.data, dtype=float))
     kernel = Gaussian2DKernel(kernel_fwhm * gaussian_fwhm_to_sigma)

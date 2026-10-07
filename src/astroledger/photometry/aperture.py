@@ -36,6 +36,7 @@ from astropy.table import QTable
 from astropy.wcs.utils import proj_plane_pixel_scales
 from photutils.aperture import ApertureStats, CircularAnnulus, CircularAperture, aperture_photometry
 
+from astroledger.core.mode import require_imaging
 from astroledger.core.product import ImageProduct
 from astroledger.provenance import step
 
@@ -118,7 +119,13 @@ def aperture_photometry_table(
         One row per position: ``id, x, y, ra, dec, flux, flux_err, flux_err_aperture,
         bkg_per_pixel, bkg_per_pixel_err, n_bkg, bkg_unstable, masked_fraction, snr, abmag,
         abmag_err``. ``meta`` records the method, unit conversion and caveats.
+
+    Raises
+    ------
+    UnsupportedProductError
+        If the product is not direct imaging (spectroscopy, coronagraphy, time series, ...).
     """
+    require_imaging(image, "aperture photometry")
     if isinstance(positions, SkyCoord):
         if image.wcs is None:
             raise ValueError("sky positions need a WCS")

@@ -38,6 +38,7 @@ from astropy.table import QTable
 from photutils.psf import CircularGaussianPRF, EPSFBuilder, extract_stars
 from scipy import ndimage
 
+from astroledger.core.mode import require_imaging
 from astroledger.core.product import ImageProduct
 from astroledger.imaging.detection import detect
 from astroledger.photometry.aperture import flux_conversion
@@ -100,6 +101,7 @@ def empirical_psf(
     from astropy.stats import sigma_clipped_stats
     from astropy.table import Table
 
+    require_imaging(image, "PSF building")
     data = np.where(image.mask, np.nan, np.asarray(image.data, dtype=float))
     half = size // 2
     yy, xx = np.mgrid[-half : half + 1, -half : half + 1]
@@ -204,6 +206,7 @@ def injection_recovery(
     detect_kwargs : dict, optional
         Settings passed to :func:`~astroledger.imaging.detect` (use the science settings).
     """
+    require_imaging(image, "injection-recovery")
     rng = np.random.default_rng(seed)
     detect_kwargs = {**(detect_kwargs or {}), "estimate_false_positives": False}
     ny, nx = image.data.shape

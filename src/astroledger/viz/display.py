@@ -31,6 +31,7 @@ from astropy.visualization import (
 )
 from astropy.wcs import WCS
 
+from astroledger.core.mode import require_imaging
 from astroledger.core.product import ImageProduct
 
 __all__ = ["RGBComposite", "display_norm", "make_rgb", "show", "show_rgb"]
@@ -212,6 +213,8 @@ def make_rgb(
 
     if len(images) != 3:
         raise ValueError(f"need exactly 3 images, got {len(images)}")
+    for img in images:
+        require_imaging(img, "colour composite")
     if any(img.wcs is None for img in images):
         raise ValueError("all images need a celestial WCS to be aligned")
     ordered = sorted(images, key=_wavelength_um)  # blue, green, red
