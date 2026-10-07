@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import io
 import math
 import re
 import xml.etree.ElementTree as ET
@@ -36,6 +37,7 @@ __all__ = [
     "BUCKET_URL",
     "BudgetExceededError",
     "DownloadLedger",
+    "RemoteFile",
     "RemoteHDU",
     "fetch",
     "fetch_rows",
@@ -203,6 +205,55 @@ def _get_range(
         )
     ledger.record(n, _url(key), f"{start}-{stop - 1}", purpose)
     return response.content
+
+
+class RemoteFile(io.RawIOBase):
+    """Read-only, seekable file over HTTP range requests, for libraries such as pyarrow.
+
+    Every byte read is recorded in ``ledger``; reads that would exceed its budget raise
+    :class:`BudgetExceededError` before any transfer.
+    """
+
+    def __init__(
+        self,
+        key: str,
+        *,
+        ledger: DownloadLedger | None = None,
+        session: requests.Session | None = None,
+        purpose: str = "range read",
+    ) -> None:
+        self.key, self.purpose = key, purpose
+        self._http = session or requests.Session()
+        self._ledger = ledger or DownloadLedger()
+        self.size, self.etag = _head(key, self._http)
+        self._pos = 0
+
+    def readable(self) -> bool:
+        return True
+
+    def seekable(self) -> bool:
+        return True
+
+    def tell(self) -> int:
+        return self._pos
+
+    def seek(self, offset: int, whence: int = io.SEEK_SET) -> int:
+        base = {io.SEEK_SET: 0, io.SEEK_CUR: self._pos, io.SEEK_END: self.size}[whence]
+        self._pos = max(0, base + offset)
+        return self._pos
+
+    def read(self, size: int = -1) -> bytes:
+        stop = self.size if size is None or size < 0 else min(self.size, self._pos + size)
+        if stop <= self._pos:
+            return b""
+        data = _get_range(self.key, self._pos, stop, self._http, self._ledger, self.purpose)
+        self._pos = stop
+        return data
+
+    def readinto(self, buffer) -> int:
+        data = self.read(len(buffer))
+        buffer[: len(data)] = data
+        return len(data)
 
 
 @step("archives.cloud.fetch", version="1")

@@ -18,3 +18,18 @@ Its metadata keeps the pipeline's aperture radii, background annulus and apertur
 
 `tests/science/test_photometry_vs_pipeline.py` uses them to check that astroledger reproduces the
 pipeline's aperture photometry on authentic data.
+
+## Astrometry fixtures (roadmap task 14)
+
+`gaia_dr3_ngc3132_cone.ecsv` holds 71 Gaia DR3 sources within 88″ of NGC 3132. They were read on
+2026-10-07 from MAST's HATS copy of Gaia DR3 on AWS
+(`s3://stpubdata/gaia/gaia_dr3/public/hats/gaia/`, partition Norder=4/Npix=2407, row group 0) with
+`astroledger.archives.gaia.gaia_cone`. The values are unchanged: positions at `ref_epoch` J2016.0,
+proper motions, errors, G magnitude and `astrometric_params_solved`.
+
+`jw02733-o001_t001_nircam_f405n-f444w_cat_gaia_subset.ecsv` holds the 44 rows of the JWST pipeline
+catalogue `jw02733-o001_t001_nircam_f405n-f444w_cat.ecsv` (jwst 2.0.1) that lie within 1″ of a
+Gaia source. Values are unchanged.
+
+`tests/science/test_astrometry_vs_gaia.py` uses them, with the observation epoch read from the
+stamps' authentic `MJD-AVG`.
