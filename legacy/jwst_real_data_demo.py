@@ -22,17 +22,21 @@ def download_jwst_sample_data():
     os.makedirs("jwst_data/raw", exist_ok=True)
     os.makedirs("jwst_data/visualizations", exist_ok=True)
     
-    # Sample JWST data URLs (these are publicly available)
+    # Sample JWST data URLs (these are publicly available).
+    # Files keep their archive names. These are Stage-1 rate files (DN/s, no WCS) from
+    # program 2756 (DDT imaging of Abell 2744), taken on NRCA1, a short-wavelength detector.
+    # They are NOT NGC 3132 and NOT F444W/F277W: earlier versions of this script saved them
+    # under those fabricated names. See docs/lab-roadmap/01-repository-audit.md (S18).
     sample_urls = [
         {
-            "name": "NGC_3132_F444W.fits",
+            "name": "jw02756001001_02101_00001_nrca1_rate.fits",
             "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:JWST/product/jw02756001001_02101_00001_nrca1_rate.fits",
-            "description": "NGC 3132 (Southern Ring Nebula) - F444W filter"
+            "description": "JWST program 2756, NIRCam NRCA1 rate file, exposure 00001"
         },
         {
-            "name": "NGC_3132_F277W.fits", 
+            "name": "jw02756001001_02101_00002_nrca1_rate.fits",
             "url": "https://mast.stsci.edu/api/v0.1/Download/file?uri=mast:JWST/product/jw02756001001_02101_00002_nrca1_rate.fits",
-            "description": "NGC 3132 (Southern Ring Nebula) - F277W filter"
+            "description": "JWST program 2756, NIRCam NRCA1 rate file, exposure 00002"
         }
     ]
     

@@ -1,0 +1,91 @@
+# %ECSV 1.0
+# ---
+# datatype:
+# - {name: catalog_index, datatype: int64}
+# - {name: source_id, datatype: int64}
+# - {name: ra, unit: deg, datatype: float64}
+# - {name: dec, unit: deg, datatype: float64}
+# - {name: ra_gaia, unit: deg, datatype: float64}
+# - {name: dec_gaia, unit: deg, datatype: float64}
+# - {name: dra, unit: mas, datatype: float64}
+# - {name: ddec, unit: mas, datatype: float64}
+# - {name: gaia_ra_error, unit: mas, datatype: float64}
+# - {name: gaia_dec_error, unit: mas, datatype: float64}
+# - {name: phot_g_mean_mag, unit: mag, datatype: float64}
+# - {name: pm_missing, datatype: bool}
+# - {name: x, datatype: float64}
+# - {name: y, datatype: float64}
+# - {name: x_gaia, datatype: float64}
+# - {name: y_gaia, datatype: float64}
+# - {name: near_mask, datatype: bool}
+# - {name: clipped, datatype: bool}
+# - {name: used, datatype: bool}
+# meta: !!omap
+# - summary: {epoch: '2022-06-12T12:01:50.714', epoch_keyword: MJD-AVG, match_radius_arcsec: 0.5, median_ddec_err_mas: 5.81568247739926,
+#     median_ddec_mas: -34.981834087360525, median_dra_err_mas: 5.413485838714791, median_dra_mas: -34.57987095582938, median_dx_pix: -0.43994317339127065,
+#     median_dy_pix: -0.04980889911053055, median_gaia_error_mas: 1.9770149023046837, n_clipped: 1, n_matched: 14, n_near_mask: 2, n_no_pm: 0,
+#     n_used: 11, pixel_scale_arcsec: 0.11090963139566923, rms_mas: 57.52511800267709, robust_sigma_ddec_mas: 15.39011942661605, robust_sigma_dra_mas: 14.325781006079444}
+# - fit: {n: 11, rms_after_mas: 14.795274351010463, rotation_arcsec: 75.24082517405424, rotation_err_arcsec: 15.613587517267634, scale_err_ppm: 75.69680839572422,
+#     scale_ppm: -101.33212484004927, shift_ddec_err_mas: 3.621176732040793, shift_ddec_mas: -46.01147925169424, shift_dra_err_mas: 3.621176732040793,
+#     shift_dra_mas: -33.69358724976558}
+# - notes: ['positions are the catalogue''s centroids converted with the image WCS; centroid bias (e.g. from saturation, blending or nebulosity)
+#       appears as astrometric error', Gaia positions propagated with proper motion only (parallax and RV ignored), "systematic RA* offset\
+#       \ of -34.6 \xB1 5.4 mas (>3 sigma) between this catalogue and Gaia DR3 at the image epoch", "systematic Dec offset of -35.0 \xB1\
+#       \ 5.8 mas (>3 sigma) between this catalogue and Gaia DR3 at the image epoch"]
+# - __serialized_columns__:
+#     ddec:
+#       __class__: astropy.coordinates.angles.core.Angle
+#       unit: &id002 !astropy.units.Unit {unit: mas}
+#       value: !astropy.table.SerializedColumn {name: ddec}
+#     dec:
+#       __class__: astropy.coordinates.angles.core.Latitude
+#       unit: &id001 !astropy.units.Unit {unit: deg}
+#       value: !astropy.table.SerializedColumn {name: dec}
+#     dec_gaia:
+#       __class__: astropy.coordinates.angles.core.Latitude
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: dec_gaia}
+#     dra:
+#       __class__: astropy.coordinates.angles.core.Angle
+#       unit: *id002
+#       value: !astropy.table.SerializedColumn {name: dra}
+#     gaia_dec_error:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id002
+#       value: !astropy.table.SerializedColumn {name: gaia_dec_error}
+#     gaia_ra_error:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: *id002
+#       value: !astropy.table.SerializedColumn {name: gaia_ra_error}
+#     phot_g_mean_mag:
+#       __class__: astropy.units.quantity.Quantity
+#       unit: !astropy.units.Unit {unit: mag}
+#       value: !astropy.table.SerializedColumn {name: phot_g_mean_mag}
+#     ra:
+#       __class__: astropy.coordinates.angles.core.Longitude
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: ra}
+#       wrap_angle: &id003 !astropy.coordinates.Angle
+#         unit: *id001
+#         value: 360.0
+#     ra_gaia:
+#       __class__: astropy.coordinates.angles.core.Longitude
+#       unit: *id001
+#       value: !astropy.table.SerializedColumn {name: ra_gaia}
+#       wrap_angle: *id003
+# schema: astropy-2.0
+catalog_index source_id ra dec ra_gaia dec_gaia dra ddec gaia_ra_error gaia_dec_error phot_g_mean_mag pm_missing x y x_gaia y_gaia near_mask clipped used
+2 5420219796652827392 151.7465262387104 -40.425373292166135 151.74654142808882 -40.42535867359148 -41.62655809123223 -52.62687233663494 0.7157664370405884 0.7871466811577931 18.453067779541016 False 565.7686007041374 38.69412310943419 566.3725750682183 38.733861364535805 False False True
+3 5420219800952064512 151.75542659135752 -40.417408957429565 151.7554432341516 -40.417394812895125 -45.61505017829978 -50.92032828013375 4.927574857280117 5.790319875600785 20.677337646484375 False 903.6308089219634 72.95119947228797 904.2431647855524 73.02879602613461 False False True
+26 5420219800952114176 151.75930385054576 -40.41784867224765 151.75932230179774 -40.41783964812963 -50.57139309537892 -32.48683013729689 8.189488948669416 9.73882305035982 20.664505004882812 False 946.7898283266885 161.3670770681119 947.2917832113944 161.57819886112966 False False True
+28 5420219831012430720 151.7611854434361 -40.416569489154845 151.76120120561208 -40.416553407990236 -43.20196553987281 -57.89219643014889 2.5332412972989498 3.0733923461185015 20.087940216064453 False 1007.5634213541152 176.17767537331684 1008.2157443303039 176.2012933503571 False False True
+30 5420219800952960256 151.75800416242706 -40.420965344315555 151.75801298700975 -40.420941534227445 -24.185392337279218 -85.71631841892038 0.5233894983509196 0.5755652429712339 15.811838150024414 False 845.379088382532 192.8168899428128 846.1379192101134 192.55481548520552 False False True
+89 5420219732228461184 151.7572854507798 -40.43644836839981 151.7572933805296 -40.436425935788144 -21.727935388646806 -80.75740297379787 0.17249967127456395 0.19988260112529543 10.039054870605469 False 422.3103737627804 463.8810483052649 423.02312551163396 463.62804477173506 True False False
+117 5420219762292942592 151.77298481334975 -40.42659021872774 151.77299642684883 -40.42658307153784 -31.826269273384586 -25.729885721865788 2.196272612140786 2.6328652807684696 19.996475219726562 False 908.924338578867 601.5380396928462 909.2811150919312 601.6440793416277 False False True
+133 5420219762292951040 151.771769052136 -40.430788581348004 151.7717816712202 -40.43077886417255 -34.57987095582938 -34.981834087360525 0.4248929631125256 0.5343649673258696 17.385746002197266 False 779.4737320831333 653.5452878048409 779.9136752565246 653.6241282162072 False False True
+150 5420219732228463104 151.76812596416704 -40.43742927364348 151.76811775724616 -40.43740780712692 22.487070798319973 -77.27946068171882 0.7934948935738081 0.8849879917848373 18.620332717895508 False 549.7231704720676 701.4923535085699 550.182471192758 700.9299602811652 False True False
+166 5420219629149108736 151.76069318069634 -40.44983592863979 151.76069357734374 -40.44982483022533 -1.0866184413714195 -39.954292050610945 1.4846649331962196 1.7433323910246752 19.56757354736328 False 110.29534541769792 781.2882566507341 110.60074366811494 781.0885346666136 False False True
+172 5420219762292938752 151.77816425500134 -40.43166681671024 151.77817281649666 -40.4316599830048 -23.460619994063883 -24.601340746866764 1.3025025573292102 1.4873046130788627 19.356346130371094 False 847.5197091717226 800.0764267209944 847.8253540460962 800.1262356201049 False False True
+199 5420218976319237632 151.77244046374915 -40.44114778358602 151.77244955810067 -40.44113956951755 -24.917264044943472 -29.5706477625831 0.37311931692919337 0.41589873348372924 17.353330612182617 False 511.19343118996585 858.0367483801497 511.5441801404628 858.0697552023502 False False True
+205 5420219006378695552 151.78404812273385 -40.43001252584661 151.78406350566516 -40.43000739096545 -42.15408271265593 -18.48557583147432 0.5752232182854591 0.6404912256543698 18.105195999145508 False 976.2757785006711 890.3981064137898 976.63429921251 890.6201939402744 False False True
+232 5420219010673959552 151.78582187755032 -40.434769822192415 151.78592309642067 -40.434804305933135 -277.35200145307635 124.14130768127491 2.182524943144761 2.3628430770850577 19.898515701293945 False 874.2982319774416 1014.3873938547971 874.8273380067109 1017.1104436954581 True False False

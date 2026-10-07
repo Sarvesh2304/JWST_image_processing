@@ -67,3 +67,9 @@ coverage.xml
 
 # Logs
 *.log
+
+# Local virtual environment created by the Claude Code SessionStart hook
+.venv/
+
+# Small authentic test fixtures (public JWST data, documented in tests/data/real/README.md)
+!tests/data/real/*.fits

@@ -1,0 +1,8 @@
+{
+  "output_file": {
+    "path": "jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880_gaia_qa.png",
+    "sha256": "be63ab3b708b5e58133db0a0f36706a56ac1644620e76a861f9b1c89d529f40a"
+  },
+  "made_by": "astroledger.astrometry.plot_astrometric_qa",
+  "from_activity": "18dc3b9b7e0e728a-e08b7576"
+}

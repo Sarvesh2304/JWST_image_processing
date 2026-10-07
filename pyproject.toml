@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "astroledger"
+version = "0.0.1"
+description = "Personal astrophysics laboratory: archive data, own observations and evidence-graded interpretation with full provenance."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Sarvesh Pardeshi" }]
+dependencies = [
+    "numpy>=1.26",
+    "astropy>=6.0",
+]
+
+[project.scripts]
+astroledger = "astroledger.cli:main"
+
+[project.optional-dependencies]
+# Archive access (Phase 1+).
+archives = ["astroquery>=0.4.7", "pyvo>=1.5", "requests>=2.31", "pyarrow>=15", "astropy-healpix>=1.0"]
+# Image measurement (Phase 2+).
+imaging = ["photutils>=2.0", "reproject>=0.13", "scipy>=1.11", "matplotlib>=3.8"]
+# Dependencies of the frozen legacy prototype (legacy/requirements.txt), used by the defect tests.
+legacy = [
+    "astroquery>=0.4.7",
+    "matplotlib>=3.8",
+    "scipy>=1.11",
+    "requests>=2.31",
+    "pillow>=10.0",
+    "scikit-image>=0.21",
+    "photutils>=2.0",
+]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/astroledger"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]  # test helpers such as fits_factory.py
+addopts = ["-ra", "--strict-markers", "-m", "not remote"]
+xfail_strict = true
+markers = [
+    "remote: needs network access to astronomy archives (excluded by default)",
+    "legacy_defect: documents a defect of the frozen legacy prototype (expected to fail)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+# legacy/ is frozen; docs/lab-roadmap/*.py are the audit's evidence scripts, kept as published.
+extend-exclude = ["legacy", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "NPY", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["astroledger", "fits_factory"]

@@ -1,0 +1,281 @@
+SIMPLE  =                    T / conforms to FITS standard                      
+BITPIX  =                    8 / array data type                                
+NAXIS   =                    0 / number of array dimensions                     
+EXTEND  =                    T                                                  
+DATE    = '2026-08-01T16:10:44.907' / UTC date file created                     
+ORIGIN  = 'STSCI   '           / Organization responsible for creating file     
+TIMESYS = 'UTC     '           / principal time system for time-related keywords
+TIMEUNIT= 's       '           / Default unit applicable to all time values     
+FILENAME= 'jw01386-o013_t004_nirspec_g140h-f100lp_s3d.fits' / Name of the file  
+SDP_VER = '2026_1b '           / Data Processing (DP) Software Version          
+PRD_VER = 'PRDOPSSOC-073'      / S&OC Project Reference Database (PRD) Version  
+OSS_VER = '8.4.10  '           / Observatory Scheduling Software (OSS) Version  
+GSC_VER = 'GSC32   '           / Guide Star Catalog (GSC) Version               
+CAL_VER = '2.0.1   '           / Calibration Software Version                   
+CAL_VCS = 'RELEASE '           / Calibration software version control sys number
+DATAMODL= 'IFUCubeModel'       / Type of data model                             
+TELESCOP= 'JWST    '           / Telescope used to acquire the data             
+HGA_MOVE=                    F / High Gain Antenna moved during data collection 
+PWFSEET =   59764.686768935186 / [d] Previous WFS exposure end time in MJD      
+NWFSEST =    59766.48709135417 / [d] Next WFS exposure start time in MJD        
+COMPRESS=                    F / On-board data compression was used (T/F)       
+                                                                                
+        Association information                                                 
+                                                                                
+ASNPOOL = 'jw01386_20260801t084051_pool.csv' / Name of the ASN pool             
+ASNTABLE= 'jw01386-o013_20260801t084051_spec3_00001_asn.json' / Name of the ASN 
+                                                                                
+        Program information                                                     
+                                                                                
+TITLE   = 'High Contrast Imaging of Exoplanets and Exoplanetary Systems with &' 
+CONTINUE  'JWST&'                                                               
+CONTINUE  '' / Proposal title                                                   
+PI_NAME = 'Hinkley, Sasha'     / Principal investigator name                    
+CATEGORY= 'ERS     '           / Program category                               
+SCICAT  = 'Planets and Planet Formation' / Science category assigned during TAC 
+                                                                                
+        Observation identifiers                                                 
+                                                                                
+DATE-OBS= '2022-07-05'         / [yyyy-mm-dd] UTC date at start of exposure     
+TIME-OBS= '10:06:34.378'       / [hh:mm:ss.sss] UTC time at start of exposure   
+DATE-BEG= '2022-07-05T10:06:34.378' / Date-time start of exposure               
+DATE-END= '2022-07-05T10:33:48.357' / Date-time end of exposure                 
+OBS_ID  = 'V01386013001P0000000003106' / Programmatic observation identifier    
+VISIT_ID= '01386013001'        / Visit identifier                               
+PROGRAM = '01386   '           / Program number                                 
+OBSERVTN= '013     '           / Observation number                             
+VISIT   = '001     '           / Visit number                                   
+VISITGRP= '03      '           / Visit group identifier                         
+SEQ_ID  = '1       '           / Parallel sequence identifier                   
+ACT_ID  = '06      '           / Activity identifier                            
+EXPOSURE= '1       '           / Exposure request number                        
+BKGDTARG=                    F / Background target                              
+TEMPLATE= 'NIRSpec IFU Spectroscopy' / Observation template used                
+OBSLABEL= 'NIRSpec IFU'        / Proposer label for the observation             
+OBSFOLDR= 'VHS 1256b'          / Name of the APT observation folder             
+                                                                                
+        Visit information                                                       
+                                                                                
+ENG_QUAL= 'OK      '           / Engineering data quality indicator from EngDB  
+ENGQLPTG= 'CALCULATED_TRACK_TR_202111' / Quality of pointing information from En
+VISITYPE= 'PRIME_TARGETED_FIXED' / Visit type                                   
+VSTSTART= '2022-07-05 07:55:35.2460000' / UTC visit start time                  
+VISITSTA= 'SUCCESSFUL'         / Status of a visit                              
+NEXPOSUR=                   14 / Total number of planned exposures in visit     
+INTARGET=                    F / At least one exposure in visit is internal     
+TARGOOPP=                    F / Visit scheduled as target of opportunity       
+TSOVISIT=                    F / Time Series Observation visit indicator        
+EXP_ONLY=                    F / Special commanding without SI configuration    
+CROWDFLD=                    F / Are the FGSes in a crowded field?              
+                                                                                
+        Target information                                                      
+                                                                                
+TARGPROP= 'VHS-1256B'          / Proposer's name for the target                 
+TARGNAME= '2MASS J12560183-1257276' / Standard astronomical catalog name for tar
+TARGTYPE= 'FIXED   '           / Type of target (fixed, moving, generic)        
+TARGCAT = 'Star    '           / Target category from APT                       
+TARGDESC= 'Exoplanets'         / Target description from APT                    
+TARG_RA =    194.0057598499967 / [deg] Target RA at mid time of exposure        
+TARG_DEC=  -12.959015130763362 / [deg] Target Dec at mid time of exposure       
+TARGURA =                  0.1 / [arcsec] Target RA uncertainty                 
+TARGUDEC=                  0.1 / [arcsec] Target Dec uncertainty                
+MU_RA   =              -0.2754 / [arcsec/yr] Target proper motion in RA         
+MU_DEC  =              -0.1984 / [arcsec/yr] Target proper motion in Dec        
+MU_EPOCH= '2011-09-13 12:00:00.0000000' / Target proper motion epoch in UT      
+PROP_RA =   194.00660833333333 / [deg] Proposer's target RA                     
+PROP_DEC=  -12.958419444444443 / [deg] Proposer's target Dec                    
+SRCTYAPT= 'UNKNOWN '           / Source type from APT (point/extended)          
+                                                                                
+        Instrument configuration information                                    
+                                                                                
+INSTRUME= 'NIRSPEC '           / Instrument used to acquire the data            
+DETECTOR= 'MULTIPLE'           / Name of detector used to acquire the data      
+FILTER  = 'F100LP  '           / Name of the filter element used                
+GRATING = 'G140H   '           / Name of the grating element used               
+FOCUSPOS=                    3 / Focus position                                 
+LAMP    = 'NONE    '           / Internal lamp state                            
+OPMODE  = 'IFU     '           / Lamp operating mode                            
+GWA_XTIL=          0.358352035 / Grating wheel tilt along instrmnt model Y axis 
+GWA_YTIL=          0.133760422 / Grating wheel tilt along instrmnt model X axis 
+GWA_XP_V=          179.5171708 / GWA X-position/tilt sensor calibrated          
+GWA_YP_V=           67.0058676 / GWA Y-position/tilt sensor calibrated          
+GWA_PXAV=            179.55148 / GWA REC avg X-pos/tilt sensor calibrated       
+GWA_PYAV=           67.0058676 / GWA REC avg Y-pos/tilt sensor calibrated       
+GWA_TILT=             36.03639 / [K] GWA TILT (avg/calib) temperature           
+                                                                                
+        Exposure parameters                                                     
+                                                                                
+EXPCOUNT=                   11 / Running count of exposures in visit            
+EXPRIPAR= 'PRIME   '           / Prime or parallel exposure                     
+EXP_TYPE= 'NRS_IFU '           / Type of data in the exposure                   
+EXPSTART=    59765.42123122685 / [d] exposure start time in MJD                 
+EXPMID  =    59765.43068703125 / [d] exposure mid time in MJD                   
+EXPEND  =    59765.44014302083 / [d] exposure end time in MJD                   
+OSF_FILE= '2022186T175517436_002_osf.xml' / Observatory Status File name coverin
+READPATT= 'NRSIRS2RAPID'       / Readout pattern                                
+NOUTPUTS=                    5 / Number of detector outputs used                
+NINTS   =                    1 / Number of integrations in exposure             
+NGROUPS =                   21 / Number of groups in integration                
+NFRAMES =                    1 / Number of frames per group                     
+FRMDIVSR=                    1 / Divisor applied to frame-averaged groups       
+GROUPGAP=                    0 / Number of frames dropped between groups        
+DRPFRMS1=                    0 / Number of frames dropped prior to first integra
+DRPFRMS3=                    0 / Number of frames dropped between integrations  
+NSAMPLES=                    1 / Number of A/D samples per pixel                
+TSAMPLE =                 10.0 / [us] Time between samples                      
+TFRAME  =             14.58889 / [s] Time between frames                        
+TGROUP  =               14.589 / [s] Time between groups                        
+EFFINTTM=              306.367 / [s] Effective integration time                 
+EFFEXPTM=             2450.936 / [s] Effective exposure time                    
+TMEASURE=             2334.224 / [s] Measurement time                           
+DURATION=             2567.648 / [s] Total duration of exposure                 
+NRSTSTRT=                    1 / Number of reset frames at start of exposure    
+NRESETS =                    1 / Number of reset frames between integrations    
+ZEROFRAM=                    F / Zero frame was downlinked separately           
+DATAPROB=                    F / Science telemetry indicated a problem          
+SCA_NUM =                  491 / Sensor Chip Assembly number                    
+DATAMODE=                   58 / post-processing method used in FPAP            
+NRS_NORM=                   16 / Number of normal pixels in IRS2 readout        
+NRS_REF =                    4 / Number of reference pixels in IRS2 readout     
+SCTARATE= 0.045097800132782785 / [ms/s] Spacecraft Clock Time Adjust RATE       
+GAINFACT=                  1.0 / Gain scale factor                              
+IS_IMPRT=                    F / NIRSpec imprint exposure                       
+PRIMECRS=   0.1439303660198287 / Cosmic Ray rate per thousand pixels per second 
+EXTNCRS =   0.6953670944390625 / Snowballs/showers per million pixels per second
+                                                                                
+        Subarray parameters                                                     
+                                                                                
+SUBARRAY= 'FULL    '           / Subarray used                                  
+SUBSTRT1=                    1 / Starting pixel in axis 1 direction             
+SUBSTRT2=                    1 / Starting pixel in axis 2 direction             
+SUBSIZE1=                 2048 / Number of pixels in axis 1 direction           
+SUBSIZE2=                 2048 / Number of pixels in axis 2 direction           
+FASTAXIS=                    2 / Fast readout axis direction                    
+SLOWAXIS=                    1 / Slow readout axis direction                    
+                                                                                
+        Dither information                                                      
+                                                                                
+PATTTYPE= '4-POINT-NOD'        / Primary dither pattern type                    
+PATT_NUM=                    1 / Position number within dither pattern          
+NUMDTHPT=                    4 / Total number of points in dither pattern       
+XOFFSET =  -0.9080026043488437 / [arcsec] X offset in SI ideal coordinate frame 
+YOFFSET =  -0.7630022777730674 / [arcsec] Y offset in SI ideal coordinate frame 
+                                                                                
+        Aperture information                                                    
+                                                                                
+APERNAME= 'NRS_FULL_IFU'       / PRD science aperture used                      
+PPS_APER= 'NRS_FULL_IFU'       / original AperName supplied by PPS              
+                                                                                
+        Velocity aberration correction information                              
+                                                                                
+VA_RA   =   194.00577223309313 / [deg] Velocity aberrated apparent reference RA 
+VA_DEC  =  -12.960183126516233 / [deg] Velocity aberrated apparent reference Dec
+                                                                                
+        Time information                                                        
+                                                                                
+BARTDELT=   116.10558691900223 / [s] Barycentric correction at exposure start   
+BSTRTIME=    59765.42257504151 / [d] Barycentric exposure start time in MJD     
+BENDTIME=    59765.42628945022 / [d] Barycentric exposure end time in MJD       
+BMIDTIME=    59765.42443224587 / [d] Barycentric exposure mid time in MJD       
+HELIDELT=   112.12138314731419 / [s] Heliocentric correction at exposure start  
+HSTRTIME=   59765.422528928044 / [d] Heliocentric exposure start time in MJD    
+HENDTIME=    59765.42624333667 / [d] Heliocentric exposure end time in MJD      
+HMIDTIME=   59765.424386132356 / [d] Heliocentric exposure mid time in MJD      
+                                                                                
+        Guide star information                                                  
+                                                                                
+GS_ORDER=                    3 / index of guide star within list of selected gui
+GSSTRTTM= '2022-07-05 08:37:34.2840000' / UTC time when guide star activity star
+GSENDTIM= '2022-07-05 08:41:33.8990000' / UTC time when guide star activity comp
+GDSTARID= 'S72L003172'         / guide star identifier                          
+GS_RA   =    193.9815763737661 / guide star right ascension                     
+GS_DEC  =   -12.87596841360063 / guide star declination                         
+GS_URA  =          0.328323334 / guide star right ascension uncertainty         
+GS_UDEC =          0.208213285 / guide star declination uncertainty             
+GS_MAG  =    17.07873344421387 / guide star magnitude in FGS detector           
+GS_UMAG =  0.01788914017379284 / guide star magnitude uncertainty               
+GS_V3_PA=    113.0407918695329 / V3 Position Angle of guide star for science    
+PCS_MODE= 'FINEGUIDE'          / Pointing Control System mode                   
+VISITEND= '2022-07-05 10:35:44.4530000' / Observatory UTC time when the visit en
+                                                                                
+        Reference file information                                              
+                                                                                
+CRDS_VER= '13.1.13 '           / Version of CRDS file selection software used   
+CRDS_CTX= 'jwst_1535.pmap'     / CRDS context (.pmap) used to select ref files  
+R_AREA  = 'crds://jwst_nirspec_area_0046.fits' / Pixel area reference file name 
+R_CAMERA= 'crds://jwst_nirspec_camera_0007.asdf' / Nirspec Camera reference file
+R_COLLIM= 'crds://jwst_nirspec_collimator_0007.asdf' / Nirspec Collimator refere
+R_CUBPAR= 'crds://jwst_nirspec_cubepar_0009.fits' / IFU cube parameters referenc
+R_DARK  = 'crds://jwst_nirspec_dark_0351.fits' / Dark reference file name       
+R_DISPER= 'crds://jwst_nirspec_disperser_0061.asdf' / Disperser reference file n
+R_DISTOR= 'N/A     '           / Distortion reference file name                 
+R_FILOFF= 'N/A     '           / Filter Offset reference file name              
+R_FLAT  = 'N/A     '           / Flat reference file name                       
+R_DFLAT = 'crds://jwst_nirspec_dflat_0001.fits' / Detector Flat reference file n
+R_FFLAT = 'crds://jwst_nirspec_fflat_0180.fits' / Fore-optics Flat reference fil
+R_SFLAT = 'crds://jwst_nirspec_sflat_0216.fits' / Spectrograph Flat reference fi
+R_FORE  = 'crds://jwst_nirspec_fore_0045.asdf' / Nirspec FORE Model reference fi
+R_FPA   = 'crds://jwst_nirspec_fpa_0008.asdf' / Nirspec FPA Model reference file
+R_GAIN  = 'crds://jwst_nirspec_gain_0023.fits' / Gain reference file name       
+R_IFUFOR= 'crds://jwst_nirspec_ifufore_0010.asdf' / ifufore reference file name 
+R_IFUPOS= 'crds://jwst_nirspec_ifupost_0009.asdf' / ifupost reference file name 
+R_IFUSLI= 'crds://jwst_nirspec_ifuslicer_0010.asdf' / ifuslicer reference file n
+R_LINEAR= 'crds://jwst_nirspec_linearity_0022.fits' / Linearity reference file n
+R_MASK  = 'crds://jwst_nirspec_mask_0048.fits' / Mask reference file name       
+R_MSA   = 'crds://jwst_nirspec_msa_0008.asdf' / Nirspec MSA Model reference file
+R_OTE   = 'crds://jwst_nirspec_ote_0010.asdf' / Nirspec OTE Model reference file
+R_PTHLOS= 'crds://jwst_nirspec_pathloss_0003.fits' / Pathloss reference file nam
+R_PHOTOM= 'crds://jwst_nirspec_photom_0016.fits' / Photometric reference file na
+R_READNO= 'crds://jwst_nirspec_readnoise_0038.fits' / Read noise reference file 
+R_REFPIX= 'crds://jwst_nirspec_refpix_0019.fits' / Reference pixels reference fi
+R_REGION= 'N/A     '           / Regions reference file name                    
+R_SATURA= 'crds://jwst_nirspec_saturation_0031.fits' / Saturation reference file
+R_SPCWCS= 'N/A     '           / Spectral distortion reference file name        
+R_SUPERB= 'crds://jwst_nirspec_superbias_0254.fits' / Superbias reference file n
+R_WAVRAN= 'crds://jwst_nirspec_wavelengthrange_0006.asdf' / Wavelength Range ref
+                                                                                
+        Calibration step information                                            
+                                                                                
+S_TRCMOD= 'SKIPPED '           / Adaptive Trace Model                           
+S_WCS   = 'COMPLETE'           / Assign World Coordinate System                 
+S_BKDSUB= 'COMPLETE'           / Background subtraction                         
+S_BPXSLF= 'SKIPPED '           / Bad Pixel Self-Calibration                     
+S_BARSHA= 'SKIPPED '           / Bar shadow correction                          
+S_CHGMIG= 'SKIPPED '           / Charge Migration                               
+S_CLNFNS= 'SKIPPED '           / Clean Flicker Noise                            
+S_IFUCUB= 'COMPLETE'           / IFU Cube Creation                              
+S_DARK  = 'COMPLETE'           / Dark Subtraction                               
+S_DQINIT= 'COMPLETE'           / Data Quality Initialization                    
+S_FLAT  = 'COMPLETE'           / Flat Field Correction                          
+S_FRINGE= 'SKIPPED '           / Fringe Correction                              
+S_GANSCL= 'COMPLETE'           / Gain Scale Correction                          
+S_GRPSCL= 'SKIPPED '           / Group Scale Correction                         
+S_IMPRNT= 'SKIPPED '           / NIRSpec MSA Imprint Subtraction                
+S_IPC   = 'SKIPPED '           / Interpixel Capacitance Correction              
+S_JUMP  = 'COMPLETE'           / Jump Detection                                 
+S_LINEAR= 'COMPLETE'           / Linearity Correction                           
+S_MSAFLG= 'COMPLETE'           / NIRSpec MSA Stuck Shutter Flagging             
+S_OUTLIR= 'COMPLETE'           / Outlier Detection                              
+S_PTHLOS= 'COMPLETE'           / Pathloss Correction                            
+S_PHOTOM= 'COMPLETE'           / Photometric Calibration                        
+S_PCTFRM= 'SKIPPED '           / Picture Frame Correction                       
+S_PXREPL= 'SKIPPED '           / Pixel Replacement                              
+S_RAMP  = 'COMPLETE'           / Ramp Fitting                                   
+S_REFPIX= 'COMPLETE'           / Reference Pixel Correction                     
+S_RESFRI= 'SKIPPED '           / Residual Fringe Correction                     
+S_SATURA= 'COMPLETE'           / Saturation Checking                            
+S_SRCTYP= 'COMPLETE'           / Source Type Determination                      
+S_STRAY = 'SKIPPED '           / Straylight Correction                          
+S_SUPERB= 'COMPLETE'           / Superbias Subtraction                          
+S_TACNTR= 'SKIPPED '           / Target Acquisition Centering                   
+                                                                                
+        IFU cube parameters                                                     
+                                                                                
+FLUXEXT = 'SCI     '           / EXTNAME of the extension containing flux data  
+ERREXT  = 'ERR     '           / EXTNAME of the extension containing error data 
+MASKEXT = 'DQ      '           / EXTNAME of the extension containing data qualit
+ROIS    =                    0 / [arcsec] Size of ROI in spatial dimension      
+ROIW    =                    0 / [um] Size of ROI in wavelength dimension       
+WTYPE   = 'drizzle '           / Weighting type (MSM, MIRIPSF, AREA)            
+WPOWER  =                    0 / Weighting power for Modified Shepard Method    
+END                                                                             
