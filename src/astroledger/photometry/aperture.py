@@ -191,7 +191,7 @@ def aperture_photometry_table(
     table["bkg_per_pixel_err"] = bkg_err * out_unit
     table["n_bkg"] = n_bkg
     table["bkg_unstable"] = bkg_unstable
-    table["masked_fraction"] = 1.0 - area / full_area
+    table["masked_fraction"] = np.clip(1.0 - area / full_area, 0.0, 1.0)  # float noise -> 0
     with np.errstate(divide="ignore", invalid="ignore"):
         table["snr"] = flux / flux_err
         if factor is not None:

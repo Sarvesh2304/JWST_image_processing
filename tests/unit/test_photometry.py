@@ -109,3 +109,12 @@ def test_uncalibrated_units_give_no_magnitudes(tmp_path):
     t = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 3.0)
     assert "abmag" not in t.colnames
     assert any("no flux calibration" in c for c in t.meta["caveats"])
+
+
+def test_masked_fraction_is_exactly_zero_without_masked_pixels(tmp_path):
+    """Exact-overlap areas differ from pi r^2 by float noise; the fraction must not go negative."""
+    img = _star_image(tmp_path / "s.fits")
+    xy = np.array([[40.3, 39.7], [30.11, 33.87], [50.5, 45.5]])
+    for radius in (1.5, 2.7, 4.0):
+        t = aperture_photometry_table(img, xy, radius)
+        assert np.all(np.asarray(t["masked_fraction"]) == 0.0)

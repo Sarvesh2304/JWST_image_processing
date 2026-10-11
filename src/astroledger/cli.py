@@ -34,6 +34,27 @@ def _inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def _explain(args: argparse.Namespace) -> int:
+    from astropy.table import QTable
+
+    from astroledger.core.errors import ProductError
+    from astroledger.interpret import explain, format_explanation
+    from astroledger.io import open_image
+
+    try:
+        image = open_image(args.file, extver=args.extver)
+        gaia = QTable.read(args.gaia) if args.gaia else None
+        result = explain(image, gaia=gaia)
+    except (ProductError, OSError) as exc:
+        print(f"astroledger explain: {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(result.to_dict(), indent=2, default=str))
+    else:
+        print(format_explanation(result, limit=args.limit))
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Entry point of the ``astroledger`` command."""
     parser = argparse.ArgumentParser(prog="astroledger", description=__doc__)
@@ -49,6 +70,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     inspect.add_argument("--json", action="store_true", help="machine-readable output")
     inspect.set_defaults(handler=_inspect)
+
+    explain = commands.add_parser(
+        "explain", help="graded statements (L1/L2/L3) about an image and its sources"
+    )
+    explain.add_argument("file", help="FITS image (direct imaging only)")
+    explain.add_argument("--extver", type=int, help="EXTVER of the SCI extension")
+    explain.add_argument("--gaia", help="Gaia DR3 table (ECSV) covering the field")
+    explain.add_argument("--limit", type=int, default=20, help="sources shown in text output")
+    explain.add_argument("--json", action="store_true", help="machine-readable output")
+    explain.set_defaults(handler=_explain)
 
     args = parser.parse_args(argv)
     return args.handler(args)

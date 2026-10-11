@@ -1,0 +1,72 @@
+jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880.fits  (JWST/NIRCAM/F470N)
+
+Image (L1 observations)
+  [IMG-1] JWST NIRCAM image in JWST/NIRCAM/F470N (imaging (EXP_TYPE=NRC_IMAGE)).
+  [IMG-2] The observer's target designation is 'NGC-3132'. This labels the pointing; it is not an identification of any source in the image.
+  [IMG-4] 1421 sources detected.
+
+Sources: 1421 detected; 0 unresolved, 0 extended; 19 coincide with Gaia DR3; 0 established as stars (L2); 275 possible PSF artefacts.
+
+  Source 1
+    L1 [SRC-1-1] Source 1 at RA 151.748897, Dec -40.420117 (ICRS): flux 2.249e-06 Jy (23.02 AB) in JWST/NIRCAM/F470N.
+
+  Source 2
+    L1 [SRC-2-1] Source 2 at RA 151.749919, Dec -40.419036 (ICRS): flux 0.0003441 Jy (17.56 AB) in JWST/NIRCAM/F470N.
+
+  Source 3
+    L1 [SRC-3-1] Source 3 at RA 151.736323, Dec -40.444159 (ICRS): flux 7.171e-06 Jy (21.76 AB) in JWST/NIRCAM/F470N.
+
+  Source 4
+    L1 [SRC-4-1] Source 4 at RA 151.737822, Dec -40.441572 (ICRS): flux 9.812e-05 Jy (18.92 AB) in JWST/NIRCAM/F470N.
+
+  Source 5
+    L1 [SRC-5-1] Source 5 at RA 151.748237, Dec -40.421424 (ICRS): flux 1.16e-06 Jy (23.74 AB) in JWST/NIRCAM/F470N.
+    L3 [SRC-5-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  Source 6
+    L1 [SRC-6-1] Source 6 at RA 151.749344, Dec -40.419531 (ICRS): flux 4.751e-06 Jy (22.21 AB) in JWST/NIRCAM/F470N.
+    L3 [SRC-6-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  Source 7
+    L1 [SRC-7-1] Source 7 at RA 151.736462, Dec -40.443761 (ICRS): flux 1.212e-06 Jy (23.69 AB) in JWST/NIRCAM/F470N.
+
+  Source 8
+    L1 [SRC-8-1] Source 8 at RA 151.740999, Dec -40.435674 (ICRS): flux 1.069e-05 Jy (21.33 AB) in JWST/NIRCAM/F470N.
+
+  Source 9
+    L1 [SRC-9-1] Source 9 at RA 151.741687, Dec -40.434340 (ICRS): flux 7.607e-06 Jy (21.70 AB) in JWST/NIRCAM/F470N.
+
+  Source 10
+    L1 [SRC-10-1] Source 10 at RA 151.748713, Dec -40.420978 (ICRS): flux 1.534e-06 Jy (23.44 AB) in JWST/NIRCAM/F470N.
+    L3 [SRC-10-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  Source 11
+    L1 [SRC-11-1] Source 11 at RA 151.751060, Dec -40.417080 (ICRS): flux 9.961e-06 Jy (21.40 AB) in JWST/NIRCAM/F470N.
+
+  Source 12
+    L1 [SRC-12-1] Source 12 at RA 151.749628, Dec -40.419638 (ICRS): flux 3.523e-06 Jy (22.53 AB) in JWST/NIRCAM/F470N.
+    L3 [SRC-12-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  Source 13
+    L1 [SRC-13-1] Source 13 at RA 151.749428, Dec -40.420813 (ICRS): flux 9.144e-05 Jy (19.00 AB) in JWST/NIRCAM/F470N.
+
+  Source 14
+    L1 [SRC-14-1] Source 14 at RA 151.746549, Dec -40.425357 (ICRS): flux 4.741e-05 Jy (19.71 AB) in JWST/NIRCAM/F470N.
+    L1 [SRC-14-3] Coincides with Gaia DR3 5420219796652827392 at 12.3 mas (0.4 sigma; chance probability 1.3e-06).
+
+  Source 15
+    L1 [SRC-15-1] Source 15 at RA 151.748937, Dec -40.421016 (ICRS): flux 6.853e-07 Jy (24.31 AB) in JWST/NIRCAM/F470N.
+    L3 [SRC-15-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  ... 1406 more sources (use --json)
+
+Notes
+  - Gaia DR3 positions propagated to 2022-06-03T17:18:55.386 (from MJD-AVG)
+  - galaxy and nebula identifications need NED/SIMBAD records (not yet available)
+  - sizes not assessed: the image has no ERR array, so measurement errors are unknown; without a size, no source is established as a star (L2)
+  - L1 = measured; L2 = inferred from measurements and a stated rule or catalogue record; L3 = hypothesis with the test that would decide it
