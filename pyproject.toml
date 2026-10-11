@@ -57,6 +57,8 @@ extend-exclude = ["legacy", "docs"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "NPY", "RUF"]
+# Mathematical symbols used deliberately in scientific docstrings and labels.
+allowed-confusables = ["σ", "ρ", "π", "Σ", "−", "×"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["astroledger", "fits_factory"]

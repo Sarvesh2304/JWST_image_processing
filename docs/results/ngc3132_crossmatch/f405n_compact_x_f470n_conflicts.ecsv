@@ -1,0 +1,28 @@
+# %ECSV 1.0
+# ---
+# datatype:
+# - {name: kind, datatype: string}
+# - {name: a_indices, datatype: string}
+# - {name: b_indices, datatype: string}
+# - {name: detail, datatype: string}
+# meta: !!omap
+# - crossmatch:
+#     annulus_arcsec: !!python/tuple [1.0, 31.0]
+#     density_method: local annulus, edge-corrected; floor of 1 source
+#     expected_completeness: 0.9996645373720975
+#     k: 4.0
+#     n_a: 106
+#     n_b: 1421
+#     n_conflicts: 0
+#     n_matched: 26
+#     p_chance_limit: 0.01
+#     prior_method: estimated from sources without candidates
+#     prior_q: 0.2445677332646514
+#     registration: {applied: true, n_pairs: 39, n_pairs_used: 26, offset_ddec_arcsec: 0.02722513586453551, offset_dra_arcsec: 0.012024174269321246,
+#       offset_err_arcsec: 0.003276079013534179, residual_scatter_arcsec: 0.013328645031582683, sigma_sys_calibrated_arcsec: 0.00721882908004733}
+#     sigma_sys_arcsec: 0.00721882908004733
+# - notes: [matches are positional coincidences (L1); no identity is assigned, positional errors are treated as circular Gaussians per
+#       coordinate, 'near the edge of B''s footprint the convex hull is slightly smaller than the true footprint, so local densities at
+#       its corners err high by about 13% (P_chance errs conservative); along straight edges the correction is unbiased']
+# schema: astropy-2.0
+kind a_indices b_indices detail
