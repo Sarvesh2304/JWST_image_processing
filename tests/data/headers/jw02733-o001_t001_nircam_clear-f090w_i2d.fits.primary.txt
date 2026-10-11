@@ -1,0 +1,283 @@
+SIMPLE  =                    T / conforms to FITS standard                      
+BITPIX  =                    8 / array data type                                
+NAXIS   =                    0 / number of array dimensions                     
+EXTEND  =                    T                                                  
+DATE    = '2026-07-26T17:45:50.831' / UTC date file created                     
+ORIGIN  = 'STSCI   '           / Organization responsible for creating file     
+TIMESYS = 'UTC     '           / principal time system for time-related keywords
+TIMEUNIT= 's       '           / Default unit applicable to all time values     
+FILENAME= 'jw02733-o001_t001_nircam_clear-f090w_i2d.fits' / Name of the file    
+SDP_VER = '2026_1b '           / Data Processing (DP) Software Version          
+PRD_VER = 'PRDOPSSOC-073'      / S&OC Project Reference Database (PRD) Version  
+OSS_VER = '8.4.5.2 '           / Observatory Scheduling Software (OSS) Version  
+GSC_VER = 'GSC32   '           / Guide Star Catalog (GSC) Version               
+CAL_VER = '2.0.1   '           / Calibration Software Version                   
+CAL_VCS = 'RELEASE '           / Calibration software version control sys number
+DATAMODL= 'ImageModel'         / Type of data model                             
+TELESCOP= 'JWST    '           / Telescope used to acquire the data             
+HGA_MOVE=                    F / High Gain Antenna moved during data collection 
+PWFSEET =    59731.72474766204 / [d] Previous WFS exposure end time in MJD      
+NWFSEST =   59733.808773668985 / [d] Next WFS exposure start time in MJD        
+COMPRESS=                    F / On-board data compression was used (T/F)       
+                                                                                
+        Association information                                                 
+                                                                                
+ASNPOOL = 'jw02733_20260726t151748_pool.csv' / Name of the ASN pool             
+ASNTABLE= 'jw02733-o001_20260726t151748_image3_00002_asn.json' / Name of the ASN
+                                                                                
+        Program information                                                     
+                                                                                
+TITLE   = 'JWST Early Release Observation 7' / Proposal title                   
+PI_NAME = 'Pontoppidan, Klaus M.' / Principal investigator name                 
+CATEGORY= 'COM     '           / Program category                               
+SUBCAT  = 'ERO     '           / Program sub-category                           
+                                                                                
+        Observation identifiers                                                 
+                                                                                
+DATE-OBS= '2022-06-03'         / [yyyy-mm-dd] UTC date at start of exposure     
+TIME-OBS= '17:47:30.542'       / [hh:mm:ss.sss] UTC time at start of exposure   
+DATE-BEG= '2022-06-03T17:47:30.542' / Date-time start of exposure               
+DATE-END= '2022-06-03T18:21:52.041' / Date-time end of exposure                 
+OBS_ID  = 'V02733001001P0000000002105' / Programmatic observation identifier    
+VISIT_ID= '02733001001'        / Visit identifier                               
+PROGRAM = '02733   '           / Program number                                 
+OBSERVTN= '001     '           / Observation number                             
+VISIT   = '001     '           / Visit number                                   
+VISITGRP= '02      '           / Visit group identifier                         
+SEQ_ID  = '1       '           / Parallel sequence identifier                   
+ACT_ID  = '05      '           / Activity identifier                            
+EXPOSURE= '1       '           / Exposure request number                        
+BKGDTARG=                    F / Background target                              
+TEMPLATE= 'NIRCam Imaging'     / Observation template used                      
+OBSLABEL= 'NGC 3132 NIRCam imaging' / Proposer label for the observation        
+OBSFOLDR= 'Imaging '           / Name of the APT observation folder             
+                                                                                
+        Visit information                                                       
+                                                                                
+ENG_QUAL= 'OK      '           / Engineering data quality indicator from EngDB  
+ENGQLPTG= 'CALCULATED_TRACK_TR_202111' / Quality of pointing information from En
+VISITYPE= 'PRIME_TARGETED_FIXED' / Visit type                                   
+VSTSTART= '2022-06-03 15:23:59.5400000' / UTC visit start time                  
+VISITSTA= 'SUCCESSFUL'         / Status of a visit                              
+NEXPOSUR=                   24 / Total number of planned exposures in visit     
+INTARGET=                    F / At least one exposure in visit is internal     
+TARGOOPP=                    F / Visit scheduled as target of opportunity       
+TSOVISIT=                    F / Time Series Observation visit indicator        
+EXP_ONLY=                    F / Special commanding without SI configuration    
+CROWDFLD=                    F / Are the FGSes in a crowded field?              
+                                                                                
+        Target information                                                      
+                                                                                
+TARGPROP= 'NGC-3132'           / Proposer's name for the target                 
+TARGNAME= 'NGC 3132'           / Standard astronomical catalog name for target  
+TARGTYPE= 'FIXED   '           / Type of target (fixed, moving, generic)        
+TARGCAT = 'ISM     '           / Target category from APT                       
+TARGDESC= 'Planetary nebulae'  / Target description from APT                    
+TARG_RA =   151.75511473253715 / [deg] Target RA at mid time of exposure        
+TARG_DEC=   -40.43742698752177 / [deg] Target Dec at mid time of exposure       
+TARGURA =                  0.1 / [arcsec] Target RA uncertainty                 
+TARGUDEC=                  0.1 / [arcsec] Target Dec uncertainty                
+MU_RA   = -0.00769288534450976 / [arcsec/yr] Target proper motion in RA         
+MU_DEC  = 0.000410999999999999 / [arcsec/yr] Target proper motion in Dec        
+MU_EPOCH= '2015-07-02 12:00:00.0000000' / Target proper motion epoch in UT      
+PROP_RA =   151.75513416666666 / [deg] Proposer's target RA                     
+PROP_DEC=   -40.43742777777778 / [deg] Proposer's target Dec                    
+                                                                                
+        Instrument configuration information                                    
+                                                                                
+INSTRUME= 'NIRCAM  '           / Instrument used to acquire the data            
+DETECTOR= 'MULTIPLE'           / Name of detector used to acquire the data      
+MODULE  = 'B       '           / NIRCam module: A, B or MULTIPLE                
+CHANNEL = 'SHORT   '           / Instrument channel                             
+FILTER  = 'F090W   '           / Name of the filter element used                
+FWPOSOFF=                    0 / Filter wheel position offset (actual minus comm
+FWPOSTOL= 'within commanded tolerance' / Filter wheel position tolerance        
+PUPIL   = 'CLEAR   '           / Name of the pupil element used                 
+PILIN   =                    F / Pupil imaging lens in the optical path?        
+PWPOSOFF=                    0 / Pupil wheel position offset (actual minus comma
+PWPOSTOL= 'within commanded tolerance' / Pupil wheel position tolerance         
+                                                                                
+        Exposure parameters                                                     
+                                                                                
+EXPCOUNT=                   17 / Running count of exposures in visit            
+EXPRIPAR= 'PRIME   '           / Prime or parallel exposure                     
+EXP_TYPE= 'NRC_IMAGE'          / Type of data in the exposure                   
+EXPSTART=   59733.741325717594 / [d] exposure start time in MJD                 
+EXPMID  =    59733.75325603878 / [d] exposure mid time in MJD                   
+EXPEND  =    59733.76518565972 / [d] exposure end time in MJD                   
+OSF_FILE= '2022155T000048043_002_osf.xml' / Observatory Status File name coverin
+READPATT= 'BRIGHT1 '           / Readout pattern                                
+NOUTPUTS=                    4 / Number of detector outputs used                
+NINTS   =                    1 / Number of integrations in exposure             
+NGROUPS =                    9 / Number of groups in integration                
+NFRAMES =                    1 / Number of frames per group                     
+FRMDIVSR=                    1 / Divisor applied to frame-averaged groups       
+GROUPGAP=                    1 / Number of frames dropped between groups        
+DRPFRMS1=                    0 / Number of frames dropped prior to first integra
+DRPFRMS3=                    0 / Number of frames dropped between integrations  
+NSAMPLES=                    1 / Number of A/D samples per pixel                
+TSAMPLE =                 10.0 / [us] Time between samples                      
+TFRAME  =             10.73677 / [s] Time between frames                        
+TGROUP  =               21.474 / [s] Time between groups                        
+EFFINTTM=              182.525 / [s] Effective integration time                 
+EFFEXPTM=   1460.2000000000003 / [s] Effective exposure time                    
+TMEASURE=             1374.304 / [s] Measurement time                           
+DURATION=   1460.2000000000003 / [s] Total duration of exposure                 
+NRSTSTRT=                    0 / Number of reset frames at start of exposure    
+NRESETS =                    1 / Number of reset frames between integrations    
+ZEROFRAM=                    F / Zero frame was downlinked separately           
+DATAPROB=                    F / Science telemetry indicated a problem          
+SCA_NUM =                  486 / Sensor Chip Assembly number                    
+DATAMODE=                   32 / post-processing method used in FPAP            
+SCTARATE= -0.10394789225774191 / [ms/s] Spacecraft Clock Time Adjust RATE       
+PRIMECRS=  0.05324975820496793 / Cosmic Ray rate per thousand pixels per second 
+EXTNCRS =   0.5731749625648768 / Snowballs/showers per million pixels per second
+                                                                                
+        Subarray parameters                                                     
+                                                                                
+SUBARRAY= 'FULL    '           / Subarray used                                  
+SUBSTRT1=                    1 / Starting pixel in axis 1 direction             
+SUBSTRT2=                    1 / Starting pixel in axis 2 direction             
+SUBSIZE1=                 2048 / Number of pixels in axis 1 direction           
+SUBSIZE2=                 2048 / Number of pixels in axis 2 direction           
+FASTAXIS=                    1 / Fast readout axis direction                    
+SLOWAXIS=                   -2 / Slow readout axis direction                    
+                                                                                
+        Dither information                                                      
+                                                                                
+PATTTYPE= 'INTRAMODULEX'       / Primary dither pattern type                    
+PRIDTYPE= '8       '           / Primary dither points and packing              
+PRIDTPTS=                    8 / Number of points in primary dither pattern     
+PATT_NUM=                    1 / Position number within dither pattern          
+NUMDTHPT=                    8 / Total number of points in dither pattern       
+SUBPXPTS=                    1 / Number of points in subpixel dither pattern    
+SUBPXPAT= 'STANDARD'           / Subpixel dither pattern type                   
+XOFFSET =    -8.82002460373568 / [arcsec] X offset in SI ideal coordinate frame 
+YOFFSET =    8.820000451579364 / [arcsec] Y offset in SI ideal coordinate frame 
+                                                                                
+        Aperture information                                                    
+                                                                                
+APERNAME= 'NRCB1_FULL'         / PRD science aperture used                      
+PPS_APER= 'NRCBS_FULL'         / original AperName supplied by PPS              
+                                                                                
+        Velocity aberration correction information                              
+                                                                                
+VA_RA   =   151.77004383337805 / [deg] Velocity aberrated apparent reference RA 
+VA_DEC  =  -40.432375047292936 / [deg] Velocity aberrated apparent reference Dec
+                                                                                
+        Time information                                                        
+                                                                                
+BARTDELT=   137.08113699685782 / [s] Barycentric correction at exposure start   
+BSTRTIME=    59733.74291230483 / [d] Barycentric exposure start time in MJD     
+BENDTIME=   59733.745024725926 / [d] Barycentric exposure end time in MJD       
+BMIDTIME=    59733.74396851537 / [d] Barycentric exposure mid time in MJD       
+HELIDELT=   134.07619579229504 / [s] Heliocentric correction at exposure start  
+HSTRTIME=   59733.742877525416 / [d] Heliocentric exposure start time in MJD    
+HENDTIME=   59733.744989946514 / [d] Heliocentric exposure end time in MJD      
+HMIDTIME=    59733.74393373596 / [d] Heliocentric exposure mid time in MJD      
+                                                                                
+        NIRCam Focus Adjust Mechanism parameters                                
+                                                                                
+FAM_LA1 =                    0 / position in steps of linear actuator 1         
+FASTEP1 =                    0 / requested focus actuator 1 starting steps      
+FAUNIT1 =                  0.0 / requested focus actuator 1 starting units      
+FAPHASE1= 'NULL    '           / requested focus actuator 1 starting phase      
+FA1VALUE=                    0 / requested focus actuator 1 position value      
+FAM_LA2 =                    0 / position in steps of linear actuator 2         
+FASTEP2 =                    0 / requested focus actuator 2 starting steps      
+FAUNIT2 =                  0.0 / requested focus actuator 2 starting units      
+FAPHASE2= 'NULL    '           / requested focus actuator 2 starting phase      
+FA2VALUE=                    0 / requested focus actuator 2 position value      
+FAM_LA3 =                    0 / position in steps of linear actuator 3         
+FASTEP3 =                    0 / requested focus actuator 3 starting steps      
+FAUNIT3 =                  0.0 / requested focus actuator 3 starting units      
+FAPHASE3= 'NULL    '           / requested focus actuator 3 starting phase      
+FA3VALUE=                    0 / requested focus actuator 3 position value      
+                                                                                
+        Guide star information                                                  
+                                                                                
+GS_ORDER=                    1 / index of guide star within list of selected gui
+GSSTRTTM= '2022-06-03 15:48:12.5940000' / UTC time when guide star activity star
+GSENDTIM= '2022-06-03 15:58:41.3300000' / UTC time when guide star activity comp
+GDSTARID= 'S5OT011415'         / guide star identifier                          
+GS_RA   =    151.6516471224709 / guide star right ascension                     
+GS_DEC  =   -40.50670943766652 / guide star declination                         
+GS_URA  =         0.0500904135 / guide star right ascension uncertainty         
+GS_UDEC =         0.0567638576 / guide star declination uncertainty             
+GS_MAG  =    16.29475402832031 / guide star magnitude in FGS detector           
+GS_UMAG =  0.04382776841521263 / guide star magnitude uncertainty               
+GS_V3_PA=    112.0712846621029 / V3 Position Angle of guide star for science    
+PCS_MODE= 'FINEGUIDE'          / Pointing Control System mode                   
+VISITEND= '2022-06-03 18:23:00.2650000' / Observatory UTC time when the visit en
+                                                                                
+        Reference file information                                              
+                                                                                
+CRDS_VER= '13.1.13 '           / Version of CRDS file selection software used   
+CRDS_CTX= 'jwst_1535.pmap'     / CRDS context (.pmap) used to select ref files  
+R_AREA  = 'crds://jwst_nircam_area_0300.fits' / Pixel area reference file name  
+R_CAMERA= 'N/A     '           / Nirspec Camera reference file name             
+R_COLLIM= 'N/A     '           / Nirspec Collimator reference file name         
+R_SIRSKL= 'crds://jwst_nircam_sirskernel_0002.asdf' / NIR Simple Improved Refere
+R_DARK  = 'crds://jwst_nircam_dark_0344.fits' / Dark reference file name        
+R_DISPER= 'N/A     '           / Disperser reference file name                  
+R_DISTOR= 'crds://jwst_nircam_distortion_0214.asdf' / Distortion reference file 
+R_FILOFF= 'crds://jwst_nircam_filteroffset_0006.asdf' / Filter Offset reference 
+R_FLAT  = 'crds://jwst_nircam_flat_0674.fits' / Flat reference file name        
+R_DFLAT = 'N/A     '           / Detector Flat reference file name              
+R_FFLAT = 'N/A     '           / Fore-optics Flat reference file name           
+R_SFLAT = 'N/A     '           / Spectrograph Flat reference file name          
+R_FORE  = 'N/A     '           / Nirspec FORE Model reference file name         
+R_FPA   = 'N/A     '           / Nirspec FPA Model reference file name          
+R_GAIN  = 'crds://jwst_nircam_gain_0090.fits' / Gain reference file name        
+R_IFUFOR= 'N/A     '           / ifufore reference file name                    
+R_IFUPOS= 'N/A     '           / ifupost reference file name                    
+R_IFUSLI= 'N/A     '           / ifuslicer reference file name                  
+R_LINEAR= 'crds://jwst_nircam_linearity_0057.fits' / Linearity reference file na
+R_MASK  = 'crds://jwst_nircam_mask_0060.fits' / Mask reference file name        
+R_MSA   = 'N/A     '           / Nirspec MSA Model reference file name          
+R_OTE   = 'N/A     '           / Nirspec OTE Model reference file name          
+R_PHOTOM= 'crds://jwst_nircam_photom_0175.fits' / Photometric reference file nam
+R_READNO= 'crds://jwst_nircam_readnoise_0220.fits' / Read noise reference file n
+R_REGION= 'N/A     '           / Regions reference file name                    
+R_SATURA= 'crds://jwst_nircam_saturation_0102.fits' / Saturation reference file 
+R_SPCWCS= 'N/A     '           / Spectral distortion reference file name        
+R_SUPERB= 'crds://jwst_nircam_superbias_0241.fits' / Superbias reference file na
+R_WAVRAN= 'N/A     '           / Wavelength Range reference file name           
+                                                                                
+        Calibration step information                                            
+                                                                                
+S_WCS   = 'COMPLETE'           / Assign World Coordinate System                 
+S_CHGMIG= 'SKIPPED '           / Charge Migration                               
+S_CLNFNS= 'SKIPPED '           / Clean Flicker Noise                            
+S_DARK  = 'COMPLETE'           / Dark Subtraction                               
+S_DQINIT= 'COMPLETE'           / Data Quality Initialization                    
+S_FLAT  = 'COMPLETE'           / Flat Field Correction                          
+S_GANSCL= 'SKIPPED '           / Gain Scale Correction                          
+S_GRPSCL= 'SKIPPED '           / Group Scale Correction                         
+S_IPC   = 'SKIPPED '           / Interpixel Capacitance Correction              
+S_JUMP  = 'COMPLETE'           / Jump Detection                                 
+S_LINEAR= 'COMPLETE'           / Linearity Correction                           
+S_OUTLIR= 'COMPLETE'           / Outlier Detection                              
+S_PERSIS= 'SKIPPED '           / Persistence Correction                         
+S_PHOTOM= 'COMPLETE'           / Photometric Calibration                        
+S_PCTFRM= 'SKIPPED '           / Picture Frame Correction                       
+S_RAMP  = 'COMPLETE'           / Ramp Fitting                                   
+S_REFPIX= 'COMPLETE'           / Reference Pixel Correction                     
+S_RESAMP= 'COMPLETE'           / Image resampling                               
+S_SATURA= 'COMPLETE'           / Saturation Checking                            
+S_SKYMAT= 'COMPLETE'           / Sky Background Equalization or Subtraction     
+S_SUPERB= 'COMPLETE'           / Superbias Subtraction                          
+S_TWKREG= 'COMPLETE'           / Image Alignment via Astronomical Sources       
+                                                                                
+        Resample Parameters                                                     
+                                                                                
+NDRIZ   =                    8 / Number of groups/pointings included in resample
+RESWHT  = 'exptime '           / Type of drizzle weighting to use in resampling 
+PIXFRAC =                  1.0 / Drizzle parameter describing pixel shrinking   
+PXSCLRT =                  1.0 / Pixel scale ratio relative to native detector s
+                                                                                
+        Background information                                                  
+                                                                                
+BKGMETH = 'match   '           / Background computation method                  
+BKGLEVEL= 0.001345870274881184 / Computed/Matched constant background level     
+BKGSUB  =                    F / Has background been subtracted from data?      

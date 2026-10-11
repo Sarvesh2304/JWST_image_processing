@@ -1,0 +1,28 @@
+# %ECSV 1.0
+# ---
+# datatype:
+# - {name: file, datatype: string}
+# - {name: bandpass, datatype: string}
+# - {name: cal_ver, datatype: string}
+# - {name: epoch_utc, datatype: string}
+# - {name: n_matched, datatype: int64}
+# - {name: n_used, datatype: int64}
+# - {name: median_dra_mas, datatype: float64}
+# - {name: median_dra_err_mas, datatype: float64}
+# - {name: median_ddec_mas, datatype: float64}
+# - {name: median_ddec_err_mas, datatype: float64}
+# - {name: robust_sigma_dra_mas, datatype: float64}
+# - {name: robust_sigma_ddec_mas, datatype: float64}
+# - {name: rotation_arcsec, datatype: float64}
+# - {name: rotation_err_arcsec, datatype: float64}
+# - {name: scale_ppm, datatype: float64}
+# - {name: scale_err_ppm, datatype: float64}
+# - {name: rms_after_fit_mas, datatype: float64}
+# meta: !!omap
+# - {description: 'Per-image astrometric residuals (catalogue minus Gaia DR3 at the image epoch), L1'}
+# schema: astropy-2.0
+file bandpass cal_ver epoch_utc n_matched n_used median_dra_mas median_dra_err_mas median_ddec_mas median_ddec_err_mas robust_sigma_dra_mas robust_sigma_ddec_mas rotation_arcsec rotation_err_arcsec scale_ppm scale_err_ppm rms_after_fit_mas
+jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits JWST/NIRCAM/F405N 2.0.1 2022-06-03T16:26:05.326 31 19 20.360784765072395 1.3213963303160905 19.560770714035215 1.3155103731572284 4.595733717556316 4.575262727018144 5.795935197963391 3.294927983932489 27.79503826890987 15.974261648811321 4.782641657079658
+jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880.fits JWST/NIRCAM/F470N 2.0.1 2022-06-03T17:18:55.386 26 14 15.10189216914104 3.619554267690261 -2.5648459309693634 3.6466534649138262 10.805977788663853 10.886880933535151 6.211429827553719 14.202814350917496 124.70876306347847 68.85718707583658 18.182079268560916
+jw02733-o001_t001_nircam_clear-f356w_i2d_rows480-1880.fits JWST/NIRCAM/F356W 2.0.1 2022-06-03T18:04:41.348 23 10 9.380002783052252 0.9413852716935803 7.819859204991788 2.6878432330465296 2.3752665876391523 6.781861174417771 5.548358236533258 8.584758649678772 2.4024520164592036 41.62008442387695 8.527115554839162
+jw02733002001_02101_00001_mirimage_cal.fits JWST/MIRI/F770W 2.0.1 2022-06-12T12:01:50.714 14 11 -34.57987095582938 5.413485838714791 -34.981834087360525 5.81568247739926 14.325781006079444 15.39011942661605 75.24082517405424 15.613587517267634 -101.33212484004927 75.69680839572422 14.795274351010463

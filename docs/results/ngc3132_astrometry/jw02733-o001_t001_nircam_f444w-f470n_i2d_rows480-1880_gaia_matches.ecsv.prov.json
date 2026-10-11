@@ -1,0 +1,100 @@
+{
+  "duration_s": 0.047884,
+  "ended": "2026-10-07T11:24:50.855+00:00",
+  "environment": {
+    "git": {
+      "commit": "30eadfc9a9742b19a984afab05262e2b5d30ce77",
+      "dirty": true
+    },
+    "packages": {
+      "astroledger": "0.0.1",
+      "astropy": "8.0.1",
+      "astroquery": "0.4.11",
+      "numpy": "2.5.3",
+      "photutils": "3.0.0",
+      "reproject": "0.21.0",
+      "scipy": "1.18.1"
+    },
+    "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "error": null,
+  "extra": {},
+  "function": "astroledger.astrometry.qa.astrometric_qa",
+  "id": "18dc3b9b7e0e728a-e08b7576",
+  "inputs": {
+    "catalog": {
+      "columns": [
+        "label",
+        "x",
+        "y",
+        "ra",
+        "dec",
+        "area",
+        "semimajor_axis",
+        "semiminor_axis",
+        "ellipticity",
+        "fwhm",
+        "flux",
+        "near_bright_source"
+      ],
+      "kind": "table",
+      "rows": 1421,
+      "sha256": "45117b6b46631c66dc4d9b47de907dcc446ff81e58cf12cca5dbaf1474504b22"
+    },
+    "gaia": {
+      "columns": [
+        "source_id",
+        "ra",
+        "dec",
+        "ra_error",
+        "dec_error",
+        "pmra",
+        "pmra_error",
+        "pmdec",
+        "pmdec_error",
+        "ref_epoch",
+        "phot_g_mean_mag",
+        "astrometric_params_solved"
+      ],
+      "kind": "table",
+      "rows": 71,
+      "sha256": "6a5b5435bbd84a0fc4acad774f23c6173efab0e70adc80a0f4ac6628bc23f575"
+    },
+    "image": {
+      "bandpass": "JWST/NIRCAM/F470N",
+      "data_sha256": "cad7834d8623368b52093e8a92e91f748e9b04e50cf07a217174d0785e4c6afd",
+      "extension": [
+        "SCI",
+        1
+      ],
+      "file": "jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880.fits",
+      "kind": "image",
+      "path": "/tmp/claude-0/-home-user-JWST-image-processing/e5718ba4-285a-57c5-b8f0-6de1b2249d01/scratchpad/realdata/astro_cache/jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880.fits",
+      "sha256": "d9e6eebfe36f3a2f3b940b1452308a5081c44fae93b12f3dd3338d37afa7c840"
+    }
+  },
+  "name": "astrometry.gaia_qa",
+  "output_file": {
+    "path": "jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880_gaia_matches.ecsv",
+    "sha256": "98432ad18a663980ddd3829d007c52ea22a874369de78aa36ec52d554645aaaa"
+  },
+  "outputs": [
+    {
+      "kind": "param",
+      "value": "AstrometricQA(matches=<QTable length=26>\ncatalog_index      source_id              ra         ... near_mask clipped  used\n                                         deg         ...                        \n    int64            int64             float64       ...    bool     bool   bool\n------------- ------------------- ------------------ ... --------- ------- -----\n           13 5420219796652827392 151.74654912855996 ...     False   False  True\n           47 5420219663509091840 151.73618530038104 ...."
+    }
+  ],
+  "params": {
+    "clip": 3.0,
+    "epoch": null,
+    "exclude_no_pm": true,
+    "mask_radius": 3,
+    "match_radius": "0.5 arcsec",
+    "max_iter": 10,
+    "min_fit": 6
+  },
+  "started": "2026-10-07T11:24:50.807+00:00",
+  "status": "ok",
+  "version": "1"
+}

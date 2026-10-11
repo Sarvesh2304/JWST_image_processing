@@ -1,0 +1,17 @@
+{
+  "output_file": {
+    "path": "ngc3132_f405n_completeness.png",
+    "sha256": "2b45b7d4167219a04dd32aebfb20f9b8f8f2b2f419926019b020613bd77513ba"
+  },
+  "made_by": "astroledger.imaging.plot_completeness",
+  "from_activities": {
+    "clean sky (>65\")": {
+      "activity_id": "18dc3afc6142a1d7-535d239c",
+      "table": "ngc3132_f405n_completeness_clean.ecsv"
+    },
+    "nebula (<50\")": {
+      "activity_id": "18dc3b071a644377-d29bf613",
+      "table": "ngc3132_f405n_completeness_nebula.ecsv"
+    }
+  }
+}

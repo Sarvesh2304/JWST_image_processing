@@ -1,0 +1,102 @@
+{
+  "duration_s": 0.026356,
+  "ended": "2026-10-07T11:24:55.199+00:00",
+  "environment": {
+    "git": {
+      "commit": "30eadfc9a9742b19a984afab05262e2b5d30ce77",
+      "dirty": true
+    },
+    "packages": {
+      "astroledger": "0.0.1",
+      "astropy": "8.0.1",
+      "astroquery": "0.4.11",
+      "numpy": "2.5.3",
+      "photutils": "3.0.0",
+      "reproject": "0.21.0",
+      "scipy": "1.18.1"
+    },
+    "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "error": null,
+  "extra": {},
+  "function": "astroledger.astrometry.qa.astrometric_qa",
+  "id": "18dc3b9c8244a45d-f4779ad0",
+  "inputs": {
+    "catalog": {
+      "columns": [
+        "label",
+        "x",
+        "y",
+        "ra",
+        "dec",
+        "area",
+        "semimajor_axis",
+        "semiminor_axis",
+        "ellipticity",
+        "fwhm",
+        "flux",
+        "flux_err",
+        "snr",
+        "near_bright_source"
+      ],
+      "kind": "table",
+      "rows": 233,
+      "sha256": "4a5c6cb06979e9de5eff349d11a7bf25437d27b94fd623ae29252ff0589c1b9a"
+    },
+    "gaia": {
+      "columns": [
+        "source_id",
+        "ra",
+        "dec",
+        "ra_error",
+        "dec_error",
+        "pmra",
+        "pmra_error",
+        "pmdec",
+        "pmdec_error",
+        "ref_epoch",
+        "phot_g_mean_mag",
+        "astrometric_params_solved"
+      ],
+      "kind": "table",
+      "rows": 71,
+      "sha256": "6a5b5435bbd84a0fc4acad774f23c6173efab0e70adc80a0f4ac6628bc23f575"
+    },
+    "image": {
+      "bandpass": "JWST/MIRI/F770W",
+      "data_sha256": "204e50f3793431a202df6a55ceac7d76b26cbbd33d6a5dade467dd6b11a19531",
+      "extension": [
+        "SCI",
+        1
+      ],
+      "file": "jw02733002001_02101_00001_mirimage_cal.fits",
+      "kind": "image",
+      "path": "/tmp/claude-0/-home-user-JWST-image-processing/e5718ba4-285a-57c5-b8f0-6de1b2249d01/scratchpad/realdata/astro_cache/jw02733002001_02101_00001_mirimage_cal.fits",
+      "sha256": "9f36f999dd40e2bfe6161cdb7fc57ca378759d09ab7853c07e9a2231579f6928"
+    }
+  },
+  "name": "astrometry.gaia_qa",
+  "output_file": {
+    "path": "jw02733002001_02101_00001_mirimage_cal_gaia_matches.ecsv",
+    "sha256": "ea5704e59c10a85cfacb2c82693b47c897bbcecfb7e70d78ca9831860a9142b9"
+  },
+  "outputs": [
+    {
+      "kind": "param",
+      "value": "AstrometricQA(matches=<QTable length=14>\ncatalog_index      source_id              ra         ... near_mask clipped  used\n                                         deg         ...                        \n    int64            int64             float64       ...    bool     bool   bool\n------------- ------------------- ------------------ ... --------- ------- -----\n            2 5420219796652827392  151.7465262387104 ...     False   False  True\n            3 5420219800952064512 151.75542659135752 ...."
+    }
+  ],
+  "params": {
+    "clip": 3.0,
+    "epoch": null,
+    "exclude_no_pm": true,
+    "mask_radius": 3,
+    "match_radius": "0.5 arcsec",
+    "max_iter": 10,
+    "min_fit": 6
+  },
+  "started": "2026-10-07T11:24:55.173+00:00",
+  "status": "ok",
+  "version": "1"
+}

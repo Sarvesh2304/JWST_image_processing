@@ -1,0 +1,80 @@
+{
+  "duration_s": 46.029658,
+  "ended": "2026-10-07T11:14:13.454+00:00",
+  "environment": {
+    "git": {
+      "commit": "c3a06aed60d363988a644bace4abea22837c6243",
+      "dirty": true
+    },
+    "packages": {
+      "astroledger": "0.0.1",
+      "astropy": "8.0.1",
+      "astroquery": "0.4.11",
+      "numpy": "2.5.3",
+      "photutils": "3.0.0",
+      "reproject": "0.21.0",
+      "scipy": "1.18.1"
+    },
+    "platform": "Linux-6.18.44-fc-v77-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "error": null,
+  "extra": {},
+  "function": "astroledger.imaging.completeness.injection_recovery",
+  "id": "18dc3afc6142a1d7-535d239c",
+  "inputs": {
+    "image": {
+      "bandpass": "JWST/NIRCAM/F405N",
+      "data_sha256": "23693a7e55f52646cd4400fae025cbd409b8d181206085cf56e2fae108204ef5",
+      "extension": [
+        "SCI",
+        1
+      ],
+      "file": "jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits",
+      "kind": "image",
+      "path": "/tmp/claude-0/-home-user-JWST-image-processing/e5718ba4-285a-57c5-b8f0-6de1b2249d01/scratchpad/realdata/cutouts/jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits",
+      "sha256": "60d6bba44ccf7d925e7de321a55b467d3372b5925378d954cab292119d16c0fb"
+    },
+    "levels": {
+      "dtype": "float64",
+      "kind": "array",
+      "sha256": "be97ce4caa73d92d4591074c153335fe619f3666650786bf0ee740626149a707",
+      "shape": [
+        19
+      ]
+    },
+    "region": {
+      "dtype": "bool",
+      "kind": "array",
+      "sha256": "a2ce24407c12c584c0a7396677e98b046afad87e4ac5835f6659ce8b6ddaa166",
+      "shape": [
+        1400,
+        2356
+      ]
+    }
+  },
+  "name": "imaging.injection_recovery",
+  "output_file": {
+    "path": "ngc3132_f405n_completeness_clean.ecsv",
+    "sha256": "b8f1a4a1af04232c0bbb515377dda5cbdaa2f5d39c8472bf35d6bade8206780a"
+  },
+  "outputs": [
+    {
+      "kind": "param",
+      "value": "CompletenessResult(table=<QTable length=19>\n abmag           flux          ...       ci_high       median_flux_ratio \n                  Jy           ...                                       \nfloat64        float64         ...       float64            float64      \n------- ---------------------- ... ------------------- ------------------\n   18.0 0.00022908676527677723 ...  0.9904096873429008 1.0153776113685442\n   18.5  0.0001445439770745928 ...  0.9904096873429008 1.0080327422520334\n   19.0  9.1..."
+    }
+  ],
+  "params": {
+    "avoid_sources": true,
+    "detect_kwargs": null,
+    "fwhm": 2.0,
+    "match_radius": 1.5,
+    "min_separation": 25.0,
+    "n_per_level": 40,
+    "psf": "Model: ImagePSF\nInputs: ('x', 'y')\nOutputs: ('z',)\nModel set size: 1\nPSF shape (oversampled pixels): (51, 51)\nOrigin: [25.0, 25.0]\nOversampling: [2, 2]\nFill Value: 0.0\nParameters:\n    flux x_0 y_0\n    ---- --- ---\n     1.0 0.0 0.0",
+    "seed": 7
+  },
+  "started": "2026-10-07T11:13:27.424+00:00",
+  "status": "ok",
+  "version": "1"
+}
