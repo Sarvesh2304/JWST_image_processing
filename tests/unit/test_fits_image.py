@@ -191,6 +191,19 @@ def test_reader_warnings_are_recorded_not_discarded(tmp_path):
     assert any(n.startswith("warning while reading:") for n in img.notes)
 
 
+def test_routine_keyword_fixes_are_noted_but_not_logged_as_warnings(tmp_path, caplog):
+    path = tmp_path / "dates.fits"
+    hdu = fits.PrimaryHDU(np.zeros(ff.SHAPE, "float32"))
+    hdu.header.update(ff.tan_wcs((10.0, 10.0), 1.0))
+    hdu.header["MJD-AVG"] = 59740.5  # astropy fills DATE-AVG from it ('datfix')
+    hdu.writeto(path)
+    with caplog.at_level("DEBUG", logger="astroledger.io.fits_image"):
+        img = open_image(path)
+    assert any("'datfix'" in n for n in img.notes)
+    datfix = [r for r in caplog.records if "'datfix'" in r.getMessage()]
+    assert datfix and all(r.levelname == "DEBUG" for r in datfix)
+
+
 def test_repr_is_informative(tmp_path):
     text = repr(open_image(ff.jwst_cal(tmp_path / "x_cal.fits")))
     assert "JWST/NIRCAM/NRCA1" in text and "MJy / sr" in text and "[SCI,1]" in text

@@ -1,9 +1,9 @@
 {
-  "duration_s": 6.50713,
-  "ended": "2026-10-13T07:45:19.021+00:00",
+  "duration_s": 5.975794,
+  "ended": "2026-10-13T08:14:22.755+00:00",
   "environment": {
     "git": {
-      "commit": "2834b89175f816987e95d09f29b4fb911631221c",
+      "commit": "5b07e23de431094927ba15c33d729d058bd0443a",
       "dirty": true
     },
     "packages": {
@@ -21,7 +21,7 @@
   "error": null,
   "extra": {},
   "function": "astroledger.interpret.engine.explain",
-  "id": "18de071a9582ddb8-45e3a0c0",
+  "id": "18de08b0b3f41686-bb9f259c",
   "inputs": {
     "gaia": {
       "columns": [
@@ -58,7 +58,7 @@
   "name": "interpret.explain",
   "output_file": {
     "path": "jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880_explain.json",
-    "sha256": "8867c3cb491169942510f164fff3ec604c4a42f85ea11ceb2875070595628704"
+    "sha256": "d7d670800ef35ce1ac73658f3cd0e41d15fd43e6e39d6e13db94d67fe6dfe773"
   },
   "outputs": [
     {
@@ -67,9 +67,10 @@
     }
   ],
   "params": {
+    "catalogue": null,
     "detect_kwargs": null
   },
-  "started": "2026-10-13T07:45:12.499+00:00",
+  "started": "2026-10-13T08:14:16.766+00:00",
   "status": "ok",
   "version": "1"
 }

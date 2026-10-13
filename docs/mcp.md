@@ -10,7 +10,7 @@ code as the command line.
 |------|-----------------|---------------------|
 | `list_files` | FITS files under the data root, with sizes | no |
 | `inspect` | The L1 fact sheet of an image: telescope, instrument, bandpass, observing mode, target designation, units, WCS footprint, pixel statistics | no |
-| `explain` | Graded statements: L1 measured, L2 inferred with a cited rule or catalogue record, L3 hypothesis with its test. Sources with an L2 inference come first. Pass `gaia_table` (an ECSV of Gaia DR3 sources) to allow stars to be established. | no |
+| `explain` | Graded statements: L1 measured, L2 inferred with a cited rule or catalogue record, L3 hypothesis with its test. Sources with an L2 inference come first. Pass `gaia_table` (an ECSV of Gaia DR3 sources) to allow stars to be established, and `simbad_table` (an ECSV from `astroledger.archives.cds.simbad_cone`) to allow galaxies and nebulae to be established. | no |
 | `search` | MAST observations around a target name or `RA DEC`, with the true bandpass of each | yes (`mast.stsci.edu`) |
 
 The server tells the client, in its instructions, to keep each statement's evidence level, never

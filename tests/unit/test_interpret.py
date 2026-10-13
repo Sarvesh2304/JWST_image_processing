@@ -334,3 +334,17 @@ def test_catalogue_without_required_columns_is_refused(case):
     image, _, _ = case
     with pytest.raises(ValueError, match="lacks columns"):
         explain(image, catalogue=QTable({"main_id": ["x"]}))
+
+
+def test_cli_reads_a_simbad_table_written_as_ecsv(case, tmp_path, capsys):
+    image, _, _ = case
+    path = _write(tmp_path / "cli_i2d.fits")
+    records_path = tmp_path / "simbad.ecsv"
+    _records(image, [("SYNTH GAL 1", "G", BLOB)]).write(records_path, format="ascii.ecsv")
+    assert main(["explain", str(path), "--catalogue", str(records_path), "--json"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["summary"]["L2_galaxy"] == 1
+    texts = [
+        s["text"] for v in payload["sources"].values() for s in v if s["level"] == "L2_INFERENCE"
+    ]
+    assert any("SYNTH GAL 1" in t for t in texts)

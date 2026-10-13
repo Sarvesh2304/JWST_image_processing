@@ -67,6 +67,6 @@ Sources: 1421 detected; 0 unresolved, 0 extended; 19 coincide with Gaia DR3; 0 e
 
 Notes
   - Gaia DR3 positions propagated to 2022-06-03T17:18:55.386 (from MJD-AVG)
-  - galaxy and nebula identifications need NED/SIMBAD records (not yet available)
+  - no SIMBAD records given: galaxies and nebulae stay hypotheses (L3)
   - sizes not assessed: the image has no ERR array, so measurement errors are unknown; without a size, no source is established as a star (L2)
   - L1 = measured; L2 = inferred from measurements and a stated rule or catalogue record; L3 = hypothesis with the test that would decide it

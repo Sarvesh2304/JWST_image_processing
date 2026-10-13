@@ -40,6 +40,7 @@ from astroledger.core.product import ImageProduct, SourceInfo
 __all__ = ["DEFAULT_BAD_BITS", "JWST_DO_NOT_USE", "open_image", "open_images", "parse_bunit"]
 
 log = logging.getLogger(__name__)
+_ROUTINE_FIX = re.compile(r"FITSFixedWarning: '(datfix|obsfix)'")
 
 #: JWST data-quality bit 0: the pipeline's "do not use this pixel" flag.
 JWST_DO_NOT_USE = 1
@@ -145,7 +146,10 @@ def open_images(
         f"{w.category.__name__}: {w.message}" for w in caught if w not in unrelated
     )
     for text in reader_warnings:
-        log.warning("%s: %s", path.name, text)
+        # astropy's routine keyword standardisation (dates from MJD, site from OBSGEO-XYZ) is not
+        # a problem with the file; it stays in the notes but is not logged as a warning
+        level = logging.DEBUG if _ROUTINE_FIX.match(text) else logging.WARNING
+        log.log(level, "%s: %s", path.name, text)
     for product in products:
         product.notes.extend(f"warning while reading: {text}" for text in reader_warnings)
     return products
