@@ -13,13 +13,24 @@ Wavelengths
 ``nominal_wavelength`` comes from the instruments' published naming convention (the digits of
 the filter name): JWST ``F405N`` = 4.05 um, ``F1130W`` = 11.30 um; HST UVIS/optical ``F606W`` =
 606 nm, HST infrared ``F160W`` = 1.60 um. It is good for ordering and labelling, not for
-photometry. ``pivot`` is filled only from a header value (HST ``PHOTPLAM``); it is never guessed.
+photometry.
+
+``pivot`` comes from an authentic source and is never guessed:
+
+- HST: the ``PHOTPLAM`` header keyword;
+- JWST NIRCam and NIRISS: ``core/data/jwst_pivots.ecsv``, computed with
+  ``scripts/build_jwst_pivots.py`` from STScI's throughput tables (``mirage`` 2.5.0). NIRCam
+  pivots differ slightly between modules A and B. The module comes from ``DETECTOR``; for a
+  multi-module mosaic (``DETECTOR=MULTIPLE``) the mean of the two is used, and a note says so;
+- MIRI and anything else: none (no authentic table available here).
 """
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from functools import lru_cache
+from pathlib import Path
 
 from astropy import units as u
 from astropy.io.fits import Header
@@ -142,6 +153,12 @@ class Bandpass:
         if photplam:
             pivot = (float(photplam) * u.AA).to(u.um)
             notes = (*notes, "pivot from PHOTPLAM header keyword")
+        elif telescope == "JWST" and instrument in ("NIRCAM", "NIRISS") and name:
+            pivot, note = _jwst_pivot(
+                instrument, name, elements, get("DETECTOR"), get("FILENAME") or ""
+            )
+            if note:
+                notes = (*notes, note)
 
         return cls(
             name=name,
@@ -153,6 +170,72 @@ class Bandpass:
             pivot=pivot,
             notes=tuple(notes),
         )
+
+
+_PIVOT_TABLE = Path(__file__).parent / "data" / "jwst_pivots.ecsv"
+
+
+@lru_cache(maxsize=1)
+def _pivot_rows() -> tuple[tuple[str, str, str, str, str, float], ...]:
+    from astropy.table import Table
+
+    table = Table.read(_PIVOT_TABLE, format="ascii.ecsv")
+    return tuple(
+        (
+            str(r["instrument"]),
+            str(r["filter_wheel"] or ""),
+            str(r["pupil_wheel"] or ""),
+            str(r["bandpass"]),
+            str(r["module"] or ""),
+            float(r["pivot_um"]),
+        )
+        for r in table
+    )
+
+
+_COMBINED_PRODUCT = re.compile(r"^JW\d{5}-[OC]\d+", re.IGNORECASE)
+
+
+def _jwst_pivot(
+    instrument: str,
+    name: str,
+    elements: dict[str, str],
+    detector: str | None,
+    filename: str = "",
+) -> tuple[u.Quantity | None, str | None]:
+    """Pivot from the bundled STScI-derived table; (None, None) when not covered.
+
+    The NIRCam module is taken from ``DETECTOR`` only for single-exposure products. Stage-3
+    association products (``jwNNNNN-o...``, ``jwNNNNN-c...``) inherit ``DETECTOR`` from one
+    input exposure although they may combine both modules, so the module mean is used.
+    """
+    rows = [r for r in _pivot_rows() if r[0] == instrument and r[3] == name]
+    if instrument == "NIRCAM":
+        filt, pupil = elements.get("FILTER", ""), elements.get("PUPIL", "CLEAR") or "CLEAR"
+        exact = [r for r in rows if r[1] == filt and r[2] == pupil]
+        rows = exact or rows
+        modules = {r[4]: r[5] for r in rows}
+        if not modules:
+            return None, None
+        combined = bool(_COMBINED_PRODUCT.match(Path(filename).name))
+        det = detector or ""
+        module = "A" if det.startswith("NRCA") else "B" if det.startswith("NRCB") else None
+        if module in modules and not combined:
+            return modules[module] * u.um, f"pivot: STScI throughput table, module {module}"
+        values = list(modules.values())
+        spread = (max(values) - min(values)) / (sum(values) / len(values))
+        why = (
+            "combined product, modules not recorded"
+            if combined
+            else f"DETECTOR={detector or 'unknown'}"
+        )
+        return sum(values) / len(values) * u.um, (
+            f"pivot: mean of NIRCam modules {'/'.join(sorted(modules))} from STScI throughput "
+            f"tables ({why}); modules differ by {spread:.2%}"
+        )
+    if rows:
+        return rows[0][5] * u.um, "pivot: STScI throughput table"
+    return None, None
 
 
 _Resolved = tuple[str | None, str, dict[str, str], tuple[str, ...]]

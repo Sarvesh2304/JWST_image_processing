@@ -33,6 +33,8 @@ legacy = [
     "scikit-image>=0.21",
     "photutils>=2.0",
 ]
+# The official JWST calibration pipeline, which astroledger wraps rather than reimplements.
+jwst = ["jwst>=1.16"]
 # Read-only MCP server exposing inspect/explain/search to Claude (astroledger mcp).
 mcp = ["mcp>=2.3,<3"]
 dev = ["pytest>=8", "ruff>=0.6"]

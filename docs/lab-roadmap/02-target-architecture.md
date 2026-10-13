@@ -133,8 +133,8 @@ provenance DAG. The notebook exporter walks the DAG and emits the calls in order
 **iPad access path:**
 - **Now:** Claude Code cloud sessions on this repository (see the [README](README.md#using-this-from-the-ipad)).
 - **Later:** the platform's own **MCP server**, reachable from the Claude app through a remote MCP
-  connector. It is exposed only over an authenticated tunnel, so you can say "what am I looking at"
-  from the iPad and it runs on your lab machine.
+  connector. It is exposed only with authentication (OAuth, which remote connectors support),
+  so you can say "what am I looking at" from the iPad and it runs on your lab machine.
 - Hardware tools are exposed through MCP only at the permission level you grant (§19 in [04](04-observatory.md)).
 
 ---

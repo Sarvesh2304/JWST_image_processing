@@ -5,6 +5,7 @@ import hashlib
 import matplotlib
 import numpy as np
 import pytest
+from astropy import units as u
 from astropy.io import fits
 
 import fits_factory as ff
@@ -102,3 +103,37 @@ def test_rgb_requires_three_images_with_wcs(tmp_path):
     rate = open_image(ff.jwst_rate(tmp_path / "x_rate.fits"))
     with pytest.raises(ValueError, match="WCS"):
         make_rgb([img, img, rate])
+
+
+def test_lupton_composite_uses_common_scaling_and_leaves_data_unchanged(tmp_path):
+    centre = (202.47, 47.20)
+    images = [
+        _band_file(tmp_path / f"{band}.fits", band, centre, 0.063, seed)
+        for seed, band in enumerate(("F470N", "F405N", "F356W"), start=1)
+    ]
+    digests = [_digest(i) for i in images]
+    comp = make_rgb(images, stretch="lupton", q=8)
+    assert comp.rgb.shape == (*ff.SHAPE, 3)
+    assert 0 <= np.nanmin(comp.rgb) and np.nanmax(comp.rgb) <= 1
+    assert "Lupton" in comp.method
+    assert [c["colour"] for c in comp.channels] == ["red", "green", "blue"]
+    assert all("lupton" in c["scale"] for c in comp.channels)
+    ny, nx = ff.SHAPE
+    source = comp.rgb[(ny - 1) // 2, (nx - 1) // 2].max()
+    assert source > 5 * np.median(comp.rgb.max(axis=2))  # the shared source stands out
+    assert [_digest(i) for i in images] == digests
+
+
+def test_lupton_refuses_mixed_units(tmp_path):
+    centre = (202.47, 47.20)
+    images = [
+        _band_file(tmp_path / f"{band}.fits", band, centre, 0.063, seed)
+        for seed, band in enumerate(("F470N", "F405N", "F356W"), start=1)
+    ]
+    path = tmp_path / "jy.fits"
+    _band_file(path, "F444W", centre, 0.063, 9)
+    fits.setval(path, "BUNIT", value="Jy", extname="SCI")
+    images[0] = open_image(path)
+    assert images[0].unit == u.Jy
+    with pytest.raises(ValueError, match="common unit"):
+        make_rgb(images, stretch="lupton")

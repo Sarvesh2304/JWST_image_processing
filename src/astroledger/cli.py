@@ -44,7 +44,8 @@ def _explain(args: argparse.Namespace) -> int:
     try:
         image = open_image(args.file, extver=args.extver)
         gaia = QTable.read(args.gaia) if args.gaia else None
-        result = explain(image, gaia=gaia)
+        catalogue = QTable.read(args.catalogue) if args.catalogue else None
+        result = explain(image, gaia=gaia, catalogue=catalogue)
     except (ProductError, OSError) as exc:
         print(f"astroledger explain: {exc}", file=sys.stderr)
         return 2
@@ -61,7 +62,7 @@ def _mcp(args: argparse.Namespace) -> int:
     except ImportError:  # pragma: no cover - depends on the optional extra
         print('astroledger mcp: install the "mcp" extra: pip install -e ".[mcp]"', file=sys.stderr)
         return 2
-    serve(args.root, http=args.http, host=args.host, port=args.port)
+    serve(args.root, http=args.http, host=args.host, port=args.port, path=args.http_path)
     return 0
 
 
@@ -87,6 +88,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     explain.add_argument("file", help="FITS image (direct imaging only)")
     explain.add_argument("--extver", type=int, help="EXTVER of the SCI extension")
     explain.add_argument("--gaia", help="Gaia DR3 table (ECSV) covering the field")
+    explain.add_argument(
+        "--catalogue", help="SIMBAD records (ECSV from archives.cds.simbad_cone) for the field"
+    )
     explain.add_argument("--limit", type=int, default=20, help="sources shown in text output")
     explain.add_argument("--json", action="store_true", help="machine-readable output")
     explain.set_defaults(handler=_explain)
@@ -98,6 +102,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     mcp.add_argument("--http", action="store_true", help="serve Streamable HTTP instead of stdio")
     mcp.add_argument("--host", default="127.0.0.1", help="HTTP bind address (default 127.0.0.1)")
     mcp.add_argument("--port", type=int, default=8000, help="HTTP port (default 8000)")
+    mcp.add_argument("--http-path", default="/mcp", help="HTTP endpoint path (default /mcp)")
     mcp.set_defaults(handler=_mcp)
 
     args = parser.parse_args(argv)

@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import re
 import warnings
 from os import PathLike
 from pathlib import Path
@@ -298,13 +299,33 @@ def _read_one(
     )
 
 
+# Keywords of lookup-table distortions (HST D2IM / NPOL corrections), stored in other HDUs.
+_TABLE_DISTORTION = re.compile(
+    r"^(CPDIS\d|DP\d|CPERR\d|D2IMDIS\d|D2IM\d|D2IMERR\d|D2IMEXT|NPOLEXT)"
+)
+
+
 def _celestial_wcs(header: fits.Header, hdul: fits.HDUList, notes: list[str]) -> WCS | None:
     try:
         # fobj lets astropy resolve lookup-table distortions stored in other extensions (HST).
         wcs = WCS(header, fobj=hdul)
     except Exception as exc:  # malformed WCS headers raise many different exception types
-        notes.append(f"WCS could not be built ({type(exc).__name__}: {exc}): no WCS")
-        return None
+        stripped = fits.Header(
+            [card for card in header.cards if not _TABLE_DISTORTION.match(card.keyword)]
+        )
+        if len(stripped) == len(header):
+            notes.append(f"WCS could not be built ({type(exc).__name__}: {exc}): no WCS")
+            return None
+        try:
+            wcs = WCS(stripped)
+        except Exception as exc2:
+            notes.append(f"WCS could not be built ({type(exc2).__name__}: {exc2}): no WCS")
+            return None
+        notes.append(
+            "distortion lookup tables referenced by the header are not in this file "
+            f"({exc}); WCS built without them (core WCS and SIP polynomial kept), so the small "
+            "tabular distortion corrections are not applied"
+        )
     if not wcs.has_celestial:
         notes.append("no celestial WCS in the science header")
         return None

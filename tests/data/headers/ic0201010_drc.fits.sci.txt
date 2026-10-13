@@ -1,0 +1,91 @@
+XTENSION= 'IMAGE   '           / Image extension                                
+BITPIX  =                  -32 / array data type                                
+NAXIS   =                    2 / number of array dimensions                     
+NAXIS1  =                 1040                                                  
+NAXIS2  =                 1097                                                  
+PCOUNT  =                    0 / number of parameters                           
+GCOUNT  =                    1 / number of groups                               
+INHERIT =                    T / inherit the primary header                     
+EXTNAME = 'SCI     '           / extension name                                 
+EXTVER  =                    1 / extension version number                       
+ROOTNAME= 'ic0201mvs                         ' / rootname of the observation set
+EXPNAME = 'ic0201mvs                ' / exposure identifier                     
+BUNIT   = 'ELECTRONS/S'        / Units of science product                       
+                                                                                
+              / CCD CHIP IDENTIFICATION                                         
+                                                                                
+CCDCHIP = '-999    '           / CCD chip (1 or 2)                              
+                                                                                
+              / World Coordinate System and Related Parameters                  
+                                                                                
+LTV1    =        0.0000000E+00 / offset in X to subsection start                
+LTV2    =       -1.0000000E+00 / offset in Y to subsection start                
+LTM1_1  =                  1.0 / reciprocal of sampling rate in X               
+LTM2_2  =                  1.0 / reciprocal of sampling rate in Y               
+PA_APER =              134.966 / Position Angle of reference aperture center (de
+RA_APER =   2.830731329167E+02 / RA of aperture reference position              
+DEC_APER=   9.956388888889E-01 / Declination of aperture reference position     
+                                                                                
+              / REPEATED EXPOSURES INFORMATION                                  
+                                                                                
+NCOMBINE=                    5 / number of image sets combined during CR rejecti
+                                                                                
+              / PHOTOMETRY KEYWORDS                                             
+                                                                                
+PHOTMODE= 'WFC3 UVIS2 F658N MJD#56371.1125' / Obser                             
+PHOTFLAM= 9.75810393999999E-18 / Inverse sensitivity, ergs/cm2/A/e-             
+PHTFLAM1=   9.758103664384E-18 / Ch1 Inv Sens, use PHOTFLAM for UV filters      
+PHTFLAM2=        9.6607681E-18 / Ch2 Inv Sens, use PHOTFLAM if FLUXCORR=COMPLETE
+PHTRATIO=   9.900251557340E-01 / PHTFLAM2/PHTFLAM1 ratio                        
+PHOTFNU =        1.3968841E-05 / Inverse sensitivity, Jy*sec/e-                 
+PHOTZPT =       -2.1100000E+01 / ST magnitude zero point                        
+PHOTPLAM=        6.5839233E+03 / Pivot wavelength (Angstroms)                   
+PHOTBW  =        1.5114844E+02 / RMS bandwidth of filter plus detector          
+                                                                                
+              / READOUT DEFINITION PARAMETERS                                   
+                                                                                
+CENTERA1=                  527 / subarray axis1 center pt in unbinned dect. pix 
+CENTERA2=                  514 / subarray axis2 center pt in unbinned dect. pix 
+SIZAXIS1=                 1025 / subarray axis1 size in unbinned detector pixels
+SIZAXIS2=                 1024 / subarray axis2 size in unbinned detector pixels
+BINAXIS1=                    1 / axis1 data bin size in unbinned detector pixels
+BINAXIS2=                    1 / axis2 data bin size in unbinned detector pixels
+                                                                                
+              / DATA PACKET INFORMATION                                         
+                                                                                
+PODPSFF =                    F / podps fill present (T/F)                       
+STDCFFF =                    F / science telemetry fill data present (T=1/F=0)  
+STDCFFP = '0x5569'             / science telemetry fill pattern (hex)           
+                                                                                
+              / IMAGE STATISTICS AND DATA QUALITY FLAGS                         
+                                                                                
+SDQFLAGS=                31743 / serious data quality flags                     
+SOFTERRS=                    0 / number of soft error pixels (DQF=1)            
+MEANFLSH=        6.7679744E+00 / Mean number of counts in post flash exposure   
+RADESYS = 'ICRS    '           / Equatorial coordinate system                   
+S_REGION= 'POLYGON ICRS 283.0649195473559 0.9959204396082274 &'                 
+CONTINUE  '283.07292313344766 0.9879275053588598 283.0813862851339 &'           
+CONTINUE  '0.9953483717942746 283.0733827015458 1.003341326582971 &'            
+CONTINUE  '283.0649195473559 0.9959204396082274 '                               
+SKYCELL = 'p1393x15y07'        / Skycell(s) that this image occupies            
+IDCTAB  = 'iref$2731450pi_idc.fits'                                             
+D2IMFILE= 'N/A     '                                                            
+NPOLFILE= 'N/A     '                                                            
+WCSAXES =                    2 / Number of coordinate axes                      
+CUNIT1  = 'deg'                / Units of coordinate increment and value        
+CUNIT2  = 'deg'                / Units of coordinate increment and value        
+WCSNAME = 'IDC_2731450pi'      / Coordinate system title                        
+CD1_1   = 7.84424577692041E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2   = 7.71945990841885E-06 / partial of first axis coordinate w.r.t. y      
+CD2_1   = 7.71945990841885E-06 / partial of second axis coordinate w.r.t. x     
+CD2_2   = -7.8442457769204E-06 / partial of second axis coordinate w.r.t. y     
+CRVAL1  =    283.0730568906664 / [deg] Coordinate value at reference point      
+CRVAL2  =   0.9956369698431151 / [deg] Coordinate value at reference point      
+CRPIX1  =                520.0 / Pixel coordinate of reference point            
+CRPIX2  =                548.5 / Pixel coordinate of reference point            
+CTYPE1  = 'RA---TAN'           / Right ascension, gnomonic projection           
+CTYPE2  = 'DEC--TAN'           / Declination, gnomonic projection               
+ORIENTAT=   135.45937327227523 / position angle of image y axis (deg. e of n)   
+VAFACTOR=                  1.0                                                  
+WCSTYPE = 'undistorted not aligned'                                             
+END                                                                             

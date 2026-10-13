@@ -197,6 +197,7 @@ def make_rgb(
     percentile: float = 99.5,
     stretch: str = "asinh",
     a: float = 0.1,
+    q: float = 8.0,
 ) -> RGBComposite:
     """Build a chromatically ordered colour composite on a common sky grid.
 
@@ -208,6 +209,12 @@ def make_rgb(
         Image whose WCS and shape define the output grid. Default: the longest-wavelength image.
     percentile, stretch, a
         Per-channel display scaling (see :func:`display_norm`), applied after reprojection.
+        ``stretch="lupton"`` instead applies one common asinh scaling to all three channels
+        (Lupton et al. 2004, astropy ``make_lupton_rgb``), which preserves colour ratios; it
+        needs the three images in the same unit. Its softening is ``q``, and the bright end is
+        set by the ``percentile`` of the summed channels.
+    q : float
+        Lupton softening parameter (``stretch="lupton"`` only).
     """
     from reproject import reproject_interp
 
@@ -221,14 +228,32 @@ def make_rgb(
     ref = reference or ordered[-1]
     shape = ref.data.shape
 
+    if stretch == "lupton":
+        units = {str(img.unit) for img in images}
+        if len(units) != 1:
+            raise ValueError(f"lupton stretch needs one common unit; got {sorted(units)}")
+
     channels = []
     planes = []
+    raw = []
     for colour, img in zip(("blue", "green", "red"), ordered, strict=True):
         values = _display_values(img)
         if img is ref:
             plane = values
         else:
             plane, _ = reproject_interp((values, img.wcs), ref.wcs, shape_out=shape)
+        raw.append(plane)
+        if stretch == "lupton":
+            channels.append(
+                {
+                    "colour": colour,
+                    "bandpass": img.bandpass.key,
+                    "wavelength_um": _wavelength_um(img),
+                    "file": img.source.filename,
+                    "scale": f"lupton (Q={q}), common to all channels",
+                }
+            )
+            continue
         norm = display_norm(plane, percentile=percentile, stretch=stretch, a=a)
         planes.append(np.nan_to_num(np.clip(norm(plane, clip=True).filled(np.nan), 0, 1), nan=0))
         channels.append(
@@ -241,12 +266,42 @@ def make_rgb(
                 "interval": (float(norm.vmin), float(norm.vmax)),
             }
         )
+    if stretch == "lupton":
+        return _lupton(raw, channels, ref, percentile=percentile, q=q)
     rgb = np.dstack([planes[2], planes[1], planes[0]])
     method = (
         f"reprojected onto the grid of {ref.source.filename} with reproject_interp; "
         f"each channel scaled independently ({stretch}, {percentile}% interval) for display"
     )
     return RGBComposite(rgb=rgb, wcs=ref.wcs, channels=tuple(reversed(channels)), method=method)
+
+
+def _lupton(raw, channels, ref, *, percentile: float, q: float) -> RGBComposite:
+    """Common-scaling composite (Lupton et al. 2004) from reprojected display copies."""
+    from astropy.visualization import make_lupton_rgb
+
+    blue, green, red = (np.nan_to_num(p, nan=0.0) for p in raw)
+    finite = [p[np.isfinite(p)] for p in raw]
+    if any(f.size == 0 for f in finite):
+        raise ValueError("no finite, unmasked pixels to scale")
+    minimum = [float(np.percentile(f, 100 - percentile)) for f in (finite[2], finite[1], finite[0])]
+    total = red + green + blue - sum(minimum)
+    span = float(np.percentile(total[np.isfinite(total)], percentile))
+    span = span if span > 0 else 1.0
+    rgb8 = make_lupton_rgb(red, green, blue, minimum=minimum, stretch=span, Q=q)
+    for channel, low in zip(reversed(channels), minimum, strict=True):  # red, green, blue
+        channel["interval"] = (low, low + span)
+    method = (
+        f"reprojected onto the grid of {ref.source.filename} with reproject_interp; one common "
+        f"asinh scaling for all channels (Lupton et al. 2004, Q={q}, {percentile}% range), "
+        "preserving colour ratios"
+    )
+    return RGBComposite(
+        rgb=rgb8.astype(float) / 255.0,
+        wcs=ref.wcs,
+        channels=tuple(reversed(channels)),
+        method=method,
+    )
 
 
 def show_rgb(composite: RGBComposite, *, title: str = "", caption: str = "") -> plt.Figure:

@@ -11,9 +11,10 @@ Every tool is read-only: nothing is written, downloaded or modified, and every p
 inside the data root given at start-up, so a client cannot read files outside it.
 
 Run it with ``astroledger mcp --root DATA_DIR`` (stdio, for Claude Code), or with ``--http``
-(Streamable HTTP, default 127.0.0.1:8000/mcp) for use as a remote connector behind your own
-authenticated tunnel or VPN. Do not expose the HTTP endpoint to the internet without
-authentication.
+(Streamable HTTP, default 127.0.0.1:8000/mcp). The server has no authentication of its own;
+a Claude app remote connector reaches it from Anthropic's cloud, with OAuth or without
+authentication. Until OAuth is added, expose it only for public data, behind an unguessable
+``--http-path``. See docs/mcp.md.
 """
 
 from __future__ import annotations
@@ -153,6 +154,7 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
     def explain(
         path: str,
         gaia_table: str | None = None,
+        simbad_table: str | None = None,
         extver: int | None = None,
         max_sources: int = 20,
     ) -> dict[str, Any]:
@@ -161,7 +163,9 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
         Each statement has a level (L1 measured, L2 inferred with a cited rule or catalogue
         record, L3 hypothesis with a test) and its evidence. ``gaia_table`` is an ECSV of Gaia
         DR3 sources for the field, relative to the data root; without it no star is established
-        (L2). Sources with an L2 inference come first; at most ``max_sources`` are returned.
+        (L2). ``simbad_table`` is an ECSV of SIMBAD records for the field (from
+        ``archives.cds.simbad_cone``); without it no galaxy or nebula is established (L2).
+        Sources with an L2 inference come first; at most ``max_sources`` are returned.
         """
         from astropy.table import QTable
 
@@ -170,7 +174,8 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
 
         image = open_image(_resolve(root, path), extver=extver)
         gaia = QTable.read(_resolve(root, gaia_table)) if gaia_table else None
-        result = run_explain(image, gaia=gaia)
+        records = QTable.read(_resolve(root, simbad_table)) if simbad_table else None
+        result = run_explain(image, gaia=gaia, catalogue=records)
         limit = max(0, min(int(max_sources), explain_source_limit))
         ranked = result.ranked_sources()
         return _jsonable(
@@ -228,10 +233,17 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
     return server
 
 
-def main(root: str | os.PathLike, *, http: bool = False, host: str = "127.0.0.1", port: int = 8000):
-    """Run the server over stdio (default) or Streamable HTTP."""
+def main(
+    root: str | os.PathLike,
+    *,
+    http: bool = False,
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    path: str = "/mcp",
+):
+    """Run the server over stdio (default) or Streamable HTTP at ``http://host:port{path}``."""
     server = build_server(root)
     if http:
-        server.run("streamable-http", host=host, port=port)
+        server.run("streamable-http", host=host, port=port, streamable_http_path=path)
     else:
         server.run("stdio")

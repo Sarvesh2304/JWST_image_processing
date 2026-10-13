@@ -44,20 +44,31 @@ folder:
 
 ## The Claude app (iPad, phone, web) as a remote connector
 
-The Claude app connects to MCP servers over HTTPS (Settings → Connectors → add a custom
-connector with the server's URL). For that the server must be reachable from the internet:
+To add the server as a custom connector (Settings → Connectors), give the Claude app its
+public URL. Claude reaches that URL **from Anthropic's cloud**, not from your device. Two
+consequences follow:
 
-```bash
-astroledger mcp --root /path/to/data --http --host 127.0.0.1 --port 8000   # serves /mcp
-```
+- The server must be reachable over public HTTPS: a reverse proxy or tunnel to a machine you
+  control, terminating TLS, in front of
 
-Put it behind an HTTPS tunnel or reverse proxy that **requires authentication**, for example on
-your own machine or the lab computer. Only then give the connector its public URL ending in
-`/mcp`.
+  ```bash
+  astroledger mcp --root /path/to/public-data --http --host 127.0.0.1 --port 8000 \
+      --http-path /mcp-<long-random-string>
+  ```
 
-Do not expose the bare HTTP endpoint: it has no authentication of its own (planned for a later
-phase, roadmap §15). Even read-only, it would let anyone read your data folder and run MAST
-searches through it.
+- A login page or VPN in front of the server would block Claude as well. Remote connectors
+  authenticate with OAuth or not at all, and this server does not implement OAuth yet (planned,
+  roadmap §15).
+
+The only configuration that works today is therefore **without authentication**. Anyone who
+learns the URL can call the four read-only tools on that folder. If you use it:
+
+- point `--root` at a folder that contains **only public archive data**;
+- use an unguessable `--http-path`, and treat the URL like a password;
+- stop the server when you are not using it.
+
+Anything you would not publish should wait for the OAuth version. Claude Code, which runs the
+server locally over stdio, has none of these exposure issues.
 
 ## Verified
 
@@ -70,5 +81,6 @@ stdio subprocess launched exactly as `.mcp.json` launches it. The tests check:
 - the refusal of a coronagraphic file;
 - MAST search with a stubbed archive.
 
-On real data, the tools were run against the NGC 3132 cutouts. In this cloud environment
-`search` reports the proxy's refusal, because `mast.stsci.edu` is blocked here.
+On real data, the tools were run against the NGC 3132 cutouts. The Streamable HTTP transport was
+also checked: a client connected over HTTP, listed the tools and ran `inspect`. In this cloud
+environment `search` reports the proxy's refusal, because `mast.stsci.edu` is blocked here.

@@ -160,3 +160,54 @@ def test_root_must_exist(tmp_path):
     with pytest.raises(DataRootError):
         build_server(tmp_path / "nope")
     assert Path(tmp_path).exists()
+
+
+def test_streamable_http_on_a_custom_path(root, monkeypatch):
+    """The transport a Claude app remote connector uses, on an unguessable path."""
+    import socket
+    import subprocess
+    import time
+
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    path = "/mcp-test-7f3a9c"
+    monkeypatch.setenv("NO_PROXY", "127.0.0.1,localhost")
+    monkeypatch.setenv("no_proxy", "127.0.0.1,localhost")
+    proc = subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "astroledger.cli",
+            "mcp",
+            "--root",
+            str(root),
+            "--http",
+            "--port",
+            str(port),
+            "--http-path",
+            path,
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        deadline = time.time() + 60
+        while time.time() < deadline:
+            with socket.socket() as probe:
+                if probe.connect_ex(("127.0.0.1", port)) == 0:
+                    break
+            time.sleep(0.3)
+
+        async def go():
+            async with Client(f"http://127.0.0.1:{port}{path}") as client:
+                tools = await client.list_tools()
+                listed = await client.call_tool("list_files", {})
+                return tools, listed
+
+        tools, listed = _run(go())
+        assert {t.name for t in tools.tools} == {"list_files", "inspect", "explain", "search"}
+        assert not listed.is_error
+    finally:
+        proc.terminate()
+        proc.wait(timeout=30)

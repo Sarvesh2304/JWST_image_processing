@@ -53,7 +53,43 @@ RULES = {
         "A source whose light is as concentrated as that of stars (the PSF) is unresolved; one "
         "significantly less concentrated is extended."
     ),
+    "R-GAL-CAT": (
+        "An extended source that coincides with a catalogue record classified as a galaxy, with "
+        "a chance-coincidence probability below 1%, is that catalogued galaxy."
+    ),
+    "R-NEB-CAT": (
+        "Extended emission in a band containing a diagnostic emission line, in a field that "
+        "contains a catalogued nebula, is attributed to that nebula; whether it is line or "
+        "continuum emission still needs a continuum-subtracted image."
+    ),
 }
+
+#: SIMBAD object-type codes treated as galaxies / nebulae (condensed ``otype`` codes, as in
+#: SIMBAD's object classification). Candidate types (codes ending in "?") never qualify. A code
+#: missing here only prevents an L2 statement; it can never create one.
+SIMBAD_GALAXY_TYPES = frozenset(
+    {
+        "G",
+        "GiC",
+        "GiG",
+        "GiP",
+        "BiC",
+        "IG",
+        "PaG",
+        "SBG",
+        "SyG",
+        "Sy1",
+        "Sy2",
+        "AGN",
+        "LSB",
+        "EmG",
+        "H2G",
+        "bCG",
+        "rG",
+        "LIN",
+    }
+)
+SIMBAD_NEBULA_TYPES = frozenset({"PN", "HII", "RNe", "SNR", "GNe", "EmO", "SFR"})
 
 #: Diagnostic lines inside narrow bands (rest wavelengths, micron).
 LINES_IN_BAND = {
@@ -189,6 +225,78 @@ def _gaia_matches(image, catalog, gaia, scale_arcsec):
     return result, covered, f"{epoch.utc.isot} (from {keyword})"
 
 
+def _catalogue_records(catalogue: QTable | None) -> QTable | None:
+    """Records with the columns the rules need, or None."""
+    if catalogue is None or len(catalogue) == 0:
+        return None
+    missing = {"main_id", "otype", "ra", "dec"} - set(catalogue.colnames)
+    if missing:
+        raise ValueError(f"catalogue lacks columns {sorted(missing)}")
+    return catalogue
+
+
+def _otype(value) -> str:
+    return str(value).strip()
+
+
+def _galaxy_matches(catalog: QTable, records: QTable, scale_arcsec: float) -> dict:
+    """row -> (main_id, otype, separation arcsec, P_chance) for sources matching a galaxy."""
+    galaxies = records[[_otype(t) in SIMBAD_GALAXY_TYPES for t in records["otype"]]]
+    if len(galaxies) == 0 or len(catalog) == 0:
+        return {}
+    det = QTable({"ra": catalog["ra"], "dec": catalog["dec"]})
+    # an extended source's centroid and a catalogue position differ by a fraction of its size
+    size = np.asarray(u.Quantity(catalog["semimajor_axis"]).value, float) * scale_arcsec
+    det["pos_err"] = np.maximum(0.25 * np.nan_to_num(size, nan=0.0), 0.1) * u.arcsec
+    ref = QTable(
+        {"ra": u.Quantity(galaxies["ra"], u.deg), "dec": u.Quantity(galaxies["dec"], u.deg)}
+    )
+    if "coo_err_maj" in galaxies.colnames:
+        err = np.asarray(u.Quantity(galaxies["coo_err_maj"], u.mas).to_value(u.arcsec), float)
+    else:
+        err = np.full(len(galaxies), 0.1)
+    ref["pos_err"] = np.where(np.isfinite(err) & (err > 0), err, 0.1) * u.arcsec
+    result = crossmatch(det, ref, sigma_a="pos_err", sigma_b="pos_err", k=4.0, prior=0.5)
+    out = {}
+    for row in range(len(catalog)):
+        best = result.best[row]
+        if best["b_index"] < 0 or best["p_chance"] > 0.01 or best["reliability"] < 0.9:
+            continue
+        rec = galaxies[int(best["b_index"])]
+        out[row] = (
+            str(rec["main_id"]).strip(),
+            _otype(rec["otype"]),
+            float(best["sep"].to_value(u.arcsec)),
+            float(best["p_chance"]),
+        )
+    return out
+
+
+def _nebula_statement(records: QTable | None, band, n_extended: int) -> Statement | None:
+    """Image-level L2: extended emission in a line band, in a field with a catalogued nebula."""
+    if records is None or n_extended == 0 or band.name not in LINES_IN_BAND:
+        return None
+    nebulae = [r for r in records if _otype(r["otype"]) in SIMBAD_NEBULA_TYPES]
+    if not nebulae:
+        return None
+    rec = nebulae[0]
+    name, otype = str(rec["main_id"]).strip(), _otype(rec["otype"])
+    line, wavelength = LINES_IN_BAND[band.name]
+    return Statement(
+        "IMG-5",
+        f"The extended emission ({n_extended} extended sources) lies in a field containing the "
+        f"catalogued nebula SIMBAD '{name}' (otype {otype}); {band.name} contains {line} "
+        f"({wavelength} micron). Line versus continuum emission is not yet separated.",
+        Level.L2_INFERENCE,
+        (
+            EvidenceRef("measurement", "extended sources", str(n_extended)),
+            EvidenceRef("metadata", "bandpass", band.key),
+            EvidenceRef("catalogue_record", f"SIMBAD {name}", f"otype {otype}"),
+            EvidenceRef("rule", "R-NEB-CAT", RULES["R-NEB-CAT"]),
+        ),
+    )
+
+
 def _image_statements(image, psf, n, scale_arcsec) -> list[Statement]:
     band = image.bandpass
     out = [
@@ -244,6 +352,7 @@ def explain(
     image: ImageProduct,
     *,
     gaia: QTable | None = None,
+    catalogue: QTable | None = None,
     detect_kwargs: dict | None = None,
 ) -> Explanation:
     """Graded statements about an image and every source detected in it.
@@ -255,6 +364,11 @@ def explain(
     gaia : QTable, optional
         Gaia DR3 sources covering the field (e.g. from
         :func:`~astroledger.archives.gaia.gaia_cone`), positions at ``ref_epoch``.
+    catalogue : QTable, optional
+        SIMBAD records covering the field, as retrieved by
+        :func:`~astroledger.archives.cds.simbad_cone` (columns ``main_id``, ``otype``, ``ra``,
+        ``dec``, ``coo_err_maj``). Galaxy and nebula statements reach L2 only with it; names and
+        object types are quoted verbatim from these records.
     detect_kwargs : dict, optional
         Settings for :func:`~astroledger.imaging.detect`.
     """
@@ -270,7 +384,10 @@ def explain(
         notes.append(f"Gaia DR3 positions propagated to {epoch_text}")
     else:
         notes.append("Gaia DR3 not used: no star can be established (L2) without it")
-    notes.append("galaxy and nebula identifications need NED/SIMBAD records (not yet available)")
+    records = _catalogue_records(catalogue)
+    galaxy_match = _galaxy_matches(catalog, records, scale) if records is not None else {}
+    if records is None:
+        notes.append("no SIMBAD records given: galaxies and nebulae stay hypotheses (L3)")
     if psf is None:
         notes.append(
             "sizes not assessed: "
@@ -284,6 +401,8 @@ def explain(
 
     sources: dict[int, list[Statement]] = {}
     counts = {
+        "L2_galaxy": 0,
+        "L2_nebula": 0,
         "point_like": 0,
         "extended": 0,
         "gaia_match": 0,
@@ -462,7 +581,27 @@ def explain(
                         test="cross-match with Gaia DR3 at the image epoch",
                     )
                 )
-        if extended:
+        galaxy_record = galaxy_match.get(row)
+        if extended and galaxy_record is not None:
+            counts["L2_galaxy"] += 1
+            name, otype, sep_arcsec, p_chance = galaxy_record
+            items.append(
+                Statement(
+                    f"{sid}-9",
+                    f"A galaxy: extended, and it coincides with SIMBAD record '{name}' (otype "
+                    f"{otype}) at {sep_arcsec:.2f} arcsec (chance probability {p_chance:.1e}).",
+                    Level.L2_INFERENCE,
+                    (
+                        size_ev,
+                        EvidenceRef(
+                            "measurement", f"separation label {label}", f"{sep_arcsec:.2f} arcsec"
+                        ),
+                        EvidenceRef("catalogue_record", f"SIMBAD {name}", f"otype {otype}"),
+                        EvidenceRef("rule", "R-GAL-CAT", RULES["R-GAL-CAT"]),
+                    ),
+                )
+            )
+        elif extended:
             items.append(
                 Statement(
                     f"{sid}-5",
@@ -499,6 +638,10 @@ def explain(
         sources[label] = items
 
     image_statements = _image_statements(image, psf, len(catalog), scale)
+    nebula = _nebula_statement(records, band, counts["extended"])
+    if nebula is not None:
+        image_statements.append(nebula)
+        counts["L2_nebula"] = 1
     summary = {
         "file": image.source.filename,
         "bandpass": band.key,

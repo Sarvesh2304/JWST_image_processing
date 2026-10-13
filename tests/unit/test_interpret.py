@@ -256,3 +256,81 @@ def test_text_report_lists_l2_sources_first(case):
     _, _, result = case
     first = format_explanation(result, limit=1).split("  Source ")[1]
     assert " L2 [" in first
+
+
+# --- catalogue rules (SIMBAD records; synthetic here) -----------------------------------------
+
+
+def _records(image, rows):
+    """Synthetic SIMBAD-like records at pixel positions: (name, otype, (x, y))."""
+    from astropy import units as u
+
+    names, otypes, ras, decs = [], [], [], []
+    for name, otype, xy in rows:
+        sky = image.wcs.pixel_to_world(*xy)
+        names.append(name)
+        otypes.append(otype)
+        ras.append(sky.ra.deg)
+        decs.append(sky.dec.deg)
+    return QTable(
+        {
+            "main_id": np.array(names, dtype=object),
+            "otype": np.array(otypes, dtype=object),
+            "ra": np.array(ras) * u.deg,
+            "dec": np.array(decs) * u.deg,
+            "coo_err_maj": np.full(len(rows), 50.0) * u.mas,
+        }
+    )
+
+
+def test_extended_source_matching_a_catalogued_galaxy_is_l2(case):
+    image, gaia, _ = case
+    records = _records(image, [("SYNTH GAL 1", "G", BLOB), ("SYNTH STAR", "*", STARS[5])])
+    result = explain(image, gaia=gaia, catalogue=records)
+    blob = result.sources[_label_at(result, image, BLOB)]
+    galaxy = [s for s in blob if s.level is Level.L2_INFERENCE]
+    assert galaxy and "SYNTH GAL 1" in galaxy[0].text and "otype G" in galaxy[0].text
+    refs = {e.ref for e in galaxy[0].evidence if e.kind == "catalogue_record"}
+    assert refs == {"SIMBAD SYNTH GAL 1"}
+    assert result.summary["L2_galaxy"] == 1
+
+
+def test_candidate_types_never_reach_l2(case):
+    image, gaia, _ = case
+    records = _records(image, [("SYNTH GAL 1", "G?", BLOB)])
+    result = explain(image, gaia=gaia, catalogue=records)
+    blob = result.sources[_label_at(result, image, BLOB)]
+    assert not any(s.level is Level.L2_INFERENCE for s in blob)
+
+
+def test_nebula_rule_needs_line_band_and_catalogued_nebula(case):
+    image, gaia, _ = case
+    with_nebula = explain(
+        image, gaia=gaia, catalogue=_records(image, [("SYNTH PN", "PN", (150, 150))])
+    )
+    neb = [s for s in with_nebula.image if s.id == "IMG-5"]
+    assert neb and neb[0].level is Level.L2_INFERENCE and "SYNTH PN" in neb[0].text
+    assert "Brackett-alpha" in neb[0].text and "not yet separated" in neb[0].text
+    without = explain(image, gaia=gaia, catalogue=_records(image, [("SYNTH GAL", "G", (5, 5))]))
+    assert not [s for s in without.image if s.id == "IMG-5"]
+
+
+def test_catalogue_names_only_from_records(case):
+    image, gaia, _ = case
+    records = _records(image, [("SYNTH GAL 1", "G", BLOB), ("SYNTH PN", "PN", (150, 150))])
+    result = explain(image, gaia=gaia, catalogue=records)
+    allowed = {f"SIMBAD {n}" for n in records["main_id"]} | {
+        f"Gaia DR3 {int(i)}" for i in gaia["source_id"]
+    }
+    for s in result.statements():
+        for e in s.evidence:
+            if e.kind == "catalogue_record":
+                assert e.ref in allowed
+        for quoted in re.findall(r"SIMBAD(?: record)? '([^']+)'", s.text):
+            assert quoted in set(records["main_id"])
+
+
+def test_catalogue_without_required_columns_is_refused(case):
+    image, _, _ = case
+    with pytest.raises(ValueError, match="lacks columns"):
+        explain(image, catalogue=QTable({"main_id": ["x"]}))
