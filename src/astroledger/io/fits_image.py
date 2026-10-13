@@ -86,17 +86,26 @@ def parse_bunit(raw: object) -> tuple[u.UnitBase | None, str | None]:
     if raw is None or not str(raw).strip():
         return None, "BUNIT missing: unit unknown"
     text = str(raw).strip()
-    try:
-        return u.Unit(text, parse_strict="raise"), None
-    except ValueError:
-        pass
+    # astropy reads an upper-case "S" as siemens ("DN/S" = DN per siemens); in BUNIT it always
+    # means seconds, so such values go through the alias rules below, never the direct parse
+    if "S" not in re.split(r"[\s/*.^()\d+-]+", text):
+        try:
+            return u.Unit(text, parse_strict="raise"), None
+        except ValueError:
+            pass
     parts = text.upper().replace(" ", "").split("/")
     base = _UNIT_ALIASES.get(parts[0])
     if base is not None and len(parts) == 1:
         return base, f"BUNIT {text!r} read as {base}"
-    if base is not None and len(parts) == 2 and parts[1] in _PER_SECOND:
-        unit = base / u.s
-        return unit, f"BUNIT {text!r} read as {unit}"
+    if len(parts) == 2 and parts[1] in _PER_SECOND:
+        if base is None:
+            try:
+                base = u.Unit(text.split("/")[0].strip(), parse_strict="raise")
+            except ValueError:
+                base = None
+        if base is not None:
+            unit = base / u.s
+            return unit, f"BUNIT {text!r} read as {unit}"
     return None, f"BUNIT {text!r} not understood: unit unknown"
 
 
@@ -195,7 +204,7 @@ def open_image(
     if len(products) > 1:
         raise AmbiguousProductError(
             f"{Path(path).name} holds {len(products)} science images {versions}; "
-            "pass extver=... or use open_images()"
+            "pass extver=... (--extver on the command line) or use open_images()"
         )
     return products[0]
 
@@ -213,12 +222,20 @@ def _science_hdus(hdul: fits.HDUList, path: Path) -> list[fits.hdu.base.Extensio
     if not images:
         raise UnsupportedProductError(f"{path.name}: no image data in any HDU")
     if len(images) > 1:
-        names = [f"{hdu.name or 'PRIMARY'},{hdu.ver}" for hdu in images]
+        names = [f"{_hdu_name(hdul, hdu)},{hdu.ver}" for hdu in images]
         raise AmbiguousProductError(
             f"{path.name}: no SCI extension and several image HDUs {names}; cannot tell which is "
             "the science image"
         )
     return images
+
+
+def _hdu_name(hdul: fits.HDUList, hdu: fits.hdu.base.ExtensionHDU) -> str:
+    """EXTNAME, or ``PRIMARY`` / ``HDU<n>`` for an unnamed HDU (n = its index in the file)."""
+    if hdu.name:
+        return hdu.name
+    index = hdul.index_of(hdu)
+    return "PRIMARY" if index == 0 else f"HDU{index}"
 
 
 def _read_one(
@@ -228,7 +245,7 @@ def _read_one(
     sha256: str | None,
     bad_bits: int | None,
 ) -> ImageProduct:
-    name = hdu.name or "PRIMARY"
+    name = _hdu_name(hdul, hdu)
     ver = hdu.ver
     label = f"{path.name}[{name},{ver}]"
     data = hdu.data
@@ -254,9 +271,17 @@ def _read_one(
         notes.append(f"ERR shape {err_hdu.data.shape} differs from SCI {data.shape}: ignored")
     else:
         err_unit, _ = parse_bunit(err_hdu.header.get("BUNIT"))
-        if err_unit is not None and unit is not None and err_unit != unit:
-            notes.append(f"ERR unit {err_unit} differs from SCI unit {unit}")
-        uncertainty = StdDevUncertainty(err_hdu.data, unit=unit)
+        if err_unit is None or unit is None or err_unit == unit:
+            uncertainty = StdDevUncertainty(err_hdu.data, unit=unit)
+        elif err_unit.is_equivalent(unit):
+            factor = float(err_unit.to(unit))
+            uncertainty = StdDevUncertainty(err_hdu.data * factor, unit=unit)
+            notes.append(f"ERR unit {err_unit} converted to the SCI unit {unit} (x{factor:g})")
+        else:
+            notes.append(
+                f"ERR unit {err_unit} is incompatible with the SCI unit {unit}: "
+                "ERR ignored, uncertainty unknown"
+            )
 
     mask = (
         ~np.isfinite(data) if np.issubdtype(data.dtype, np.floating) else np.zeros(data.shape, bool)
@@ -333,6 +358,9 @@ def _celestial_wcs(header: fits.Header, hdul: fits.HDUList, notes: list[str]) ->
     if not wcs.has_celestial:
         notes.append("no celestial WCS in the science header")
         return None
+    if wcs.naxis != 2:
+        notes.append(f"WCS has {wcs.naxis} axes: its celestial part is used")
+        return wcs.celestial
     return wcs
 
 

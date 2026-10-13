@@ -229,6 +229,8 @@ def make_rgb(
     shape = ref.data.shape
 
     if stretch == "lupton":
+        if any(img.unit is None for img in images):
+            raise ValueError("lupton stretch needs known units; at least one image has none")
         units = {str(img.unit) for img in images}
         if len(units) != 1:
             raise ValueError(f"lupton stretch needs one common unit; got {sorted(units)}")
@@ -284,17 +286,30 @@ def _lupton(raw, channels, ref, *, percentile: float, q: float) -> RGBComposite:
     finite = [p[np.isfinite(p)] for p in raw]
     if any(f.size == 0 for f in finite):
         raise ValueError("no finite, unmasked pixels to scale")
-    minimum = [float(np.percentile(f, 100 - percentile)) for f in (finite[2], finite[1], finite[0])]
-    total = red + green + blue - sum(minimum)
-    span = float(np.percentile(total[np.isfinite(total)], percentile))
-    span = span if span > 0 else 1.0
-    rgb8 = make_lupton_rgb(red, green, blue, minimum=minimum, stretch=span, Q=q)
+    from astropy.stats import sigma_clipped_stats
+
+    # black: each channel's sky level (Lupton et al. 2004 subtract the sky), not a low
+    # percentile, which would lift the whole noise field above black and let asinh amplify it
+    minimum = [
+        float(sigma_clipped_stats(f, sigma=3.0)[1]) for f in (finite[2], finite[1], finite[0])
+    ]
+    # mean intensity above the black points, as astropy's AsinhMapping computes it
+    intensity = (red + green + blue - sum(minimum)) / 3.0
+    bright = float(np.percentile(intensity[np.isfinite(intensity)], percentile))
+    bright = bright if bright > 0 else 1.0
+    # AsinhMapping maps a grey pixel of intensity I to 255 * 0.1 asinh(Q I / stretch) / asinh(0.1 Q)
+    # (its "stretch" is a slope, not the bright end): choose stretch so that I = bright is white
+    q_eff = q if abs(q) >= 2**-23 else 0.1  # astropy replaces Q = 0 by 0.1
+    stretch = q_eff * bright / np.sinh(np.arcsinh(0.1 * q_eff) / 0.1)
+    rgb8 = make_lupton_rgb(red, green, blue, minimum=minimum, stretch=stretch, Q=q)
     for channel, low in zip(reversed(channels), minimum, strict=True):  # red, green, blue
-        channel["interval"] = (low, low + span)
+        # black point, and the value at which a grey pixel (all channels equal) becomes white
+        channel["interval"] = (low, low + bright)
     method = (
         f"reprojected onto the grid of {ref.source.filename} with reproject_interp; one common "
-        f"asinh scaling for all channels (Lupton et al. 2004, Q={q}, {percentile}% range), "
-        "preserving colour ratios"
+        f"asinh scaling for all channels (Lupton et al. 2004, Q={q}); black at each "
+        f"channel's sky level (3-sigma-clipped median), white at the {percentile:g}th "
+        "percentile of the mean intensity; preserving colour ratios"
     )
     return RGBComposite(
         rgb=rgb8.astype(float) / 255.0,

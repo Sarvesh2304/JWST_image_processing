@@ -193,7 +193,7 @@ def _pivot_rows() -> tuple[tuple[str, str, str, str, str, float], ...]:
     )
 
 
-_COMBINED_PRODUCT = re.compile(r"^JW\d{5}-[OC]\d+", re.IGNORECASE)
+_COMBINED_PRODUCT = re.compile(r"^JW\d{5}-[OCA]\d+", re.IGNORECASE)
 
 
 def _jwst_pivot(

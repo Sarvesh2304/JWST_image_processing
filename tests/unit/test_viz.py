@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 from astropy import units as u
 from astropy.io import fits
+from astropy.stats import sigma_clipped_stats
 
 import fits_factory as ff
 from astroledger.io import open_image
@@ -137,3 +138,33 @@ def test_lupton_refuses_mixed_units(tmp_path):
     assert images[0].unit == u.Jy
     with pytest.raises(ValueError, match="common unit"):
         make_rgb(images, stretch="lupton")
+
+
+def test_lupton_white_point_is_the_stated_percentile(tmp_path):
+    """Identical channels (grey): the brightest (100 - percentile)% of pixels reach white."""
+    centre = (202.47, 47.20)
+    images = [
+        _band_file(tmp_path / f"{band}.fits", band, centre, 0.063, 1)
+        for band in ("F470N", "F405N", "F356W")
+    ]
+    comp = make_rgb(images, stretch="lupton", percentile=99.0)
+    white = np.mean(comp.rgb.max(axis=2) >= 254 / 255)
+    assert 0.007 < white < 0.013
+    low, high = comp.channels[0]["interval"]
+    finite = images[0].data[np.isfinite(images[0].data)]
+    sky = sigma_clipped_stats(finite, sigma=3.0)[1]
+    assert low == pytest.approx(sky)
+    assert high == pytest.approx(np.percentile(finite, 99), rel=0.05)
+
+
+def test_lupton_refuses_unknown_units(tmp_path):
+    centre = (202.47, 47.20)
+    paths = []
+    for seed, band in enumerate(("F470N", "F405N", "F356W"), start=1):
+        path = tmp_path / f"{band}.fits"
+        _band_file(path, band, centre, 0.063, seed)
+        fits.delval(path, "BUNIT", extname="SCI")
+        paths.append(open_image(path))
+    assert all(img.unit is None for img in paths)
+    with pytest.raises(ValueError, match="known units"):
+        make_rgb(paths, stretch="lupton")
