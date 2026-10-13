@@ -250,3 +250,9 @@ def test_text_report_and_cli(case, tmp_path, capsys):
     assert payload["summary"]["L2_star"] == 1
     assert main(["explain", str(path), "--limit", "2"]) == 0
     assert "Sources:" in capsys.readouterr().out
+
+
+def test_text_report_lists_l2_sources_first(case):
+    _, _, result = case
+    first = format_explanation(result, limit=1).split("  Source ")[1]
+    assert " L2 [" in first

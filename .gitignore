@@ -73,3 +73,7 @@ coverage.xml
 
 # Small authentic test fixtures (public JWST data, documented in tests/data/real/README.md)
 !tests/data/real/*.fits
+
+# Local data folder: downloads, caches and outputs of the examples; the MCP server's default root
+data/*
+!data/README.md

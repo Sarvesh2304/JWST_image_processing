@@ -33,6 +33,8 @@ legacy = [
     "scikit-image>=0.21",
     "photutils>=2.0",
 ]
+# Read-only MCP server exposing inspect/explain/search to Claude (astroledger mcp).
+mcp = ["mcp>=2.3,<3"]
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [tool.hatch.build.targets.wheel]

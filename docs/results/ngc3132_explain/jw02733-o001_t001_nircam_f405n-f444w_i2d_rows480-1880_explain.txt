@@ -8,77 +8,11 @@ Image (L1 observations)
 
 Sources: 551 detected; 150 unresolved, 285 extended; 25 coincide with Gaia DR3; 18 established as stars (L2); 110 possible PSF artefacts.
 
-  Source 1
-    L1 [SRC-1-1] Source 1 at RA 151.737819, Dec -40.441569 (ICRS): flux 0.0001136 Jy ± 2.3e-07 (18.76 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-1-2] Light concentration F(1.5 px)/F(4 px) = 0.299 ± 0.001 against 0.544 for stars (+10.8 sigma): less concentrated than stars: extended.
-    L3 [SRC-1-5] Extended: a galaxy, a nebular structure, or a blend of sources.
-       test: a NED/SIMBAD record at this position, colours and morphology across bands, or deblending at higher resolution
-    L3 [SRC-1-6] Its emission may be Brackett-alpha (H I) (4.0523 micron at rest), which lies in F405N; continuum emission would look the same in this band alone.
-       test: subtract the continuum measured in an adjacent band and look for an excess in F405N
-
-  Source 2
-    L1 [SRC-2-1] Source 2 at RA 151.748064, Dec -40.421870 (ICRS): flux 5.526e-07 Jy ± 1.2e-07 (24.54 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-2-2] Light concentration F(1.5 px)/F(4 px) = 1.688 ± 1.233 against 0.544 for stars (-0.9 sigma): too faint to tell whether it is resolved.
-
-  Source 3
-    L1 [SRC-3-1] Source 3 at RA 151.749352, Dec -40.419458 (ICRS): flux 5.171e-07 Jy ± 2.6e-08 (24.62 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-3-2] Light concentration F(1.5 px)/F(4 px) = 0.661 ± 0.080 against 0.544 for stars (-1.4 sigma): as concentrated as stars: unresolved.
-    L3 [SRC-3-4] Unresolved without a Gaia DR3 counterpart: a star fainter than Gaia's limit (about G = 21), a compact galaxy, a compact nebular knot or noise.
-       test: colours across bands, morphology at higher resolution, a deeper astrometric catalogue or a spectrum
-    L3 [SRC-3-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
-       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
-
-  Source 4
-    L1 [SRC-4-1] Source 4 at RA 151.747266, Dec -40.423423 (ICRS): flux 2.486e-07 Jy ± 1.9e-08 (25.41 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-4-2] Light concentration F(1.5 px)/F(4 px) = 0.380 ± 0.049 against 0.544 for stars (+3.1 sigma): less concentrated than stars: extended.
-    L3 [SRC-4-5] Extended: a galaxy, a nebular structure, or a blend of sources.
-       test: a NED/SIMBAD record at this position, colours and morphology across bands, or deblending at higher resolution
-    L3 [SRC-4-6] Its emission may be Brackett-alpha (H I) (4.0523 micron at rest), which lies in F405N; continuum emission would look the same in this band alone.
-       test: subtract the continuum measured in an adjacent band and look for an excess in F405N
-
-  Source 5
-    L1 [SRC-5-1] Source 5 at RA 151.751458, Dec -40.415507 (ICRS): flux 1.89e-07 Jy ± 2.1e-08 (25.71 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-5-2] Light concentration F(1.5 px)/F(4 px) = 0.557 ± 0.131 against 0.544 for stars (-0.1 sigma): as concentrated as stars: unresolved.
-    L3 [SRC-5-4] Unresolved without a Gaia DR3 counterpart: a star fainter than Gaia's limit (about G = 21), a compact galaxy, a compact nebular knot or noise.
-       test: colours across bands, morphology at higher resolution, a deeper astrometric catalogue or a spectrum
-
-  Source 6
-    L1 [SRC-6-1] Source 6 at RA 151.752172, Dec -40.414230 (ICRS): flux 3.878e-07 Jy ± 5.5e-08 (24.93 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-6-2] Light concentration F(1.5 px)/F(4 px) = 0.564 ± 0.120 against 0.544 for stars (-0.2 sigma): as concentrated as stars: unresolved.
-    L3 [SRC-6-4] Unresolved without a Gaia DR3 counterpart: a star fainter than Gaia's limit (about G = 21), a compact galaxy, a compact nebular knot or noise.
-       test: colours across bands, morphology at higher resolution, a deeper astrometric catalogue or a spectrum
-
-  Source 7
-    L1 [SRC-7-1] Source 7 at RA 151.741681, Dec -40.434183 (ICRS): flux 7.849e-07 Jy ± 3.1e-08 (24.16 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-7-2] Light concentration F(1.5 px)/F(4 px) = 0.295 ± 0.021 against 0.544 for stars (+8.1 sigma): less concentrated than stars: extended.
-    L3 [SRC-7-5] Extended: a galaxy, a nebular structure, or a blend of sources.
-       test: a NED/SIMBAD record at this position, colours and morphology across bands, or deblending at higher resolution
-    L3 [SRC-7-6] Its emission may be Brackett-alpha (H I) (4.0523 micron at rest), which lies in F405N; continuum emission would look the same in this band alone.
-       test: subtract the continuum measured in an adjacent band and look for an excess in F405N
-
   Source 8
     L1 [SRC-8-1] Source 8 at RA 151.746549, Dec -40.425354 (ICRS): flux 9.4e-05 Jy ± 1.7e-07 (18.97 AB) in JWST/NIRCAM/F405N.
     L1 [SRC-8-2] Light concentration F(1.5 px)/F(4 px) = 0.542 ± 0.002 against 0.544 for stars (+0.1 sigma): as concentrated as stars: unresolved.
     L1 [SRC-8-3] Coincides with Gaia DR3 5420219796652827392 at 2.8 mas (0.1 sigma; chance probability 6.7e-08).
     L2 [SRC-8-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219796652827392 has a proper motion of 7.48 ± 0.11 mas/yr (66 sigma).
-
-  Source 9
-    L1 [SRC-9-1] Source 9 at RA 151.749614, Dec -40.419433 (ICRS): flux 2.134e-07 Jy ± 1.7e-08 (25.58 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-9-2] Light concentration F(1.5 px)/F(4 px) = 1.050 ± 0.332 against 0.544 for stars (-1.5 sigma): too faint to tell whether it is resolved.
-    L3 [SRC-9-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
-       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
-
-  Source 10
-    L1 [SRC-10-1] Source 10 at RA 151.749522, Dec -40.419615 (ICRS): flux 2.02e-07 Jy ± 1.5e-08 (25.64 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-10-2] Light concentration F(1.5 px)/F(4 px) = 0.585 ± 0.103 against 0.544 for stars (-0.4 sigma): as concentrated as stars: unresolved.
-    L3 [SRC-10-4] Unresolved without a Gaia DR3 counterpart: a star fainter than Gaia's limit (about G = 21), a compact galaxy, a compact nebular knot or noise.
-       test: colours across bands, morphology at higher resolution, a deeper astrometric catalogue or a spectrum
-    L3 [SRC-10-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
-       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
-
-  Source 11
-    L1 [SRC-11-1] Source 11 at RA 151.740194, Dec -40.437364 (ICRS): flux 5.921e-07 Jy ± 9.8e-08 (24.47 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-11-2] Light concentration F(1.5 px)/F(4 px) = 0.708 ± 0.178 against 0.544 for stars (-0.9 sigma): too faint to tell whether it is resolved.
 
   Source 12
     L1 [SRC-12-1] Source 12 at RA 151.750143, Dec -40.419189 (ICRS): flux 5.586e-05 Jy ± 1.5e-07 (19.53 AB) in JWST/NIRCAM/F405N.
@@ -86,21 +20,83 @@ Sources: 551 detected; 150 unresolved, 285 extended; 25 coincide with Gaia DR3; 
     L1 [SRC-12-3] Coincides with Gaia DR3 5420219796652692480 at 4.4 mas (0.1 sigma; chance probability 2.4e-07).
     L2 [SRC-12-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219796652692480 has a proper motion of 7.41 ± 0.23 mas/yr (32 sigma).
 
-  Source 13
-    L1 [SRC-13-1] Source 13 at RA 151.736635, Dec -40.444397 (ICRS): flux 1.023e-06 Jy ± 1.8e-07 (23.88 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-13-2] Light concentration F(1.5 px)/F(4 px) = 0.707 ± 0.313 against 0.544 for stars (-0.5 sigma): too faint to tell whether it is resolved.
+  Source 28
+    L1 [SRC-28-1] Source 28 at RA 151.736185, Dec -40.447242 (ICRS): flux 4.82e-05 Jy ± 1.5e-07 (19.69 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-28-2] Light concentration F(1.5 px)/F(4 px) = 0.545 ± 0.003 against 0.544 for stars (-0.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-28-3] Coincides with Gaia DR3 5420219663509091840 at 4.5 mas (0.1 sigma; chance probability 3.1e-07).
+    L2 [SRC-28-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219663509091840 has a proper motion of 3.19 ± 0.38 mas/yr (8 sigma).
 
-  Source 14
-    L1 [SRC-14-1] Source 14 at RA 151.749779, Dec -40.419593 (ICRS): flux 4.63e-07 Jy ± 2.3e-08 (24.74 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-14-2] Light concentration F(1.5 px)/F(4 px) = 0.699 ± 0.090 against 0.544 for stars (-1.7 sigma): as concentrated as stars: unresolved.
-    L3 [SRC-14-4] Unresolved without a Gaia DR3 counterpart: a star fainter than Gaia's limit (about G = 21), a compact galaxy, a compact nebular knot or noise.
-       test: colours across bands, morphology at higher resolution, a deeper astrometric catalogue or a spectrum
-    L3 [SRC-14-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
-       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+  Source 47
+    L1 [SRC-47-1] Source 47 at RA 151.753543, Dec -40.415670 (ICRS): flux 3.15e-05 Jy ± 1.5e-07 (20.15 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-47-2] Light concentration F(1.5 px)/F(4 px) = 0.559 ± 0.004 against 0.544 for stars (-0.6 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-47-3] Coincides with Gaia DR3 5420219800950943488 at 3.2 mas (0.1 sigma; chance probability 1.7e-07).
+    L2 [SRC-47-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800950943488 has a proper motion of 11.58 ± 0.59 mas/yr (19 sigma).
 
-  Source 15
-    L1 [SRC-15-1] Source 15 at RA 151.736575, Dec -40.444498 (ICRS): flux 4.468e-07 Jy ± 1.2e-07 (24.77 AB) in JWST/NIRCAM/F405N.
-    L1 [SRC-15-2] Light concentration F(1.5 px)/F(4 px) = 1.160 ± 0.781 against 0.544 for stars (-0.8 sigma): too faint to tell whether it is resolved.
+  Source 75
+    L1 [SRC-75-1] Source 75 at RA 151.738489, Dec -40.446828 (ICRS): flux 0.0007685 Jy ± 4.7e-07 (16.69 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-75-2] Light concentration F(1.5 px)/F(4 px) = 0.546 ± 0.001 against 0.544 for stars (-0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-75-3] Coincides with Gaia DR3 5420219663514042368 at 3.9 mas (0.1 sigma; chance probability 2.4e-07).
+    L2 [SRC-75-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219663514042368 has a proper motion of 11.83 ± 0.03 mas/yr (444 sigma).
+
+  Source 101
+    L1 [SRC-101-1] Source 101 at RA 151.755452, Dec -40.417389 (ICRS): flux 2.923e-05 Jy ± 1.3e-07 (20.24 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-101-2] Light concentration F(1.5 px)/F(4 px) = 0.550 ± 0.004 against 0.544 for stars (-0.2 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-101-3] Coincides with Gaia DR3 5420219800952064512 at 2.7 mas (0.1 sigma; chance probability 1.1e-07).
+    L2 [SRC-101-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800952064512 has a proper motion of 7.54 ± 0.82 mas/yr (9 sigma).
+
+  Source 114
+    L1 [SRC-114-1] Source 114 at RA 151.744229, Dec -40.440002 (ICRS): flux 1.703e-05 Jy ± 8.6e-08 (20.82 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-114-2] Light concentration F(1.5 px)/F(4 px) = 0.547 ± 0.004 against 0.544 for stars (-0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-114-3] Coincides with Gaia DR3 5420219697875498368 at 3.6 mas (0.1 sigma; chance probability 2.1e-07).
+    L2 [SRC-114-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219697875498368 has a proper motion of 4.91 ± 0.25 mas/yr (19 sigma).
+
+  Source 144
+    L1 [SRC-144-1] Source 144 at RA 151.744703, Dec -40.443303 (ICRS): flux 0.0001004 Jy ± 1.9e-07 (18.90 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-144-2] Light concentration F(1.5 px)/F(4 px) = 0.559 ± 0.002 against 0.544 for stars (-0.7 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-144-3] Coincides with Gaia DR3 5420219693573473920 at 6.5 mas (0.2 sigma; chance probability 5.8e-07).
+    L2 [SRC-144-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219693573473920 has a proper motion of 6.37 ± 0.07 mas/yr (87 sigma).
+
+  Source 191
+    L1 [SRC-191-1] Source 191 at RA 151.761207, Dec -40.416548 (ICRS): flux 3.846e-05 Jy ± 2.1e-07 (19.94 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-191-2] Light concentration F(1.5 px)/F(4 px) = 0.554 ± 0.005 against 0.544 for stars (-0.4 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-191-3] Coincides with Gaia DR3 5420219831012430720 at 4.0 mas (0.1 sigma; chance probability 2.0e-07).
+    L2 [SRC-191-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219831012430720 has a proper motion of 3.03 ± 0.40 mas/yr (8 sigma).
+
+  Source 226
+    L1 [SRC-226-1] Source 226 at RA 151.753222, Dec -40.435002 (ICRS): flux 8.394e-06 Jy ± 6.9e-08 (21.59 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-226-2] Light concentration F(1.5 px)/F(4 px) = 0.562 ± 0.008 against 0.544 for stars (-0.7 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-226-3] Coincides with Gaia DR3 5420219800947933696 at 4.9 mas (0.2 sigma; chance probability 4.0e-07).
+    L2 [SRC-226-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800947933696 has a proper motion of 5.05 ± 0.37 mas/yr (14 sigma).
+
+  Source 255
+    L1 [SRC-255-1] Source 255 at RA 151.750572, Dec -40.445133 (ICRS): flux 2.47e-05 Jy ± 9.4e-08 (20.42 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-255-2] Light concentration F(1.5 px)/F(4 px) = 0.564 ± 0.003 against 0.544 for stars (-0.9 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-255-3] Coincides with Gaia DR3 5420219629152452736 at 5.8 mas (0.2 sigma; chance probability 4.5e-07).
+    L2 [SRC-255-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219629152452736 has a proper motion of 5.97 ± 0.77 mas/yr (8 sigma).
+
+  Source 281
+    L1 [SRC-281-1] Source 281 at RA 151.757299, Dec -40.436421 (ICRS): flux 0.02564 Jy ± 1.1e-05 (12.88 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-281-2] Light concentration F(1.5 px)/F(4 px) = 0.555 ± 0.001 against 0.544 for stars (-0.5 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-281-3] Coincides with Gaia DR3 5420219732228461184 at 6.1 mas (0.2 sigma; chance probability 7.4e-07).
+    L2 [SRC-281-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219732228461184 has a proper motion of 7.75 ± 0.03 mas/yr (291 sigma).
+
+  Source 331
+    L1 [SRC-331-1] Source 331 at RA 151.753785, Dec -40.450152 (ICRS): flux 9.954e-05 Jy ± 1.8e-07 (18.90 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-331-2] Light concentration F(1.5 px)/F(4 px) = 0.543 ± 0.002 against 0.544 for stars (+0.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-331-3] Coincides with Gaia DR3 5420219624853997696 at 4.4 mas (0.1 sigma; chance probability 1.0e-07).
+    L2 [SRC-331-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219624853997696 has a proper motion of 7.44 ± 0.13 mas/yr (58 sigma).
+
+  Source 358
+    L1 [SRC-358-1] Source 358 at RA 151.758446, Dec -40.445789 (ICRS): flux 1.147e-05 Jy ± 7.3e-08 (21.25 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-358-2] Light concentration F(1.5 px)/F(4 px) = 0.521 ± 0.005 against 0.544 for stars (+1.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-358-3] Coincides with Gaia DR3 5420219629149109760 at 6.0 mas (0.2 sigma; chance probability 3.7e-07).
+    L2 [SRC-358-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219629149109760 has a proper motion of 4.07 ± 0.35 mas/yr (12 sigma).
+
+  Source 411
+    L1 [SRC-411-1] Source 411 at RA 151.773004, Dec -40.426577 (ICRS): flux 2.567e-05 Jy ± 1.3e-07 (20.38 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-411-2] Light concentration F(1.5 px)/F(4 px) = 0.551 ± 0.003 against 0.544 for stars (-0.3 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-411-3] Coincides with Gaia DR3 5420219762292942592 at 3.1 mas (0.1 sigma; chance probability 4.7e-08).
+    L2 [SRC-411-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219762292942592 has a proper motion of 6.59 ± 0.36 mas/yr (18 sigma).
 
   ... 536 more sources (use --json)
 

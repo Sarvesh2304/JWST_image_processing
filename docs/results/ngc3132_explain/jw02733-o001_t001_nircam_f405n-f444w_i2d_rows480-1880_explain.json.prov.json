@@ -1,9 +1,9 @@
 {
-  "duration_s": 6.112798,
-  "ended": "2026-10-11T16:07:24.304+00:00",
+  "duration_s": 6.50713,
+  "ended": "2026-10-13T07:45:19.021+00:00",
   "environment": {
     "git": {
-      "commit": "f6f6a81c89df44267379d658b0aed9f7581894e7",
+      "commit": "2834b89175f816987e95d09f29b4fb911631221c",
       "dirty": true
     },
     "packages": {
@@ -21,7 +21,7 @@
   "error": null,
   "extra": {},
   "function": "astroledger.interpret.engine.explain",
-  "id": "18dd8557a158994b-ff49a65b",
+  "id": "18de071a9582ddb8-45e3a0c0",
   "inputs": {
     "gaia": {
       "columns": [
@@ -69,7 +69,7 @@
   "params": {
     "detect_kwargs": null
   },
-  "started": "2026-10-11T16:07:18.178+00:00",
+  "started": "2026-10-13T07:45:12.499+00:00",
   "status": "ok",
   "version": "1"
 }

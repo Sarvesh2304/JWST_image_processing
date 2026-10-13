@@ -102,7 +102,7 @@ Supporting files:
 | Solar System | `ssd.jpl.nasa.gov`, `ssd-api.jpl.nasa.gov`, `vo.imcce.fr`, `minorplanetcenter.net` |
 | Literature | `api.adsabs.harvard.edu`, `export.arxiv.org`, `arxiv.org` |
 
-5. **Later (Phase 4+):** the platform's MCP server, reached through a VPN as a remote connector, lets the Claude app on the iPad call your lab's tools directly. Hardware tools are only exposed at the permission tier you grant.
+5. **The MCP server (available now, read-only):** `astroledger mcp` lets Claude call `inspect`, `explain` and `search` directly. Claude Code picks it up from the project's `.mcp.json`. For the Claude app on the iPad, run it with `--http` behind an authenticated tunnel or VPN and add it as a custom connector. Setup and security: [`../mcp.md`](../mcp.md). Hardware tools will only ever be exposed at the permission tier you grant.
 
 ## Sources checked for time-sensitive statements (accessed 2026-10-06)
 - JWST pipeline releases: [PyPI `jwst`](https://pypi.org/project/jwst/), [JWST pipeline docs](https://jwst-pipeline.readthedocs.io/)

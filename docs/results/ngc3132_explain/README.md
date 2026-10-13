@@ -29,7 +29,7 @@ checks the task's two criteria on every statement.
   - 150 sources are unresolved and 285 extended.
   - 25 coincide with Gaia DR3.
   - 18 are established as Milky Way stars (L2): unresolved, with Gaia proper motions significant
-    at 8–38σ.
+    at 8–444σ.
   - The other Gaia matches stay at L3 because their proper motion is not significant or missing.
 - **MIRI F770W:** 7 stars are established at L2.
 - **F470N and F356W:** no sizes are assessed and no star is established. These cutouts were

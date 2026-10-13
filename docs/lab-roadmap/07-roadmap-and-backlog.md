@@ -282,6 +282,7 @@ Each task is sized for one or two sessions with Claude Code, and has a concrete 
   - L2 star only when unresolved **and** the Gaia proper motion is significant at more than 5σ;
   - L3, each with a stated test: unresolved sources without that evidence, extended sources, line-band emission, possible PSF artefacts and sharper-than-PSF artefacts.
   Galaxy and nebula identifications wait for task 16's catalogue records. Evaluated on four authentic NGC 3132 images: zero fabricated identities and every L2 with evidence ([`docs/results/ngc3132_explain/`](../results/ngc3132_explain/)).
+- Task 19 done: `astroledger mcp` (`astroledger.mcp_server`, official `mcp` SDK 2.x, `MCPServer`) with four read-only tools (`list_files`, `inspect`, `explain`, `search`). All are annotated read-only and non-destructive, and every path is confined to the data root (`..`, absolute paths and outward symlinks are refused). Expected failures return their reason to the model. The project `.mcp.json` registers it for Claude Code; `--http` serves Streamable HTTP for the Claude app as a remote connector, which must sit behind an authenticated tunnel (the server has no authentication yet). Tested through the protocol, in-process and as a stdio subprocess: [`docs/mcp.md`](../mcp.md).
 - **Next: task 13** (injection–recovery completeness).
 
 | # | Task | Done when |

@@ -55,6 +55,16 @@ def _explain(args: argparse.Namespace) -> int:
     return 0
 
 
+def _mcp(args: argparse.Namespace) -> int:
+    try:
+        from astroledger.mcp_server import main as serve
+    except ImportError:  # pragma: no cover - depends on the optional extra
+        print('astroledger mcp: install the "mcp" extra: pip install -e ".[mcp]"', file=sys.stderr)
+        return 2
+    serve(args.root, http=args.http, host=args.host, port=args.port)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Entry point of the ``astroledger`` command."""
     parser = argparse.ArgumentParser(prog="astroledger", description=__doc__)
@@ -80,6 +90,15 @@ def main(argv: Sequence[str] | None = None) -> int:
     explain.add_argument("--limit", type=int, default=20, help="sources shown in text output")
     explain.add_argument("--json", action="store_true", help="machine-readable output")
     explain.set_defaults(handler=_explain)
+
+    mcp = commands.add_parser(
+        "mcp", help="run the read-only MCP server (stdio by default) over a data folder"
+    )
+    mcp.add_argument("--root", default="data", help="folder the tools may read (default: data)")
+    mcp.add_argument("--http", action="store_true", help="serve Streamable HTTP instead of stdio")
+    mcp.add_argument("--host", default="127.0.0.1", help="HTTP bind address (default 127.0.0.1)")
+    mcp.add_argument("--port", type=int, default=8000, help="HTTP port (default 8000)")
+    mcp.set_defaults(handler=_mcp)
 
     args = parser.parse_args(argv)
     return args.handler(args)

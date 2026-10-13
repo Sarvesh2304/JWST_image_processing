@@ -76,6 +76,13 @@ class Explanation:
     summary: dict
     notes: list[str] = field(default_factory=list)
 
+    def ranked_sources(self) -> list[tuple[int, list[Statement]]]:
+        """Sources with an L2 inference first, then by label (every source has L1 statements)."""
+        return sorted(
+            self.sources.items(),
+            key=lambda kv: (not any(st.level is Level.L2_INFERENCE for st in kv[1]), kv[0]),
+        )
+
     def statements(self) -> list[Statement]:
         out = list(self.image)
         for items in self.sources.values():
@@ -521,10 +528,7 @@ def format_explanation(explanation: Explanation, *, limit: int = 20) -> str:
         f"extended; {s['gaia_match']} coincide with Gaia DR3; {s['L2_star']} established as "
         f"stars (L2); {s['artefact_candidate']} possible PSF artefacts.",
     ]
-    shown = sorted(
-        explanation.sources.items(),
-        key=lambda kv: min(st.level for st in kv[1]) if kv[1] else Level.L3_HYPOTHESIS,
-    )[:limit]
+    shown = explanation.ranked_sources()[:limit]
     for label, items in shown:
         lines.append(f"\n  Source {label}")
         for st in items:
