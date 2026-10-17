@@ -25,9 +25,9 @@
 #     median_ddec_mas: 7.819859204991788, median_dra_err_mas: 0.9413852716935803, median_dra_mas: 9.380002783052252, median_dx_pix: 0.17621720107490546,
 #     median_dy_pix: 0.09224197709488635, median_gaia_error_mas: 3.451096272034609, n_clipped: 7, n_matched: 23, n_near_mask: 1, n_no_pm: 5,
 #     n_used: 10, pixel_scale_arcsec: 0.06299772234999768, rms_mas: 16.480709813295768, robust_sigma_ddec_mas: 6.781861174417771, robust_sigma_dra_mas: 2.3752665876391523}
-# - fit: {n: 10, rms_after_mas: 8.527115554839162, rotation_arcsec: 5.548358236533258, rotation_err_arcsec: 8.584758649678772, scale_err_ppm: 41.62008442387695,
-#     scale_ppm: 2.4024520164592036, shift_ddec_err_mas: 2.1432588167083897, shift_ddec_mas: 9.222442175946309, shift_dra_err_mas: 2.1432588167083897,
-#     shift_dra_mas: 10.418590804198574}
+# - fit: {n: 10, rms_after_mas: 8.527115554947349, rotation_arcsec: 5.548347526635325, rotation_err_arcsec: 8.584758649701035, scale_err_ppm: 41.62008442398488,
+#     scale_ppm: 2.403033155788229, shift_ddec_err_mas: 2.131778888736837, shift_ddec_mas: 9.360745240687534, shift_dra_err_mas: 2.131778888736837,
+#     shift_dra_mas: 10.457778751935725}
 # - notes: ['positions are the catalogue''s centroids converted with the image WCS; centroid bias (e.g. from saturation, blending or nebulosity)
 #       appears as astrometric error', Gaia positions propagated with proper motion only (parallax and RV ignored), "systematic RA* offset\
 #       \ of 9.4 \xB1 0.9 mas (>3 sigma) between this catalogue and Gaia DR3 at the image epoch"]
