@@ -17,7 +17,7 @@ research-grade environment that combines:
 
 ## Status
 
-**Phase 0 (honest baseline) is complete. Phase 1–2 tasks 5–12 are done; no full analysis pipeline yet.**
+**Phase 0 (honest baseline) is complete. Roadmap tasks 1–19 are done; no full analysis pipeline yet.**
 
 What works now (all tested; numbers below are on authentic JWST data of NGC 3132, program 2733):
 
@@ -31,13 +31,20 @@ What works now (all tested; numbers below are on authentic JWST data of NGC 3132
 | Fact sheet of a file | `astroledger inspect FILE` | — |
 | Aperture photometry in Jy/AB with uncertainties | `astroledger.photometry` | matches JWST pipeline catalogue to <1e-6 |
 | Source detection with false-positive estimate | `astroledger.imaging.detect` | 34/34 pipeline sources on clean sky |
+| Injection–recovery completeness | `astroledger.imaging.injection_recovery` | 50% complete at AB 24.76 on clean sky (F405N) |
+| Gaia DR3 cross-match with epoch propagation; astrometric QA | `astroledger.archives.gaia`, `astroledger.astrometry` | NIRCam mosaics within 10–30 mas of Gaia DR3 |
+| Observing-mode router with explicit refusals | `astroledger.core.mode` | spectroscopic, coronagraphic and time-series files refused |
+| CDS adapters (Sesame, SIMBAD, VizieR), cached with provenance | `astroledger.archives.cds` | stub-tested only: CDS hosts blocked here |
+| Probabilistic cross-match (error radius, P_chance, reliability, conflicts) | `astroledger.crossmatch` | F405N × F470N separations follow the error model |
+| Evidence-graded explanations (L1/L2/L3) | `astroledger explain FILE` | zero fabricated identities on four images |
+| Read-only MCP server for Claude | `astroledger mcp` | stdio and Streamable HTTP tested |
 
 The original scripts are **frozen** in [`legacy/`](legacy/README.md) and documented as scientifically invalid. The audit is in [`docs/lab-roadmap/01-repository-audit.md`](docs/lab-roadmap/01-repository-audit.md), and the plan in [`docs/lab-roadmap/`](docs/lab-roadmap/README.md).
 
 ## Repository layout
 
 ```
-src/astroledger/    the new package (working name): core, io, viz, provenance, archives, photometry, imaging, cli
+src/astroledger/    the new package (working name): core, io, viz, provenance, archives, photometry, imaging, astrometry, crossmatch, interpret, mcp_server, cli
 tests/              unit tests, science tests (incl. documented legacy defects), legacy freeze check
 docs/lab-roadmap/   audit, architecture, roadmap, prioritised tasks (start here)
 legacy/             original prototype, frozen (checksummed)

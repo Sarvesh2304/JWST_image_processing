@@ -39,12 +39,12 @@ _HST_LEVELS = {
 
 def product_level(filename: str, telescope: str | None) -> str:
     """Processing level inferred from the archive filename suffix (stated as such)."""
-    stem = filename.removesuffix(".fits").removesuffix(".gz")
+    stem = filename.lower().removesuffix(".gz").removesuffix(".fits")
     suffix = stem.rsplit("_", 1)[-1].lower()
     if telescope == "JWST" and suffix in _JWST_LEVELS:
         level = _JWST_LEVELS[suffix]
         if suffix == "i2d":
-            association = re.match(r"^jw\d{5}-[oc]\d{3,4}_", stem)
+            association = re.match(r"^jw\d{5}-[oca]\d{3,4}_", stem)
             level = (
                 "Stage 3: combined, resampled mosaic"
                 if association
@@ -116,7 +116,8 @@ def fact_sheet(image: ImageProduct) -> dict[str, Any]:
             "shape": list(image.data.shape),
             "unit": str(image.unit) if image.unit is not None else None,
             "has_uncertainty": image.uncertainty is not None,
-            "masked_fraction": round(image.n_masked / image.data.size, 4),
+            "masked_pixels": int(image.n_masked),
+            "masked_fraction": float(f"{image.n_masked / image.data.size:.4g}"),
         },
         "measured": {},
         "notes": list(image.notes)

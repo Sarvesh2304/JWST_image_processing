@@ -21,6 +21,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import io
+import logging
 import math
 import re
 import xml.etree.ElementTree as ET
@@ -31,7 +32,9 @@ import numpy as np
 import requests
 from astropy.io import fits
 
-from astroledger.provenance import step
+from astroledger.provenance import annotate, step
+
+log = logging.getLogger(__name__)
 
 __all__ = [
     "BUCKET_URL",
@@ -200,6 +203,8 @@ def _get_range(
     response = http.get(_url(key), headers={"Range": f"bytes={start}-{stop - 1}"}, timeout=300)
     response.raise_for_status()
     if response.status_code != 206 or len(response.content) != n:
+        # the bytes did arrive (e.g. a server ignoring Range sends everything): count them
+        ledger.record(len(response.content), _url(key), "unexpected reply", purpose)
         raise OSError(
             f"{key}: range request returned {response.status_code}, {len(response.content)} bytes"
         )
@@ -260,10 +265,14 @@ class RemoteFile(io.RawIOBase):
 def fetch(key: str, dest_dir: str | Path, *, ledger: DownloadLedger | None = None) -> Path:
     """Download a whole object, keeping its archive filename, and verify its ETag.
 
+    The ETag and the result of checking it (``verified`` or, for a multipart upload whose part
+    size cannot be inferred, ``unverifiable``) are recorded in the step's provenance.
+
     Raises
     ------
     OSError
-        If the downloaded file does not match the ETag.
+        If the downloaded size differs from the archive's, or the file does not match the ETag;
+        the partial file is removed.
     """
     http, ledger = requests.Session(), ledger or DownloadLedger()
     size, etag = _head(key, http)
@@ -275,11 +284,22 @@ def fetch(key: str, dest_dir: str | Path, *, ledger: DownloadLedger | None = Non
         with dest.open("wb") as stream:
             for chunk in response.iter_content(1 << 20):
                 stream.write(chunk)
-    ledger.record(dest.stat().st_size, _url(key), "full", "fetch")
+    received = dest.stat().st_size
+    ledger.record(received, _url(key), "full", "fetch")
+    if received != size:
+        dest.unlink()
+        raise OSError(f"{key}: received {received} bytes, the archive lists {size}; file removed")
     status = verify_etag(dest, etag)
+    annotate(etag=etag, etag_check=status, size_bytes=size)
     if status == "mismatch":
         dest.unlink()
         raise OSError(f"{key}: download does not match its ETag {etag}")
+    if status == "unverifiable":
+        log.warning(
+            "%s: multipart ETag %s could not be checked (part size unknown); size matches",
+            key,
+            etag,
+        )
     return dest
 
 
@@ -354,7 +374,16 @@ def _cards(raw: bytes) -> bytes:
     return b""
 
 
-@step("archives.cloud.fetch_rows", version="1")
+#: BITPIX -> (BZERO, dtype) of the FITS unsigned-integer convention (signed bytes for 8).
+_UNSIGNED = {
+    8: (-128, np.int8),
+    16: (2**15, np.uint16),
+    32: (2**31, np.uint32),
+    64: (2**63, np.uint64),
+}
+
+
+@step("archives.cloud.fetch_rows", version="2")
 def fetch_rows(
     key: str,
     rows: tuple[int, int],
@@ -390,10 +419,17 @@ def fetch_rows(
         if hdu is None:
             raise ValueError(f"{key}: no {name} extension")
         header = hdu.header
+        if hdu.index > 0 and header.get("XTENSION", "").strip() != "IMAGE":
+            raise ValueError(
+                f"{name} is a {header.get('XTENSION')!r} extension (e.g. tile-compressed), "
+                "not an uncompressed image: download the file instead"
+            )
         nx, ny = header["NAXIS1"], header["NAXIS2"]
         if header["NAXIS"] != 2 or not 0 <= y0 < y1 <= ny:
             raise ValueError(f"{name}: rows {rows} outside 2-D image of {ny} rows")
         x0, x1 = cols if cols is not None else (0, nx)
+        if not 0 <= x0 < x1 <= nx:
+            raise ValueError(f"{name}: columns {(x0, x1)} outside 2-D image of {nx} columns")
         dtype = np.dtype(_DTYPES[header["BITPIX"]])
         row_bytes = nx * dtype.itemsize
         start = hdu.data_start + y0 * row_bytes
@@ -402,10 +438,15 @@ def fetch_rows(
         )
         data = np.frombuffer(raw, dtype=dtype).reshape(y1 - y0, nx)[:, x0:x1]
         bscale, bzero = header.get("BSCALE", 1), header.get("BZERO", 0)
-        if (bscale, bzero) == (1, 2**31) and header["BITPIX"] == 32:
-            data = (data.astype(np.int64) + 2**31).astype(np.uint32)
+        unsigned = _UNSIGNED.get(header["BITPIX"])
+        if unsigned is not None and (bscale, bzero) == (1, unsigned[0]):
+            # FITS convention for unsigned (or, for BITPIX 8, signed) integers: exact shift
+            if header["BITPIX"] == 64:  # int64 + 2**63 as uint64: flip the sign bit
+                data = data.astype(np.int64).view(np.uint64) ^ np.uint64(2**63)
+            else:
+                data = (data.astype(np.int64) + unsigned[0]).astype(unsigned[1])
         elif (bscale, bzero) != (1, 0):
-            data = data * bscale + bzero
+            data = data.astype(np.float64) * bscale + bzero
         else:
             data = data.astype(dtype.newbyteorder("="))
         new = header.copy()

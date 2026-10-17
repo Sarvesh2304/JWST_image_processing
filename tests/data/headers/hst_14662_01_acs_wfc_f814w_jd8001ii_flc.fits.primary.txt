@@ -1,0 +1,329 @@
+SIMPLE  =                    T / conforms to FITS standard                      
+BITPIX  =                    8 / array data type                                
+NAXIS   =                    0 / number of array dimensions                     
+EXTEND  =                    T                                                  
+COMMENT   FITS (Flexible Image Transport System) format is defined in 'Astronomy
+COMMENT   and Astrophysics', volume 376, page 359; bibcode: 2001A&A...376..359H 
+ORIGIN  = 'HSTIO/CFITSIO March 2010' / FITS file originator                     
+DATE    = '2026-05-20' / date this file was written (yyyy-mm-dd)                
+NEXTEND =                   21 / Number of standard extensions                  
+FILENAME= 'hst_14662_01_acs_wfc_f814w_jd8001ii_flc.fits' / name of file         
+FILETYPE= 'SCI      '          / type of data found in data file                
+                                                                                
+TELESCOP= 'HST'                / telescope used to acquire data                 
+BSIDEOPS= 'FALSE'              / Post-2021-07-15 B-Side Operations Indicator    
+INSTRUME= 'ACS   '             / identifier for instrument used to acquire data 
+EQUINOX =               2000.0 / equinox of celestial coord. system             
+                                                                                
+              / DATA DESCRIPTION KEYWORDS                                       
+                                                                                
+ROOTNAME= 'jd8001iiq                         ' / rootname of the observation set
+IMAGETYP= 'EXT               ' / type of exposure identifier                    
+PRIMESI = 'ACS   '             / instrument designated as prime                 
+                                                                                
+              / TARGET INFORMATION                                              
+                                                                                
+TARGNAME= 'NGC-5139B                      ' / proposer's target name            
+RA_TARG =   2.013959166667E+02 / right ascension of the target (deg) (J2000)    
+DEC_TARG=  -4.756687500000E+01 / declination of the target (deg) (J2000)        
+                                                                                
+              / PROPOSAL INFORMATION                                            
+                                                                                
+PROPOSID=                14662 / PEP proposal identifier                        
+LINENUM = '01.001         '    / proposal logsheet line number                  
+PR_INV_L= 'Bedin                         ' / last name of principal investigator
+PR_INV_F= 'Luigi               ' / first name of principal investigator         
+PR_INV_M= 'R.                  ' / middle name / initial of principal investigat
+                                                                                
+              / EXPOSURE INFORMATION                                            
+                                                                                
+SUNANGLE=            76.614349 / angle between sun and V1 axis                  
+MOONANGL=           102.672806 / angle between moon and V1 axis                 
+SUN_ALT =            89.898613 / altitude of the sun above Earth's limb         
+FGSLOCK = 'FINE              ' / commanded FGS lock (FINE,COARSE,GYROS,UNKNOWN) 
+GYROMODE= 'T'                  / number of gyros scheduled, T=3+OBAD            
+REFFRAME= 'ICRS    '           / guide star catalog version                     
+MTFLAG  = ' '                  / moving target flag; T if it is a moving target 
+                                                                                
+DATE-OBS= '2017-08-19'         / UT date of start of observation (yyyy-mm-dd)   
+TIME-OBS= '04:55:32'           / UT time of start of observation (hh:mm:ss)     
+EXPSTART=   5.798420523313E+04 / exposure start time (Modified Julian Date)     
+EXPEND  =   5.798420583563E+04 / exposure end time (Modified Julian Date)       
+EXPTIME =            51.000000 / exposure duration (seconds)--calculated        
+EXPFLAG = 'NORMAL       '      / Exposure interruption indicator                
+QUALCOM1= '                                                                    '
+QUALCOM2= '                                                                    '
+QUALCOM3= '                                                                    '
+QUALITY = '                                                                    '
+                                                                                
+DARKTIME=        5.4239204E+01 / fiducial pixel dark time (secs)                
+                                                                                
+              / POINTING INFORMATION                                            
+                                                                                
+PA_V3   =           311.692902 / position angle of V3-axis of HST (deg)         
+                                                                                
+              / TARGET OFFSETS (POSTARGS)                                       
+                                                                                
+POSTARG1=            -2.000000 / POSTARG in axis 1 direction                    
+POSTARG2=           -10.000000 / POSTARG in axis 2 direction                    
+                                                                                
+              / DIAGNOSTIC KEYWORDS                                             
+                                                                                
+PROCTIME=   6.118025836806E+04 / pipeline processing time (MJD)                 
+OPUS_VER= 'HSTDP 2026_1                ' / data processing software system versi
+AWSYSVER= 'v0.4.48 '           / cloud infrastructure package version           
+AWSDPVER= 'v0.2.30 '           / cloud docker image version                     
+CSYS_VER= '2026.2.1.7-arcticdrizzle-py312' / calibration software system version
+CAL_VER = '10.4.1 (08-Aug-2025)' / CALACS code version                          
+                                                                                
+              / SCIENCE INSTRUMENT CONFIGURATION                                
+                                                                                
+OBSTYPE = 'IMAGING       '     / observation type - imaging or spectroscopic    
+OBSMODE = 'ACCUM     '         / operating mode                                 
+CTEIMAGE= 'NONE'               / type of Charge Transfer Image, if applicable   
+SCLAMP  = 'NONE          '     / lamp status, NONE or name of lamp which is on  
+NRPTEXP =                    1 / number of repeat exposures in set: default 1   
+SUBARRAY=                    F / data from a subarray (T) or full frame (F)     
+DETECTOR= 'WFC'                / detector in use: WFC, HRC, or SBC              
+FILTER1 = 'CLEAR1L           ' / element selected from filter wheel 1           
+FILTER2 = 'F814W             ' / element selected from filter wheel 2           
+FW1OFFST=                    0 / computed filter wheel offset                   
+FW1ERROR=                    F / filter wheel position error flag               
+FW2OFFST=                    0 / computed filter wheel offset                   
+FW2ERROR=                    F / filter wheel position error flag               
+FWSOFFST=                    0 / computed filter wheel offset                   
+FWSERROR=                    F / filter wheel position error flag               
+LRFWAVE =             0.000000 / proposed linear ramp filter wavelength         
+APERTURE= 'WFCENTER        '   / aperture name                                  
+PROPAPER= 'WFCENTER        '   / proposed aperture name                         
+DIRIMAGE= 'NONE     '          / direct image for grism or prism exposure       
+CTEDIR  = 'NONE    '           / CTE measurement direction: serial or parallel  
+CRSPLIT =                    1 / number of cosmic ray split exposures           
+                                                                                
+              / CALIBRATION SWITCHES: PERFORM, OMIT, COMPLETE                   
+                                                                                
+STATFLAG=                    F / Calculate statistics?                          
+WRTERR  =                    T / write out error array extension                
+DQICORR = 'COMPLETE'           / data quality initialization                    
+ATODCORR= 'OMIT    '           / correct for A to D conversion errors           
+BLEVCORR= 'COMPLETE'           / subtract bias level computed from overscan img 
+BIASCORR= 'COMPLETE'           / Subtract bias image                            
+FLSHCORR= 'OMIT    '           / post flash correction                          
+CRCORR  = 'OMIT    '           / combine observations to reject cosmic rays     
+EXPSCORR= 'COMPLETE'           / process individual observations after cr-reject
+SHADCORR= 'OMIT    '           / apply shutter shading correction               
+PCTECORR= 'COMPLETE'           / cte correction                                 
+DARKCORR= 'COMPLETE'           / Subtract dark image                            
+FLATCORR= 'COMPLETE'           / flat field data                                
+PHOTCORR= 'COMPLETE'           / populate photometric header keywords           
+RPTCORR = 'OMIT    '           / add individual repeat observations             
+DRIZCORR= 'PERFORM '           / drizzle processing                             
+SINKCORR= 'COMPLETE'           / flag sink pixels                               
+                                                                                
+              / CALIBRATION REFERENCE FILES                                     
+                                                                                
+BPIXTAB = 'jref$25g1256mj_bpx.fits' / bad pixel table                           
+CCDTAB  = 'jref$72m1821dj_ccd.fits' / CCD calibration parameters                
+ATODTAB = 'N/A                    ' / analog to digital correction file         
+OSCNTAB = 'jref$17717071j_osc.fits' / CCD overscan table                        
+BIASFILE= 'jref$66418532j_bia.fits' / bias image file name                      
+FLSHFILE= 'N/A                    ' / post flash correction file name           
+CRREJTAB= 'N/A                    ' / cosmic ray rejection parameters           
+SHADFILE= 'N/A                    ' / shutter shading correction file           
+PCTETAB = 'jref$8ch1518tj_cte.fits' / CTE Correction Table                      
+DRKCFILE= 'jref$93620149j_dkc.fits' / De-trailed Dark Reference File            
+DARKFILE= 'jref$78f1842rj_drk.fits' / dark image file name                      
+PFLTFILE= 'jref$qb12257pj_pfl.fits' / pixel to pixel flat field file name       
+DFLTFILE= 'N/A                    ' / delta flat field file name                
+LFLTFILE= 'N/A                    ' / low order flat                            
+PHOTTAB = 'N/A                    ' / Photometric throughput table              
+GRAPHTAB= 'N/A                    ' / the HST graph table                       
+COMPTAB = 'N/A                    ' / the HST components table                  
+IDCTAB  = 'jref$4bb1536mj_idc.fits' / origin of Polynomial Distortion           
+DGEOFILE= 'jref$qbu16429j_dxy.fits' / Distortion correction image               
+MDRIZTAB= 'jref$37g1550cj_mdz.fits' / MultiDrizzle parameter table              
+CFLTFILE= 'N/A                    ' / Coronagraphic spot image                  
+SPOTTAB = 'N/A                    ' / Coronagraphic spot offset table           
+IMPHTTAB= 'jref$4af1559ij_imp.fits' / Image Photometry Table                    
+D2IMFILE= 'jref$4bb15371j_d2i.fits' / origin of detector to image correction    
+NPOLFILE= 'jref$4bb1536lj_npl.fits' / origin of non-polynmial distortion model  
+SNKCFILE= 'jref$25e15405j_snk.fits' / Map of sink pixels                        
+SATUFILE= 'jref$5331917aj_sat.fits' / CCD pixel saturation onset map            
+                                                                                
+              / COSMIC RAY REJECTION ALGORITHM PARAMETERS                       
+                                                                                
+MEANEXP =             0.000000 / reference exposure time for parameters         
+SCALENSE=             0.000000 / multiplicative scale factor applied to noise   
+INITGUES= '   '                / initial guess method (MIN or MED)              
+SKYSUB  = '    '               / sky value subtracted (MODE or NONE)            
+SKYSUM  =                  0.0 / sky level from the sum of all constituent image
+CRSIGMAS= '               '    / statistical rejection criteria                 
+CRRADIUS=             0.000000 / rejection propagation radius (pixels)          
+CRTHRESH=             0.000000 / rejection propagation threshold                
+BADINPDQ=                    0 / data quality flag bits to reject               
+REJ_RATE=                  0.0 / rate at which pixels are affected by cosmic ray
+CRMASK  =                    F / flag CR-rejected pixels in input files (T/F)   
+                                                                                
+              / OTFR KEYWORDS                                                   
+                                                                                
+T_SGSTAR= '                  ' / OMS calculated guide star control              
+                                                                                
+              / PATTERN KEYWORDS                                                
+                                                                                
+PATTERN1= 'NONE                    ' / primary pattern type                     
+P1_SHAPE= '                  ' / primary pattern shape                          
+P1_PURPS= '          '         / primary pattern purpose                        
+P1_NPTS =                    0 / number of points in primary pattern            
+P1_PSPAC=             0.000000 / point spacing for primary pattern (arc-sec)    
+P1_LSPAC=             0.000000 / line spacing for primary pattern (arc-sec)     
+P1_ANGLE=             0.000000 / angle between sides of parallelogram patt (deg)
+P1_FRAME= '         '          / coordinate frame of primary pattern            
+P1_ORINT=             0.000000 / orientation of pattern to coordinate frame (deg
+P1_CENTR= '   '                / center pattern relative to pointing (yes/no)   
+PATTSTEP=                    0 / position number of this point in the pattern   
+                                                                                
+              / POST FLASH  PARAMETERS                                          
+                                                                                
+FLASHDUR=                  0.0 / Exposure time in seconds: 0.1 to 409.5         
+FLASHCUR= 'OFF '               / Post flash current: OFF, LOW, MED, HIGH        
+FLASHSTA= 'NOT PERFORMED   '   / Status: SUCCESSFUL, ABORTED, NOT PERFORMED     
+SHUTRPOS= 'B    '              / Shutter position: A or B                       
+NSHUTOPN=                    1 / Number of times shutter opened                 
+                                                                                
+              / ENGINEERING PARAMETERS                                          
+                                                                                
+CCDAMP  = 'ABCD'               / CCD Amplifier Readout Configuration            
+CCDGAIN =                  2.0 / commanded gain of CCD                          
+CCDOFSTA=                    1 / commanded CCD bias offset for amplifier A      
+CCDOFSTB=                    1 / commanded CCD bias offset for amplifier B      
+CCDOFSTC=                    1 / commanded CCD bias offset for amplifier C      
+CCDOFSTD=                    1 / commanded CCD bias offset for amplifier D      
+JWROTYPE= 'DS_int      '       / asic Wfc RdOut TYP                             
+                                                                                
+              / CALIBRATED ENGINEERING PARAMETERS                               
+                                                                                
+ATODGNA =        2.0200000E+00 / calibrated gain for amplifier A                
+ATODGNB =        1.8860000E+00 / calibrated gain for amplifier B                
+ATODGNC =        2.0170000E+00 / calibrated gain for amplifier C                
+ATODGND =        2.0109999E+00 / calibrated gain for amplifier D                
+READNSEA=        4.3499999E+00 / calibrated read noise for amplifier A          
+READNSEB=        3.7500000E+00 / calibrated read noise for amplifier B          
+READNSEC=        4.0500002E+00 / calibrated read noise for amplifier C          
+READNSED=        5.0500002E+00 / calibrated read noise for amplifier D          
+BIASLEVA=        4.2235049E+03 / bias level for amplifier A                     
+BIASLEVB=        4.0351028E+03 / bias level for amplifier B                     
+BIASLEVC=        4.4426426E+03 / bias level for amplifier C                     
+BIASLEVD=        4.6389946E+03 / bias level for amplifier D                     
+                                                                                
+              / ASSOCIATION KEYWORDS                                            
+                                                                                
+ASN_ID  = 'JD8001010 '         / unique identifier assigned to association      
+ASN_TAB = 'jd8001010_asn.fits     ' / name of the association table             
+ASN_MTYP= 'EXP-DTH     '       / Role of the Member in the Association          
+CRDS_CTX= 'hst_1334.pmap'                                                       
+CRDS_VER= '13.1.14, b11.4.0, 64d96076d89b32a5687a6b77bb910ab93b3a99b3'          
+MLINTAB = 'N/A     '                                                            
+UPWCSVER= '1.7.7   '           / Version of STWCS used to update the WCS        
+PYWCSVER= '7.2.0   '           / Version of Astropy used to update the WCS      
+HISTORY CCD parameters table:                                                   
+HISTORY   reference table jref$72m1821dj_ccd.fits                               
+HISTORY     inflight                                                            
+HISTORY     CCD table with updated readnoise values for CCDGAIN=2.------------- 
+HISTORY     July 2009                                                           
+HISTORY DQICORR complete ...                                                    
+HISTORY   values checked for saturation                                         
+HISTORY   DQ array initialized ...                                              
+HISTORY   reference table jref$25g1256mj_bpx.fits                               
+HISTORY     INFLIGHT 30/03/2002 30/05/2002                                      
+HISTORY     FITS reference table for bad pixel locations on ACS WFC             
+HISTORY BIASCORR complete ...                                                   
+HISTORY   reference image jref$66418532j_bia.fits                               
+HISTORY     INFLIGHT 26/07/2017 23/08/2017                                      
+HISTORY     Standard full-frame bias for data taken after Jul 26 2017 06:53:30- 
+HISTORY DESTRIPE: number of rows fixed per amp: 2067                            
+HISTORY DESTRIPE: number of rows skipped per amp: 1                             
+HISTORY BLEVCORR complete; bias level from overscan was subtracted.             
+HISTORY BLEVCORR does not include correction for drift along lines.             
+HISTORY   Overscan region table:                                                
+HISTORY   reference table jref$17717071j_osc.fits                               
+HISTORY     GROUND                                                              
+HISTORY     New OSCNTAB which includes entries for all subarrays.-------------- 
+HISTORY Uncertainty array initialized.                                          
+HISTORY SINKCORR complete ...                                                   
+HISTORY   reference image jref$25e15405j_snk.fits                               
+HISTORY     INFLIGHT 26/07/2017 23/08/2017                                      
+HISTORY     Sink pixel reference file ----------------------------              
+HISTORY CCD parameters table:                                                   
+HISTORY   reference table jref$72m1821dj_ccd.fits                               
+HISTORY     inflight                                                            
+HISTORY     CCD table with updated readnoise values for CCDGAIN=2.------------- 
+HISTORY     July 2009                                                           
+HISTORY CTE_NAME Par/Serial PixelCTE 2023 CTE algorithm name                    
+HISTORY CTE_VER 3.0 CTE algorithm version                                       
+HISTORY CORRTYPE parallel CTE correction type                                   
+HISTORY FIXROCR            1 fix readout cosmic rays                            
+HISTORY PCTETRSH  -1.000000000000E+01 CTE over subtraction threshold            
+HISTORY PCTEFRAC   1.050926396195E+00 CTE scaling factor                        
+HISTORY CTEDATE0   5.233486000000E+04 Date of instrument installation           
+HISTORY CTEDATE1   5.771044601020E+04 Date of CTE model pinning                 
+HISTORY PCTETLEN           60 max length of CTE trail                           
+HISTORY PCTENFOR            5 Number of iter in forward model                   
+HISTORY PCTENPAR            7 Number of iter in parallel transfer               
+HISTORY CORRTYPE serial - Amp C CTE correction type                             
+HISTORY CTEDATE0   4.900000000000E+04 Date of instrument installation           
+HISTORY CTEDATE1   6.050000000000E+04 Date of CTE model pinning                 
+HISTORY PCTETLEN          100 max length of CTE trail                           
+HISTORY PCTENFOR            1 Number of iter in forward model                   
+HISTORY PCTENPAR            1 Number of iter in parallel transfer               
+HISTORY CORRTYPE serial - Amp D CTE correction type                             
+HISTORY CTEDATE0   4.900000000000E+04 Date of instrument installation           
+HISTORY CTEDATE1   6.050000000000E+04 Date of CTE model pinning                 
+HISTORY PCTETLEN          100 max length of CTE trail                           
+HISTORY PCTENFOR            1 Number of iter in forward model                   
+HISTORY PCTENPAR            1 Number of iter in parallel transfer               
+HISTORY CORRTYPE serial - Amp A CTE correction type                             
+HISTORY CTEDATE0   4.900000000000E+04 Date of instrument installation           
+HISTORY CTEDATE1   6.050000000000E+04 Date of CTE model pinning                 
+HISTORY PCTETLEN          100 max length of CTE trail                           
+HISTORY PCTENFOR            1 Number of iter in forward model                   
+HISTORY PCTENPAR            1 Number of iter in parallel transfer               
+HISTORY CORRTYPE serial - Amp B CTE correction type                             
+HISTORY CTEDATE0   4.900000000000E+04 Date of instrument installation           
+HISTORY CTEDATE1   6.050000000000E+04 Date of CTE model pinning                 
+HISTORY PCTETLEN          100 max length of CTE trail                           
+HISTORY PCTENFOR            1 Number of iter in forward model                   
+HISTORY PCTENPAR            1 Number of iter in parallel transfer               
+HISTORY PCTECORR complete ...                                                   
+HISTORY PCTERNOI  4.3499999E+00 Amp 'A' read noise clip limit (from CCDTAB).    
+HISTORY PCTERNOI  3.7500000E+00 Amp 'B' read noise clip limit (from CCDTAB).    
+HISTORY PCTERNOI  4.0500002E+00 Amp 'C' read noise clip limit (from CCDTAB).    
+HISTORY PCTERNOI  5.0500002E+00 Amp 'D' read noise clip limit (from CCDTAB).    
+HISTORY CTE parameters table:                                                   
+HISTORY   reference table jref$8ch1518tj_cte.fits                               
+HISTORY     INFLIGHT 01/03/2002 22/07/2010                                      
+HISTORY     Parameters needed for gen3 pixel-based CTE correction -----------   
+CTE_NAME= 'Par/Serial PixelCTE 2023' / name of CTE algorithm                    
+CTE_VER = '3.0     '           / version of CTE algorithm                       
+DISTNAME= 'jd8001iiq_4bb1536mj-4bb1536lj-4bb15371j' / Distortion model name     
+SIPNAME = 'jd8001iiq_4bb1536mj' / origin of SIP polynomial distortion model     
+HAPLEVEL=                    1 / Classification level of this product           
+IPPPSSOO= 'jd8001iiq'                                                           
+HISTORY CCD parameters table:                                                   
+HISTORY   reference table jref$72m1821dj_ccd.fits                               
+HISTORY     inflight                                                            
+HISTORY     CCD table with updated readnoise values for CCDGAIN=2.------------- 
+HISTORY     July 2009                                                           
+HISTORY DARKCORR complete ...                                                   
+HISTORY   reference image jref$93620149j_dkc.fits                               
+HISTORY     INFLIGHT 26/07/2017 23/08/2017                                      
+HISTORY     CTE corrected dark for WFC data taken after Jul 26 2017 06:53:30--- 
+HISTORY FLATCORR complete ...                                                   
+HISTORY   reference image jref$qb12257pj_pfl.fits                               
+HISTORY     INFLIGHT 18/04/2002 - 04/07/2006                                    
+HISTORY     Flats: P(Lab)*L(Flight)*delta(-81K,ISR06-06). UNCONFIRMED FWOFFSET  
+HISTORY PHOTCORR complete ...                                                   
+HISTORY   reference table jref$4af1559ij_imp.fits                               
+HISTORY     INFLIGHT 18/04/2000 29/09/2020                                      
+HISTORY     photometry keywords reference file--------------------------------- 
+HISTORY EXPSCORR complete ...                                                   
+END                                                                             

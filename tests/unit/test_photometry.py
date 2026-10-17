@@ -73,6 +73,21 @@ def test_sky_positions_equal_pixel_positions(tmp_path):
     assert c.meta["aperture_radius_pix"] == pytest.approx(4.0, rel=1e-3)
 
 
+def test_no_positions_give_an_empty_table_with_the_documented_columns(tmp_path):
+    img = _star_image(tmp_path / "s.fits")
+    full = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 4.0)
+    for positions in (np.empty((0, 2)), [], img.wcs.pixel_to_world([], [])):
+        t = aperture_photometry_table(img, positions, 4.0)
+        assert len(t) == 0 and t.colnames == full.colnames
+        assert t["flux"].unit == u.Jy and t.meta["bandpass"] == full.meta["bandpass"]
+
+
+def test_positions_must_be_n_by_2(tmp_path):
+    img = _star_image(tmp_path / "s.fits")
+    with pytest.raises(ValueError, match=r"shape \(N, 2\)"):
+        aperture_photometry_table(img, np.array([[40.3, 41.0, 42.0], [39.7, 39.0, 38.0]]), 4.0)
+
+
 def test_aperture_correction_is_explicit(tmp_path):
     img = _star_image(tmp_path / "s.fits")
     plain = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 3.0)
@@ -109,3 +124,12 @@ def test_uncalibrated_units_give_no_magnitudes(tmp_path):
     t = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 3.0)
     assert "abmag" not in t.colnames
     assert any("no flux calibration" in c for c in t.meta["caveats"])
+
+
+def test_masked_fraction_is_exactly_zero_without_masked_pixels(tmp_path):
+    """Exact-overlap areas differ from pi r^2 by float noise; the fraction must not go negative."""
+    img = _star_image(tmp_path / "s.fits")
+    xy = np.array([[40.3, 39.7], [30.11, 33.87], [50.5, 45.5]])
+    for radius in (1.5, 2.7, 4.0):
+        t = aperture_photometry_table(img, xy, radius)
+        assert np.all(np.asarray(t["masked_fraction"]) == 0.0)

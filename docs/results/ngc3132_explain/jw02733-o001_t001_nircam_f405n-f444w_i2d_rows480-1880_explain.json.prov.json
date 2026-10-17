@@ -1,0 +1,76 @@
+{
+  "duration_s": 5.975794,
+  "ended": "2026-10-13T08:14:22.755+00:00",
+  "environment": {
+    "git": {
+      "commit": "5b07e23de431094927ba15c33d729d058bd0443a",
+      "dirty": true
+    },
+    "packages": {
+      "astroledger": "0.0.1",
+      "astropy": "8.0.1",
+      "astroquery": "0.4.11",
+      "numpy": "2.5.3",
+      "photutils": "3.0.0",
+      "reproject": "0.21.0",
+      "scipy": "1.18.1"
+    },
+    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "error": null,
+  "extra": {},
+  "function": "astroledger.interpret.engine.explain",
+  "id": "18de08b0b3f41686-bb9f259c",
+  "inputs": {
+    "gaia": {
+      "columns": [
+        "source_id",
+        "ra",
+        "dec",
+        "ra_error",
+        "dec_error",
+        "pmra",
+        "pmra_error",
+        "pmdec",
+        "pmdec_error",
+        "ref_epoch",
+        "phot_g_mean_mag",
+        "astrometric_params_solved"
+      ],
+      "kind": "table",
+      "rows": 71,
+      "sha256": "6a5b5435bbd84a0fc4acad774f23c6173efab0e70adc80a0f4ac6628bc23f575"
+    },
+    "image": {
+      "bandpass": "JWST/NIRCAM/F405N",
+      "data_sha256": "23693a7e55f52646cd4400fae025cbd409b8d181206085cf56e2fae108204ef5",
+      "extension": [
+        "SCI",
+        1
+      ],
+      "file": "jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits",
+      "kind": "image",
+      "path": "/tmp/claude-0/-home-user-JWST-image-processing/e5718ba4-285a-57c5-b8f0-6de1b2249d01/scratchpad/realdata/astro_cache/jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits",
+      "sha256": "60d6bba44ccf7d925e7de321a55b467d3372b5925378d954cab292119d16c0fb"
+    }
+  },
+  "name": "interpret.explain",
+  "output_file": {
+    "path": "jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880_explain.json",
+    "sha256": "d7d670800ef35ce1ac73658f3cd0e41d15fd43e6e39d6e13db94d67fe6dfe773"
+  },
+  "outputs": [
+    {
+      "kind": "param",
+      "value": "Explanation(image=[Statement(id='IMG-1', text='JWST NIRCAM image in JWST/NIRCAM/F405N (imaging (EXP_TYPE=NRC_IMAGE)).', level=<Level.L1_OBSERVATION: 1>, evidence=(EvidenceRef(kind='metadata', ref='TELESCOP/INSTRUME', value='JWST/NIRCAM'), EvidenceRef(kind='metadata', ref='bandpass', value='JWST/NIRCAM/F405N'), EvidenceRef(kind='metadata', ref='EXP_TYPE', value='NRC_IMAGE')), uncertainty=None, caveats=(), test=None), Statement(id='IMG-2', text=\"The observer's target designation is 'NGC-3132'. Thi..."
+    }
+  ],
+  "params": {
+    "catalogue": null,
+    "detect_kwargs": null
+  },
+  "started": "2026-10-13T08:14:16.766+00:00",
+  "status": "ok",
+  "version": "1"
+}

@@ -131,7 +131,16 @@ def aperture_photometry_table(
             raise ValueError("sky positions need a WCS")
         xy = np.column_stack(image.wcs.world_to_pixel(positions))
     else:
-        xy = np.atleast_2d(np.asarray(positions, dtype=float))
+        xy = np.asarray(positions, dtype=float)
+        if xy.size == 0:
+            xy = xy.reshape(0, 2)
+        xy = np.atleast_2d(xy)
+        if xy.ndim != 2 or xy.shape[1] != 2:
+            raise ValueError(f"pixel positions must have shape (N, 2) as (x, y); got {xy.shape}")
+    empty = len(xy) == 0
+    if empty:  # measure one placeholder so the empty table has the documented columns and units
+        ny, nx = np.shape(image.data)
+        xy = np.array([[(nx - 1) / 2, (ny - 1) / 2]])
     r = _pixel_radius(radius, image)
     mask = image.mask if image.mask is not None else ~np.isfinite(image.data)
     data = np.where(mask, 0.0, np.asarray(image.data, dtype=float))
@@ -191,7 +200,7 @@ def aperture_photometry_table(
     table["bkg_per_pixel_err"] = bkg_err * out_unit
     table["n_bkg"] = n_bkg
     table["bkg_unstable"] = bkg_unstable
-    table["masked_fraction"] = 1.0 - area / full_area
+    table["masked_fraction"] = np.clip(1.0 - area / full_area, 0.0, 1.0)  # float noise -> 0
     with np.errstate(divide="ignore", invalid="ignore"):
         table["snr"] = flux / flux_err
         if factor is not None:
@@ -225,4 +234,4 @@ def aperture_photometry_table(
             "source_file": image.source.filename,
         }
     )
-    return table
+    return table[:0] if empty else table

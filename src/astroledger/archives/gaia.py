@@ -2,13 +2,19 @@
 
 MAST hosts Gaia DR3 as a HATS catalogue: Parquet files partitioned by HEALPix tile
 (``s3://stpubdata/gaia/gaia_dr3/public/hats/gaia/``). Rows in each file are sorted by
-``source_id``, and a Gaia ``source_id`` encodes the source's HEALPix level-12 (nested) pixel:
-``source_id // 2**35``. A cone search therefore needs only:
+``_healpix_29``, the HEALPix level-29 (nested) index of the J2016 position, so each row group
+covers a compact range of the sky (checked on the real files: their ``_healpix_29`` ranges are
+ascending and disjoint, while their ``source_id`` ranges overlap). A cone search therefore
+needs only:
 
 1. the partition file(s) containing the cone (from ``partition_info.csv``);
 2. the Parquet footer;
-3. the requested columns of the row groups whose ``source_id`` range overlaps the cone's
-   level-12 pixels.
+3. the requested columns of the row groups whose ``_healpix_29`` range overlaps the cone's
+   level-12 pixels (``_healpix_29 >> 34``).
+
+Files without ``_healpix_29`` fall back to ``source_id``, which encodes the level-12 pixel of
+the position when the identifier was assigned (``source_id >> 35``). Either way the final
+selection is an exact angular-distance cut on ``ra``/``dec``.
 
 All reads are HTTP range requests counted by a :class:`~astroledger.archives.cloud.DownloadLedger`.
 Gaia DR3 positions refer to epoch J2016.0 (``ref_epoch``), so propagate them before comparing
@@ -65,6 +71,7 @@ _UNITS = {
     "phot_g_mean_mag": u.mag,
 }
 _SOURCE_ID_SHIFT = 35  # source_id // 2**35 = HEALPix level-12 nested pixel
+_HEALPIX29_SHIFT = 2 * (29 - 12)  # _healpix_29 >> 34 = HEALPix level-12 nested pixel
 
 
 def _partition_index(ledger: DownloadLedger) -> set[tuple[int, int]]:
@@ -115,6 +122,7 @@ def gaia_cone(
     start = ledger.used_bytes
     hp12 = HEALPix(nside=2**12, order="nested")
     margin = hp12.pixel_resolution  # ensure pixels touching the cone edge are included
+    center = center.icrs  # HEALPix pixels and Gaia positions are ICRS
     pixels = np.unique(hp12.cone_search_lonlat(center.ra, center.dec, radius=radius + margin))
     columns = tuple(dict.fromkeys(("source_id", "ra", "dec", *columns)))
     tables, read_groups = [], {}
@@ -123,9 +131,14 @@ def gaia_cone(
         parquet = pq.ParquetFile(RemoteFile(key, ledger=ledger, purpose=f"gaia {order}/{npix}"))
         meta = parquet.metadata
         names = [meta.schema.column(i).name for i in range(meta.num_columns)]
-        id_column = names.index("source_id")
-        lows = np.array(members, dtype=np.int64) << _SOURCE_ID_SHIFT
-        highs = (np.array(members, dtype=np.int64) + 1) << _SOURCE_ID_SHIFT
+        index, shift = (
+            ("_healpix_29", _HEALPIX29_SHIFT)
+            if "_healpix_29" in names
+            else ("source_id", _SOURCE_ID_SHIFT)
+        )
+        id_column = names.index(index)
+        lows = np.array(members, dtype=np.int64) << shift
+        highs = (np.array(members, dtype=np.int64) + 1) << shift
         groups = []
         for g in range(meta.num_row_groups):
             stats = meta.row_group(g).column(id_column).statistics
@@ -135,12 +148,13 @@ def gaia_cone(
         if groups:
             arrow = parquet.read_row_groups(groups, columns=list(columns))
             data = {name: arrow[name].to_numpy(zero_copy_only=False) for name in columns}
-            keep = np.isin(data["source_id"] >> _SOURCE_ID_SHIFT, members)
-            tables.append(QTable({name: values[keep] for name, values in data.items()}))
+            # rows are cut by angular distance below; row groups only bound what is read
+            tables.append(QTable(data))
     rows = vstack(tables) if tables else QTable()
     if len(rows):
         sky = SkyCoord(rows["ra"] * u.deg, rows["dec"] * u.deg)
         rows = rows[sky.separation(center) < radius]
+        rows.sort("source_id")  # deterministic order, whatever the file layout
         for name in rows.colnames:
             if name in _UNITS:
                 rows[name] = np.asarray(rows[name], dtype=float) * _UNITS[name]

@@ -1,0 +1,78 @@
+[
+ {
+  "file": "jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits",
+  "bandpass": "JWST/NIRCAM/F405N",
+  "n_sources": 551,
+  "L2_galaxy": 0,
+  "L2_nebula": 0,
+  "point_like": 150,
+  "extended": 285,
+  "gaia_match": 25,
+  "L2_star": 18,
+  "artefact_candidate": 110,
+  "levels": {
+   "L1_OBSERVATION": 1108,
+   "L2_INFERENCE": 18,
+   "L3_HYPOTHESIS": 812
+  },
+  "identifiers_checked": 49,
+  "l2_checked": 18
+ },
+ {
+  "file": "jw02733-o001_t001_nircam_f444w-f470n_i2d_rows480-1880.fits",
+  "bandpass": "JWST/NIRCAM/F470N",
+  "n_sources": 1421,
+  "L2_galaxy": 0,
+  "L2_nebula": 0,
+  "point_like": 0,
+  "extended": 0,
+  "gaia_match": 19,
+  "L2_star": 0,
+  "artefact_candidate": 275,
+  "levels": {
+   "L1_OBSERVATION": 1443,
+   "L2_INFERENCE": 0,
+   "L3_HYPOTHESIS": 275
+  },
+  "identifiers_checked": 19,
+  "l2_checked": 0
+ },
+ {
+  "file": "jw02733-o001_t001_nircam_clear-f356w_i2d_rows480-1880.fits",
+  "bandpass": "JWST/NIRCAM/F356W",
+  "n_sources": 1577,
+  "L2_galaxy": 0,
+  "L2_nebula": 0,
+  "point_like": 0,
+  "extended": 0,
+  "gaia_match": 18,
+  "L2_star": 0,
+  "artefact_candidate": 356,
+  "levels": {
+   "L1_OBSERVATION": 1598,
+   "L2_INFERENCE": 0,
+   "L3_HYPOTHESIS": 356
+  },
+  "identifiers_checked": 18,
+  "l2_checked": 0
+ },
+ {
+  "file": "jw02733002001_02101_00001_mirimage_cal.fits",
+  "bandpass": "JWST/MIRI/F770W",
+  "n_sources": 233,
+  "L2_galaxy": 0,
+  "L2_nebula": 0,
+  "point_like": 161,
+  "extended": 0,
+  "gaia_match": 13,
+  "L2_star": 7,
+  "artefact_candidate": 40,
+  "levels": {
+   "L1_OBSERVATION": 416,
+   "L2_INFERENCE": 7,
+   "L3_HYPOTHESIS": 194
+  },
+  "identifiers_checked": 21,
+  "l2_checked": 7
+ }
+]

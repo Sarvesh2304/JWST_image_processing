@@ -34,6 +34,38 @@ def _inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def _explain(args: argparse.Namespace) -> int:
+    from astropy.table import QTable
+
+    from astroledger.core.errors import ProductError
+    from astroledger.interpret import explain, format_explanation
+    from astroledger.io import open_image
+
+    try:
+        image = open_image(args.file, extver=args.extver)
+        gaia = QTable.read(args.gaia) if args.gaia else None
+        catalogue = QTable.read(args.catalogue) if args.catalogue else None
+        result = explain(image, gaia=gaia, catalogue=catalogue)
+    except (ProductError, OSError) as exc:
+        print(f"astroledger explain: {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(result.to_dict(), indent=2, default=str))
+    else:
+        print(format_explanation(result, limit=args.limit))
+    return 0
+
+
+def _mcp(args: argparse.Namespace) -> int:
+    try:
+        from astroledger.mcp_server import main as serve
+    except ImportError:  # pragma: no cover - depends on the optional extra
+        print('astroledger mcp: install the "mcp" extra: pip install -e ".[mcp]"', file=sys.stderr)
+        return 2
+    serve(args.root, http=args.http, host=args.host, port=args.port, path=args.http_path)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Entry point of the ``astroledger`` command."""
     parser = argparse.ArgumentParser(prog="astroledger", description=__doc__)
@@ -49,6 +81,29 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     inspect.add_argument("--json", action="store_true", help="machine-readable output")
     inspect.set_defaults(handler=_inspect)
+
+    explain = commands.add_parser(
+        "explain", help="graded statements (L1/L2/L3) about an image and its sources"
+    )
+    explain.add_argument("file", help="FITS image (direct imaging only)")
+    explain.add_argument("--extver", type=int, help="EXTVER of the SCI extension")
+    explain.add_argument("--gaia", help="Gaia DR3 table (ECSV) covering the field")
+    explain.add_argument(
+        "--catalogue", help="SIMBAD records (ECSV from archives.cds.simbad_cone) for the field"
+    )
+    explain.add_argument("--limit", type=int, default=20, help="sources shown in text output")
+    explain.add_argument("--json", action="store_true", help="machine-readable output")
+    explain.set_defaults(handler=_explain)
+
+    mcp = commands.add_parser(
+        "mcp", help="run the read-only MCP server (stdio by default) over a data folder"
+    )
+    mcp.add_argument("--root", default="data", help="folder the tools may read (default: data)")
+    mcp.add_argument("--http", action="store_true", help="serve Streamable HTTP instead of stdio")
+    mcp.add_argument("--host", default="127.0.0.1", help="HTTP bind address (default 127.0.0.1)")
+    mcp.add_argument("--port", type=int, default=8000, help="HTTP port (default 8000)")
+    mcp.add_argument("--http-path", default="/mcp", help="HTTP endpoint path (default /mcp)")
+    mcp.set_defaults(handler=_mcp)
 
     args = parser.parse_args(argv)
     return args.handler(args)

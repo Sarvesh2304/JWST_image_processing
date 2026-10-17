@@ -1,0 +1,278 @@
+XTENSION= 'IMAGE   '           / Image extension                                
+BITPIX  =                  -32 / array data type                                
+NAXIS   =                    2 / number of array dimensions                     
+NAXIS1  =                 4096                                                  
+NAXIS2  =                 2048                                                  
+PCOUNT  =                    0 / number of parameters                           
+GCOUNT  =                    1 / number of groups                               
+ORIGIN  = 'HSTIO/CFITSIO March 2010' / FITS file originator                     
+DATE    = '2026-05-20' / date this file was written (yyyy-mm-dd)                
+INHERIT =                    T / inherit the primary header                     
+EXTNAME = 'SCI     '           / extension name                                 
+EXTVER  =                    1 / extension version number                       
+ROOTNAME= 'jd8001iiq                         ' / rootname of the observation set
+EXPNAME = 'jd8001iiq                ' / exposure identifier                     
+BUNIT   = 'ELECTRONS'          / brightness units                               
+                                                                                
+              / WFC CCD CHIP IDENTIFICATION                                     
+                                                                                
+CCDCHIP =                    2 / CCD chip (1 or 2)                              
+                                                                                
+              / World Coordinate System and Related Parameters                  
+                                                                                
+LTV1    =        0.0000000E+00 / offset in X to subsection start                
+LTV2    =        0.0000000E+00 / offset in Y to subsection start                
+RAW_LTV1=                 24.0 / original offset in X to subsection start       
+RAW_LTV2=                  0.0 / original offset in Y to subsection start       
+LTM1_1  =                  1.0 / reciprocal of sampling rate in X               
+LTM2_2  =                  1.0 / reciprocal of sampling rate in Y               
+ORIENTAT=    129.4864717166178                                                  
+RA_APER =   2.013996265635E+02 / RA of aperture reference position              
+DEC_APER=  -4.756820125835E+01 / Declination of aperture reference position     
+PA_APER =              129.225 / Position Angle of reference aperture center (de
+VAFACTOR=   9.999459725798E-01 / velocity aberration plate scale factor         
+                                                                                
+              / READOUT DEFINITION PARAMETERS                                   
+                                                                                
+CENTERA1=                 2073 / subarray axis1 center pt in unbinned dect. pix 
+CENTERA2=                 1035 / subarray axis2 center pt in unbinned dect. pix 
+SIZAXIS1=                 4096 / subarray axis1 size in unbinned detector pixels
+SIZAXIS2=                 2048 / subarray axis2 size in unbinned detector pixels
+BINAXIS1=                    1 / axis1 data bin size in unbinned detector pixels
+BINAXIS2=                    1 / axis2 data bin size in unbinned detector pixels
+                                                                                
+              / PHOTOMETRY KEYWORDS                                             
+                                                                                
+PHOTMODE= 'ACS WFC1 F814W MJD#57984.2052' / obser                               
+PHOTFLAM=        7.0978727E-20 / inverse sensitivity, ergs/cm2/Ang/electron     
+PHOTZPT =       -2.1100000E+01 / ST magnitude zero point                        
+PHOTPLAM=        8.0455361E+03 / Pivot wavelength (Angstroms)                   
+PHOTBW  =        6.5311194E+02 / RMS bandwidth of filter plus detector          
+                                                                                
+              / REPEATED EXPOSURES INFO                                         
+                                                                                
+NCOMBINE=                    1 / number of image sets combined during CR rejecti
+                                                                                
+              / DATA PACKET INFORMATION                                         
+                                                                                
+FILLCNT =                    0 / number of segments containing fill             
+ERRCNT  =                    0 / number of segments containing errors           
+PODPSFF =                    F / podps fill present (T/F)                       
+STDCFFF =                    F / science telemetry fill data present (T=1/F=0)  
+STDCFFP = '0x5569'             / science telemetry fill pattern (hex)           
+                                                                                
+              / ON-BOARD COMPRESSION INFORMATION                                
+                                                                                
+WFCMPRSD=                    F / was WFC data compressed? (T/F)                 
+CBLKSIZ =                    0 / size of compression block in 2-byte words      
+LOSTPIX =                    0 / #pixels lost due to buffer overflow            
+COMPTYP = 'None    '           / compression type performed (Partial/Full/None) 
+                                                                                
+              / IMAGE STATISTICS AND DATA QUALITY FLAGS                         
+                                                                                
+NGOODPIX=              8017726 / number of good pixels                          
+SDQFLAGS=                31743 / serious data quality flags                     
+GOODMIN =       -2.3861342E+02 / minimum value of good pixels                   
+GOODMAX =        8.2436523E+04 / maximum value of good pixels                   
+GOODMEAN=        2.1386551E+01 / mean value of good pixels                      
+SOFTERRS=                    0 / number of soft error pixels (DQF=1)            
+SNRMIN  =       -6.1376085E+00 / minimum signal to noise of good pixels         
+SNRMAX  =        2.2141957E+02 / maximum signal to noise of good pixels         
+SNRMEAN =        1.6094006E+00 / mean value of signal to noise of good pixels   
+MEANDARK=        5.4811293E-01 / average of the dark values subtracted          
+MEANBLEV=        1.6129472E+00 / average of all bias levels subtracted          
+MEANFLSH=             0.000000 / Mean number of counts in post flash exposure   
+RADESYS = 'ICRS    '           / Equatorial coordinate system                   
+S_REGION= 'POLYGON ICRS 201.33820480902375 -47.57070442678768 &'                
+CONTINUE  '201.37072315597314 -47.58840468260839 201.4284653030512 &'           
+CONTINUE  '-47.547805274365125 201.39573746443398 -47.52922165139996 &'         
+CONTINUE  '201.33820480902375 -47.57070442678768 '                              
+SKYCELL = 'p0328x01y21; p0328x02y21; p0329x18y21; p0329x19y21; p0391x14y04; &'  
+CONTINUE  'p0391x14y05&'                                                        
+CONTINUE  '' / Skycell(s) that this image occupies                              
+IDCTHETA=                  0.0 / orientation of detector's Y-axis w.r.t. V3 axis
+IDCXREF =               2048.0 / reference pixel location in X                  
+IDCYREF =               1024.0 / reference pixel location in Y                  
+IDCV2REF=              257.198 / reference pixel's V2 position                  
+IDCV3REF=            302.54099 / reference pixel's V3 position                  
+WCSNAMEO= 'OPUS    '           / Coordinate system title                        
+WCSAXESO=                    2 / Number of coordinate axes                      
+CRPIX1O =               2100.0 / Pixel coordinate of reference point            
+CRPIX2O =                 24.0 / Pixel coordinate of reference point            
+CUNIT1O = 'deg'                / Units of coordinate increment and value        
+CUNIT2O = 'deg'                / Units of coordinate increment and value        
+CTYPE1O = 'RA---TAN'           / Right ascension, gnomonic projection           
+CTYPE2O = 'DEC--TAN'           / Declination, gnomonic projection               
+CRVAL1O =        201.383775186 / [deg] Coordinate value at reference point      
+CRVAL2O =      -47.55925191329 / [deg] Coordinate value at reference point      
+RADESYSO= 'ICRS'               / Equatorial coordinate system                   
+CD1_1O  =          9.52449E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2O  =          1.07889E-05 / partial of first axis coordinate w.r.t. y      
+CD2_1O  =          1.00686E-05 / partial of second axis coordinate w.r.t. x     
+CD2_2O  =         -8.89045E-06 / partial of second axis coordinate w.r.t. y     
+TDDALPHA=  / time-dependent y-skew offset (pre-2014 IDCTAB)                     
+TDDBETA =  / time-dependent y-skew rate (pre-2014 IDCTAB)                       
+TDD_CTA =  / time-dependent x-skew rate (>2015 IDCTAB)                          
+TDD_CTB =     1.2821616374E-06 / time-dependent y-skew rate (>2015 IDCTAB)      
+TDD_CYA =  / time-dependent y-skew offset (2014 IDCTAB)                         
+TDD_CYB =  / time-dependent y-scale rate (>2015 IDCTAB)                         
+TDD_CXA =  / time-dependent x-skew offset (2014 IDCTAB)                         
+TDD_CXB =    -9.0660654172E-07 / time-dependent x-scale rate (>2015 IDCTAB)     
+IDCTAB  = 'N/A     '                                                            
+MDRIZSKY=   1.7831171590934114 / Sky value computed by AstroDrizzle             
+WCSNAMEA= 'IDC_4bb1536mj'      / Coordinate system title                        
+WCSAXESA=                    2 / Number of coordinate axes                      
+CRPIX1A =               2048.0 / Pixel coordinate of reference point            
+CRPIX2A =                 24.0 / Pixel coordinate of reference point            
+CUNIT1A = 'deg'                / Units of coordinate increment and value        
+CUNIT2A = 'deg'                / Units of coordinate increment and value        
+CTYPE1A = 'RA---TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CTYPE2A = 'DEC--TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CRVAL1A =      201.38304125251 / [deg] Coordinate value at reference point      
+CRVAL2A =     -47.559775478149 / [deg] Coordinate value at reference point      
+RADESYSA= 'ICRS'               / Equatorial coordinate system                   
+CD1_1A  =  9.5171609147466E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2A  =  1.0786093002404E-05 / partial of first axis coordinate w.r.t. y      
+CD2_1A  =  1.0052317046201E-05 / partial of second axis coordinate w.r.t. x     
+CD2_2A  = -8.8817185327284E-06 / partial of second axis coordinate w.r.t. y     
+WCSTYPE = 'undistorted a posteriori solution aligned by visit to GAIAEDR3'      
+D2IMFILE= 'N/A     '                                                            
+NPOLFILE= 'N/A     '                                                            
+WCSAXES =                    2 / Number of coordinate axes                      
+CRPIX1  =               2048.0 / Pixel coordinate of reference point            
+CRPIX2  =               1024.0 / Pixel coordinate of reference point            
+CUNIT1  = 'deg'                / Units of coordinate increment and value        
+CUNIT2  = 'deg'                / Units of coordinate increment and value        
+CTYPE1  = 'RA---TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CTYPE2  = 'DEC--TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CRVAL1  =      201.38296943374 / [deg] Coordinate value at reference point      
+CRVAL2  =     -47.559564053901 / [deg] Coordinate value at reference point      
+WCSNAME = 'IDC_4bb1536mj-FIT_SVM_GAIAeDR3' / Coordinate system title            
+A_ORDER =                    5 / SIP polynomial order, axis 0, detector to sky  
+A_0_2   = 2.16658606630989E-06 / SIP distortion coefficient                     
+A_0_3   = 5.60351376906391E-12 / SIP distortion coefficient                     
+A_0_4   = 1.76981068880783E-14 / SIP distortion coefficient                     
+A_0_5   = 2.97651391407279E-18 / SIP distortion coefficient                     
+A_1_1   = -5.2143602459003E-06 / SIP distortion coefficient                     
+A_1_2   = -5.1974100010312E-10 / SIP distortion coefficient                     
+A_1_3   = -8.4369319652595E-15 / SIP distortion coefficient                     
+A_1_4   =  -8.366066318583E-18 / SIP distortion coefficient                     
+A_2_0   = 8.55578130508047E-06 / SIP distortion coefficient                     
+A_2_1   = -2.7065748293161E-11 / SIP distortion coefficient                     
+A_2_2   = 3.87985147485322E-14 / SIP distortion coefficient                     
+A_2_3   = -7.5057378876262E-20 / SIP distortion coefficient                     
+A_3_0   = -4.9205337256133E-10 / SIP distortion coefficient                     
+A_3_1   = 5.87913046595996E-15 / SIP distortion coefficient                     
+A_3_2   = 6.28798772529919E-19 / SIP distortion coefficient                     
+A_4_0   = 2.56479527386796E-14 / SIP distortion coefficient                     
+A_4_1   = -3.6476529060799E-18 / SIP distortion coefficient                     
+A_5_0   = 3.16752968203499E-18 / SIP distortion coefficient                     
+B_ORDER =                    5 / SIP polynomial order, axis 1, detector to sky  
+B_0_2   = -7.2363726707976E-06 / SIP distortion coefficient                     
+B_0_3   = -3.7881609717518E-10 / SIP distortion coefficient                     
+B_0_4   = 7.67377316161733E-15 / SIP distortion coefficient                     
+B_0_5   = -3.0623363477792E-17 / SIP distortion coefficient                     
+B_1_1   = 6.18881276703302E-06 / SIP distortion coefficient                     
+B_1_2   = -7.5201843234585E-11 / SIP distortion coefficient                     
+B_1_3   = 1.21889328403585E-14 / SIP distortion coefficient                     
+B_1_4   = 1.50640979929545E-17 / SIP distortion coefficient                     
+B_2_0   = -1.7425782184493E-06 / SIP distortion coefficient                     
+B_2_1   = -5.1651893878471E-10 / SIP distortion coefficient                     
+B_2_2   = -3.1381506919671E-14 / SIP distortion coefficient                     
+B_2_3   = -1.6527659841859E-18 / SIP distortion coefficient                     
+B_3_0   = 1.00605222841618E-10 / SIP distortion coefficient                     
+B_3_1   = -9.5876640928495E-16 / SIP distortion coefficient                     
+B_3_2   = -1.6240555702279E-18 / SIP distortion coefficient                     
+B_4_0   = -1.8470737529755E-14 / SIP distortion coefficient                     
+B_4_1   = 1.45138043492506E-18 / SIP distortion coefficient                     
+B_5_0   = -3.2119188761227E-18 / SIP distortion coefficient                     
+D2IMDIS1= 'LOOKUP  '           / Detector to image correction type              
+D2IM1   = 'EXTVER: 1' / Version number of WCSDVARR extension                    
+D2IM1   = 'NAXES: 2' / Number of independent variables in D2IM function         
+D2IM1   = 'AXIS.1: 1' / Axis number of the 1st variable in a D2IM function      
+D2IM1   = 'AXIS.2: 2' / Axis number of the 2nd variable in a D2IM function      
+D2IMDIS2= 'LOOKUP  '           / Detector to image correction type              
+D2IM2   = 'EXTVER: 2' / Version number of WCSDVARR extension                    
+D2IM2   = 'NAXES: 2' / Number of independent variables in D2IM function         
+D2IM2   = 'AXIS.1: 1' / Axis number of the 1st variable in a D2IM function      
+D2IM2   = 'AXIS.2: 2' / Axis number of the 2nd variable in a D2IM function      
+CPDIS1  = 'LOOKUP  '           / Prior distortion function type                 
+DP1     = 'EXTVER: 1' / Version number of WCSDVARR extension                    
+DP1     = 'NAXES: 2' / Number of independent variables in CPDIS function        
+DP1     = 'AXIS.1: 1' / Axis number of the 1st variable in a CPDIS function     
+DP1     = 'AXIS.2: 2' / Axis number of the 2nd variable in a CPDIS function     
+CPDIS2  = 'LOOKUP  '           / Prior distortion function type                 
+DP2     = 'EXTVER: 2' / Version number of WCSDVARR extension                    
+DP2     = 'NAXES: 2' / Number of independent variables in CPDIS function        
+DP2     = 'AXIS.1: 1' / Axis number of the 1st variable in a CPDIS function     
+DP2     = 'AXIS.2: 2' / Axis number of the 2nd variable in a CPDIS function     
+CD1_1   =  9.5213346944409E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2   =  1.0784294827856E-05 / partial of first axis coordinate w.r.t. y      
+CD2_1   =  1.0050636466048E-05 / partial of second axis coordinate w.r.t. x     
+CD2_2   = -8.8856108435984E-06 / partial of second axis coordinate w.r.t. y     
+OCX10   =            0.0019661 / original linear term from IDCTAB               
+OCX11   =  0.04981451463494188 / original linear term from IDCTAB               
+OCY10   =          0.050264501 / original linear term from IDCTAB               
+OCY11   = 0.001499433324249381 / original linear term from IDCTAB               
+IDCSCALE=                 0.05 / pixel scale from the IDCTAB reference file     
+D2IMERR1=                0.041 / Maximum error of D2IM correction for axis 1    
+D2IMERR2=                0.062 / Maximum error of D2IM correction for axis 2    
+D2IMEXT = 'jref$4bb15371j_d2i.fits'                                             
+CPERR1  =          0.031663097 / Maximum error of NPOL correction for axis 1    
+CPERR2  =          0.014032677 / Maximum error of NPOL correction for axis 2    
+NPOLEXT = 'jref$4bb1536lj_npl.fits'                                             
+NMATCHES=                  647                                                  
+WCSNAMEB= 'IDC_4bb1536mj-GSC240-1' / Coordinate system title                    
+WCSAXESB=                    2 / Number of coordinate axes                      
+CRPIX1B =               2048.0 / Pixel coordinate of reference point            
+CRPIX2B =                 24.0 / Pixel coordinate of reference point            
+CUNIT1B = 'deg'                / Units of coordinate increment and value        
+CUNIT2B = 'deg'                / Units of coordinate increment and value        
+CTYPE1B = 'RA---TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CTYPE2B = 'DEC--TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CRVAL1B =      201.38292613072 / [deg] Coordinate value at reference point      
+CRVAL2B =     -47.559637011526 / [deg] Coordinate value at reference point      
+MJDREF  =                  0.0 / [d] MJD of fiducial time                       
+RADESYSB= 'ICRS'               / Equatorial coordinate system                   
+CD1_1B  =  9.5171758149303E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2B  =  1.0786079810929E-05 / partial of first axis coordinate w.r.t. y      
+CD2_1B  =  1.0052302928409E-05 / partial of second axis coordinate w.r.t. x     
+CD2_2B  = -8.8817345068576E-06 / partial of second axis coordinate w.r.t. y     
+WCSTYPEB= 'undistorted a priori solution based on GSC240'                       
+HDRNAMEB= 'jd8001iiq_flc_df78d0_hlet.fits'                                      
+RMS_RA  =   19.298033351777136 / RMS in RA of WCS fit(mas)                      
+RMS_DEC =   14.244773292484483 / RMS in Dec of WCS fit(mas)                     
+CRDER1  = 5.36056481993809E-06 / RMS in RA of WCS fit(deg)                      
+CRDER2  = 3.95688147013457E-06 / RMS in Dec of WCS fit(deg)                     
+FITGEOM = 'rscale  '                                                            
+RELREFIM= 'hst_14662_01_acs_wfc_f814w_jd8001ii' / base reference image rootname 
+RELRMS_R=   19.298033351777136 / RMS in RA of relative WCS fit(mas)             
+RELRMS_D=   14.244773292484483 / RMS in DEC of relative WCS fit(mas)            
+RELMATCH=                  647 / number of matches for relative fit             
+RELGEOM = 'rscale  '           / fitgeom for relative fit                       
+WCSTYPEA= 'undistorted not aligned'                                             
+WCSTYPEO= 'pipeline default not aligned'                                        
+WCSNAMEC= 'IDC_4bb1536mj-FIT_REL_GAIAeDR3' / Coordinate system title            
+WCSAXESC=                    2 / Number of coordinate axes                      
+CRPIX1C =               2048.0 / Pixel coordinate of reference point            
+CRPIX2C =                 24.0 / Pixel coordinate of reference point            
+CUNIT1C = 'deg'                / Units of coordinate increment and value        
+CUNIT2C = 'deg'                / Units of coordinate increment and value        
+CTYPE1C = 'RA---TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CTYPE2C = 'DEC--TAN-SIP'       / TAN (gnomonic) projection + SIP distortions    
+CRVAL1C =      201.38297442132 / [deg] Coordinate value at reference point      
+CRVAL2C =     -47.559564975505 / [deg] Coordinate value at reference point      
+CRDER1C =  2.3556853736713E-06 / [deg] Random error in coordinate               
+CRDER2C =  2.8995560477893E-06 / [deg] Random error in coordinate               
+RADESYSC= 'ICRS'               / Equatorial coordinate system                   
+CD1_1C  =  9.5194360673955E-06 / partial of first axis coordinate w.r.t. x      
+CD1_2C  =   1.078418471762E-05 / partial of first axis coordinate w.r.t. y      
+CD2_1C  =   1.005053505568E-05 / partial of second axis coordinate w.r.t. x     
+CD2_2C  = -8.8838401686215E-06 / partial of second axis coordinate w.r.t. y     
+WCSTYPEC= 'undistorted a posteriori solution relatively aligned to GAIAEDR3'    
+RMS_RAC =    8.480467345216738 / RMS in RA of WCS fit(mas)                      
+RMS_DECC=   10.438401772041363 / RMS in Dec of WCS fit(mas)                     
+HDRNAMEC= 'jd8001iiq_flc_IDC_4bb1536mj-FIT_REL_GAIAeDR3-hlet.fits'              
+HDRNAME = 'hst_14662_01_acs_wfc_f814w_jd8001ii_flc_IDC_4bb1536mj-FIT_SVM_GAIAe&'
+CONTINUE  'DR3-hlet.fits'                                                       
+END                                                                             

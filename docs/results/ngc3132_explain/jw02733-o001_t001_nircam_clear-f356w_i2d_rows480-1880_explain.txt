@@ -1,0 +1,63 @@
+jw02733-o001_t001_nircam_clear-f356w_i2d_rows480-1880.fits  (JWST/NIRCAM/F356W)
+
+Image (L1 observations)
+  [IMG-1] JWST NIRCAM image in JWST/NIRCAM/F356W (imaging (EXP_TYPE=NRC_IMAGE)).
+  [IMG-2] The observer's target designation is 'NGC-3132'. This labels the pointing; it is not an identification of any source in the image.
+  [IMG-4] 1577 sources detected.
+
+Sources: 1577 detected; 0 unresolved, 0 extended; 18 coincide with Gaia DR3; 0 established as stars (L2); 356 possible PSF artefacts.
+
+  Source 1
+    L1 [SRC-1-1] Source 1 at RA 151.737824, Dec -40.441576 (ICRS): flux 0.0001578 Jy (18.40 AB) in JWST/NIRCAM/F356W.
+
+  Source 2
+    L1 [SRC-2-1] Source 2 at RA 151.747273, Dec -40.423548 (ICRS): flux 1.184e-06 Jy (23.72 AB) in JWST/NIRCAM/F356W.
+
+  Source 3
+    L1 [SRC-3-1] Source 3 at RA 151.747313, Dec -40.423097 (ICRS): flux 7.858e-08 Jy (26.66 AB) in JWST/NIRCAM/F356W.
+
+  Source 4
+    L1 [SRC-4-1] Source 4 at RA 151.748269, Dec -40.421376 (ICRS): flux 4.271e-07 Jy (24.82 AB) in JWST/NIRCAM/F356W.
+
+  Source 5
+    L1 [SRC-5-1] Source 5 at RA 151.748964, Dec -40.420147 (ICRS): flux 3.398e-07 Jy (25.07 AB) in JWST/NIRCAM/F356W.
+
+  Source 6
+    L1 [SRC-6-1] Source 6 at RA 151.750313, Dec -40.419360 (ICRS): flux 0.0001209 Jy (18.69 AB) in JWST/NIRCAM/F356W.
+
+  Source 7
+    L1 [SRC-7-1] Source 7 at RA 151.752474, Dec -40.414929 (ICRS): flux 5.994e-06 Jy (21.96 AB) in JWST/NIRCAM/F356W.
+
+  Source 8
+    L1 [SRC-8-1] Source 8 at RA 151.736412, Dec -40.443732 (ICRS): flux 1.502e-07 Jy (25.96 AB) in JWST/NIRCAM/F356W.
+
+  Source 9
+    L1 [SRC-9-1] Source 9 at RA 151.736252, Dec -40.444190 (ICRS): flux 2.474e-07 Jy (25.42 AB) in JWST/NIRCAM/F356W.
+
+  Source 10
+    L1 [SRC-10-1] Source 10 at RA 151.749167, Dec -40.420802 (ICRS): flux 8.657e-06 Jy (21.56 AB) in JWST/NIRCAM/F356W.
+
+  Source 11
+    L1 [SRC-11-1] Source 11 at RA 151.741665, Dec -40.434221 (ICRS): flux 2.416e-06 Jy (22.94 AB) in JWST/NIRCAM/F356W.
+
+  Source 12
+    L1 [SRC-12-1] Source 12 at RA 151.747362, Dec -40.423381 (ICRS): flux 6.775e-08 Jy (26.82 AB) in JWST/NIRCAM/F356W.
+    L3 [SRC-12-7] May be a PSF feature (diffraction spike or wing fragment) of a much brighter nearby star rather than a separate source.
+       test: compare with an image at another roll angle or wavelength: PSF features move or change with the PSF, real sources stay fixed on the sky
+
+  Source 13
+    L1 [SRC-13-1] Source 13 at RA 151.738690, Dec -40.439784 (ICRS): flux 1.423e-07 Jy (26.02 AB) in JWST/NIRCAM/F356W.
+
+  Source 14
+    L1 [SRC-14-1] Source 14 at RA 151.740998, Dec -40.435674 (ICRS): flux 5.766e-07 Jy (24.50 AB) in JWST/NIRCAM/F356W.
+
+  Source 15
+    L1 [SRC-15-1] Source 15 at RA 151.732876, Dec -40.450688 (ICRS): flux 5.041e-08 Jy (27.14 AB) in JWST/NIRCAM/F356W.
+
+  ... 1562 more sources (use --json)
+
+Notes
+  - Gaia DR3 positions propagated to 2022-06-03T18:04:41.348 (from MJD-AVG)
+  - no SIMBAD records given: galaxies and nebulae stay hypotheses (L3)
+  - sizes not assessed: the image has no ERR array, so measurement errors are unknown; without a size, no source is established as a star (L2)
+  - L1 = measured; L2 = inferred from measurements and a stated rule or catalogue record; L3 = hypothesis with the test that would decide it

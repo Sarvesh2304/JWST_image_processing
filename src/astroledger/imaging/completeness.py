@@ -212,7 +212,9 @@ def injection_recovery(
     ny, nx = image.data.shape
     factor, conversion = flux_conversion(image)
     calibrated = factor is not None
-    model = psf if psf is not None else CircularGaussianPRF(fwhm=fwhm)
+    model = (
+        psf.copy() if psf is not None else CircularGaussianPRF(fwhm=fwhm)
+    )  # caller's PSF untouched
 
     allowed = np.ones((ny, nx), bool) if region is None else np.asarray(region, bool).copy()
     if image.mask is not None:
@@ -278,8 +280,8 @@ def injection_recovery(
     if calibrated:
         table["abmag"] = levels_arr
         table["flux"] = np.array([r[1] * factor for r in rows]) * u.Jy
-    else:
-        table["flux"] = levels_arr
+    else:  # total flux of an injected source = sum of its pixels, in the image's unit
+        table["flux"] = levels_arr * (image.unit or u.dimensionless_unscaled)
     table["n_injected"], table["n_recovered"] = n, k
     table["completeness"] = k / np.maximum(n, 1)
     table["ci_low"], table["ci_high"] = low, high

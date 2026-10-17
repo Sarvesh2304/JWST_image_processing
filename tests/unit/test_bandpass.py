@@ -79,7 +79,7 @@ def test_real_miri_cal_nominal_wavelength():
     band = Bandpass.from_header(real(name), real(name, "sci"))
     assert band.key == "JWST/MIRI/F770W"
     assert band.nominal_wavelength.to_value(u.um) == pytest.approx(7.70)
-    assert band.pivot is None  # JWST headers carry no pivot keyword; nothing is guessed
+    assert band.pivot is None  # no authentic MIRI throughput table is bundled; nothing is guessed
 
 
 # --- Instrument rules -------------------------------------------------------------------------
@@ -179,3 +179,40 @@ def test_str_with_and_without_wavelength():
     assert str(jwst) == "JWST/MIRI/F770W (7.7 um nominal)"
     generic = Bandpass.from_header(hdr(INSTRUME="CAM", FILTER="V"))
     assert str(generic) == "UNKNOWN/CAM/V"
+
+
+# --- JWST pivot wavelengths (STScI throughput tables, core/data/jwst_pivots.ecsv) -------------
+
+
+def test_real_nircam_mosaic_pivot_is_module_mean_with_note():
+    name = "jw02733-o001_t001_nircam_f405n-f444w_i2d.fits"
+    band = Bandpass.from_header(real(name))
+    assert band.key == "JWST/NIRCAM/F405N"
+    assert band.pivot.to_value(u.um) == pytest.approx(4.0529, abs=1e-4)
+    assert any("mean of NIRCam modules A/B" in n for n in band.notes)
+
+
+@pytest.mark.parametrize(("detector", "expected"), [("NRCALONG", 4.0505), ("NRCBLONG", 4.0553)])
+def test_nircam_pivot_per_module(detector, expected):
+    band = Bandpass.from_header(
+        hdr(TELESCOP="JWST", INSTRUME="NIRCAM", FILTER="F444W", PUPIL="F405N", DETECTOR=detector)
+    )
+    assert band.pivot.to_value(u.um) == pytest.approx(expected, abs=1e-4)
+
+
+def test_real_niriss_pivot():
+    band = Bandpass.from_header(real("jw02736-o003_t001_niriss_clear-f115w_i2d.fits"))
+    assert band.key == "JWST/NIRISS/F115W"
+    assert band.pivot.to_value(u.um) == pytest.approx(1.1495, abs=1e-4)
+
+
+def test_pivot_table_records_its_source():
+    from astropy.table import Table
+
+    from astroledger.core.bandpass import _PIVOT_TABLE
+
+    table = Table.read(_PIVOT_TABLE)
+    assert table.meta["source_package"].startswith("mirage 2.5.0 (STScI)")
+    assert len(table.meta["source_sha256"]) == 64
+    assert set(table["instrument"]) == {"NIRCAM", "NIRISS"}
+    assert all(f.startswith("mirage/config/") for f in table["source_file"])

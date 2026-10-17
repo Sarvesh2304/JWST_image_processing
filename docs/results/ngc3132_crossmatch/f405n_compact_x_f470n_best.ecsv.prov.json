@@ -1,0 +1,98 @@
+{
+  "duration_s": 0.051194,
+  "ended": "2026-10-17T17:02:49.276+00:00",
+  "environment": {
+    "git": {
+      "commit": "4e894c554cf65c814c231483182895563e670841",
+      "dirty": false
+    },
+    "packages": {
+      "astroledger": "0.0.1",
+      "astropy": "8.0.1",
+      "astroquery": "0.4.11",
+      "numpy": "2.5.3",
+      "photutils": "3.0.0",
+      "reproject": "0.21.0",
+      "scipy": "1.18.1"
+    },
+    "platform": "Linux-6.18.44-fc-v139-x86_64-with-glibc2.39",
+    "python": "3.13.16"
+  },
+  "error": null,
+  "extra": {},
+  "function": "astroledger.crossmatch.probabilistic.crossmatch",
+  "id": "18df5fda9abb1566-cd366c7d",
+  "inputs": {
+    "a": {
+      "columns": [
+        "label",
+        "x",
+        "y",
+        "ra",
+        "dec",
+        "area",
+        "semimajor_axis",
+        "semiminor_axis",
+        "ellipticity",
+        "fwhm",
+        "flux",
+        "flux_err",
+        "snr",
+        "near_bright_source",
+        "pos_err"
+      ],
+      "kind": "table",
+      "rows": 106,
+      "sha256": "12027a4daf1664169c08e2220cfd1322657d680e7ce944c48a4f12bf0cb8d590"
+    },
+    "b": {
+      "columns": [
+        "label",
+        "x",
+        "y",
+        "ra",
+        "dec",
+        "area",
+        "semimajor_axis",
+        "semiminor_axis",
+        "ellipticity",
+        "fwhm",
+        "flux",
+        "near_bright_source"
+      ],
+      "kind": "table",
+      "rows": 1421,
+      "sha256": "45117b6b46631c66dc4d9b47de907dcc446ff81e58cf12cca5dbaf1474504b22"
+    }
+  },
+  "name": "crossmatch.match",
+  "output_file": {
+    "path": "f405n_compact_x_f470n_best.ecsv",
+    "sha256": "3948119a31dd74305e46a0e35ac4f45833a0b4c2cca490f5bc3c93e530221893"
+  },
+  "outputs": [
+    {
+      "kind": "param",
+      "value": "CrossMatch(best=<QTable length=106>\na_index b_index          sep          ...             flags             b_label\n                        arcsec        ...                                      \n int64   int64         float64        ...             str29              int32 \n------- ------- --------------------- ... ----------------------------- -------\n      0      -1                   nan ... no counterpart within 4 sigma      --\n      1      -1                   nan ... no counterpart within ..."
+    }
+  ],
+  "params": {
+    "ambiguity_limit": 0.1,
+    "annulus": null,
+    "copy_columns": [
+      "label"
+    ],
+    "density": null,
+    "k": 4.0,
+    "p_chance_limit": 0.01,
+    "prior": null,
+    "register": true,
+    "register_radius": "0.3 arcsec",
+    "sigma_a": "pos_err",
+    "sigma_b": "11.0 mas",
+    "sigma_sys": "0.0 arcsec"
+  },
+  "started": "2026-10-17T17:02:49.220+00:00",
+  "status": "ok",
+  "version": "1"
+}

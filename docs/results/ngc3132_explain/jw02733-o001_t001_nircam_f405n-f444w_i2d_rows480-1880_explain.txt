@@ -1,0 +1,106 @@
+jw02733-o001_t001_nircam_f405n-f444w_i2d_rows480-1880.fits  (JWST/NIRCAM/F405N)
+
+Image (L1 observations)
+  [IMG-1] JWST NIRCAM image in JWST/NIRCAM/F405N (imaging (EXP_TYPE=NRC_IMAGE)).
+  [IMG-2] The observer's target designation is 'NGC-3132'. This labels the pointing; it is not an identification of any source in the image.
+  [IMG-3] Point-source light concentration F(1.5 px)/F(4 px) = 0.544 (spread 0.023), measured on 64 bright, round, unflagged sources (0.0630 arcsec per pixel).
+  [IMG-4] 551 sources detected.
+
+Sources: 551 detected; 150 unresolved, 285 extended; 25 coincide with Gaia DR3; 18 established as stars (L2); 110 possible PSF artefacts.
+
+  Source 8
+    L1 [SRC-8-1] Source 8 at RA 151.746549, Dec -40.425354 (ICRS): flux 9.4e-05 Jy ± 1.7e-07 (18.97 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-8-2] Light concentration F(1.5 px)/F(4 px) = 0.542 ± 0.002 against 0.544 for stars (+0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-8-3] Coincides with Gaia DR3 5420219796652827392 at 2.8 mas (0.1 sigma; chance probability 6.7e-08).
+    L2 [SRC-8-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219796652827392 has a proper motion of 7.48 ± 0.11 mas/yr (66 sigma).
+
+  Source 12
+    L1 [SRC-12-1] Source 12 at RA 151.750143, Dec -40.419189 (ICRS): flux 5.586e-05 Jy ± 1.5e-07 (19.53 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-12-2] Light concentration F(1.5 px)/F(4 px) = 0.542 ± 0.002 against 0.544 for stars (+0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-12-3] Coincides with Gaia DR3 5420219796652692480 at 4.4 mas (0.1 sigma; chance probability 2.4e-07).
+    L2 [SRC-12-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219796652692480 has a proper motion of 7.41 ± 0.23 mas/yr (32 sigma).
+
+  Source 28
+    L1 [SRC-28-1] Source 28 at RA 151.736185, Dec -40.447242 (ICRS): flux 4.82e-05 Jy ± 1.5e-07 (19.69 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-28-2] Light concentration F(1.5 px)/F(4 px) = 0.545 ± 0.003 against 0.544 for stars (-0.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-28-3] Coincides with Gaia DR3 5420219663509091840 at 4.5 mas (0.1 sigma; chance probability 3.1e-07).
+    L2 [SRC-28-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219663509091840 has a proper motion of 3.19 ± 0.38 mas/yr (8 sigma).
+
+  Source 47
+    L1 [SRC-47-1] Source 47 at RA 151.753543, Dec -40.415670 (ICRS): flux 3.15e-05 Jy ± 1.5e-07 (20.15 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-47-2] Light concentration F(1.5 px)/F(4 px) = 0.559 ± 0.004 against 0.544 for stars (-0.6 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-47-3] Coincides with Gaia DR3 5420219800950943488 at 3.2 mas (0.1 sigma; chance probability 1.7e-07).
+    L2 [SRC-47-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800950943488 has a proper motion of 11.58 ± 0.59 mas/yr (19 sigma).
+
+  Source 75
+    L1 [SRC-75-1] Source 75 at RA 151.738489, Dec -40.446828 (ICRS): flux 0.0007685 Jy ± 4.7e-07 (16.69 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-75-2] Light concentration F(1.5 px)/F(4 px) = 0.546 ± 0.001 against 0.544 for stars (-0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-75-3] Coincides with Gaia DR3 5420219663514042368 at 3.9 mas (0.1 sigma; chance probability 2.4e-07).
+    L2 [SRC-75-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219663514042368 has a proper motion of 11.83 ± 0.03 mas/yr (444 sigma).
+
+  Source 101
+    L1 [SRC-101-1] Source 101 at RA 151.755452, Dec -40.417389 (ICRS): flux 2.923e-05 Jy ± 1.3e-07 (20.24 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-101-2] Light concentration F(1.5 px)/F(4 px) = 0.550 ± 0.004 against 0.544 for stars (-0.2 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-101-3] Coincides with Gaia DR3 5420219800952064512 at 2.7 mas (0.1 sigma; chance probability 1.1e-07).
+    L2 [SRC-101-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800952064512 has a proper motion of 7.54 ± 0.82 mas/yr (9 sigma).
+
+  Source 114
+    L1 [SRC-114-1] Source 114 at RA 151.744229, Dec -40.440002 (ICRS): flux 1.703e-05 Jy ± 8.6e-08 (20.82 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-114-2] Light concentration F(1.5 px)/F(4 px) = 0.547 ± 0.004 against 0.544 for stars (-0.1 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-114-3] Coincides with Gaia DR3 5420219697875498368 at 3.6 mas (0.1 sigma; chance probability 2.1e-07).
+    L2 [SRC-114-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219697875498368 has a proper motion of 4.91 ± 0.25 mas/yr (19 sigma).
+
+  Source 144
+    L1 [SRC-144-1] Source 144 at RA 151.744703, Dec -40.443303 (ICRS): flux 0.0001004 Jy ± 1.9e-07 (18.90 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-144-2] Light concentration F(1.5 px)/F(4 px) = 0.559 ± 0.002 against 0.544 for stars (-0.7 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-144-3] Coincides with Gaia DR3 5420219693573473920 at 6.5 mas (0.2 sigma; chance probability 5.8e-07).
+    L2 [SRC-144-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219693573473920 has a proper motion of 6.37 ± 0.07 mas/yr (87 sigma).
+
+  Source 191
+    L1 [SRC-191-1] Source 191 at RA 151.761207, Dec -40.416548 (ICRS): flux 3.846e-05 Jy ± 2.1e-07 (19.94 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-191-2] Light concentration F(1.5 px)/F(4 px) = 0.554 ± 0.005 against 0.544 for stars (-0.4 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-191-3] Coincides with Gaia DR3 5420219831012430720 at 4.0 mas (0.1 sigma; chance probability 2.0e-07).
+    L2 [SRC-191-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219831012430720 has a proper motion of 3.03 ± 0.40 mas/yr (8 sigma).
+
+  Source 226
+    L1 [SRC-226-1] Source 226 at RA 151.753222, Dec -40.435002 (ICRS): flux 8.394e-06 Jy ± 6.9e-08 (21.59 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-226-2] Light concentration F(1.5 px)/F(4 px) = 0.562 ± 0.008 against 0.544 for stars (-0.7 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-226-3] Coincides with Gaia DR3 5420219800947933696 at 4.9 mas (0.2 sigma; chance probability 4.0e-07).
+    L2 [SRC-226-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219800947933696 has a proper motion of 5.05 ± 0.37 mas/yr (14 sigma).
+
+  Source 255
+    L1 [SRC-255-1] Source 255 at RA 151.750572, Dec -40.445133 (ICRS): flux 2.47e-05 Jy ± 9.4e-08 (20.42 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-255-2] Light concentration F(1.5 px)/F(4 px) = 0.564 ± 0.003 against 0.544 for stars (-0.9 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-255-3] Coincides with Gaia DR3 5420219629152452736 at 5.8 mas (0.2 sigma; chance probability 4.5e-07).
+    L2 [SRC-255-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219629152452736 has a proper motion of 5.97 ± 0.77 mas/yr (8 sigma).
+
+  Source 281
+    L1 [SRC-281-1] Source 281 at RA 151.757299, Dec -40.436421 (ICRS): flux 0.02564 Jy ± 1.1e-05 (12.88 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-281-2] Light concentration F(1.5 px)/F(4 px) = 0.555 ± 0.001 against 0.544 for stars (-0.5 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-281-3] Coincides with Gaia DR3 5420219732228461184 at 6.1 mas (0.2 sigma; chance probability 7.4e-07).
+    L2 [SRC-281-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219732228461184 has a proper motion of 7.75 ± 0.03 mas/yr (291 sigma).
+
+  Source 331
+    L1 [SRC-331-1] Source 331 at RA 151.753785, Dec -40.450152 (ICRS): flux 9.954e-05 Jy ± 1.8e-07 (18.90 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-331-2] Light concentration F(1.5 px)/F(4 px) = 0.543 ± 0.002 against 0.544 for stars (+0.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-331-3] Coincides with Gaia DR3 5420219624853997696 at 4.4 mas (0.1 sigma; chance probability 1.0e-07).
+    L2 [SRC-331-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219624853997696 has a proper motion of 7.44 ± 0.13 mas/yr (58 sigma).
+
+  Source 358
+    L1 [SRC-358-1] Source 358 at RA 151.758446, Dec -40.445789 (ICRS): flux 1.147e-05 Jy ± 7.3e-08 (21.25 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-358-2] Light concentration F(1.5 px)/F(4 px) = 0.521 ± 0.005 against 0.544 for stars (+1.0 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-358-3] Coincides with Gaia DR3 5420219629149109760 at 6.0 mas (0.2 sigma; chance probability 3.7e-07).
+    L2 [SRC-358-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219629149109760 has a proper motion of 4.07 ± 0.35 mas/yr (12 sigma).
+
+  Source 411
+    L1 [SRC-411-1] Source 411 at RA 151.773004, Dec -40.426577 (ICRS): flux 2.567e-05 Jy ± 1.3e-07 (20.38 AB) in JWST/NIRCAM/F405N.
+    L1 [SRC-411-2] Light concentration F(1.5 px)/F(4 px) = 0.551 ± 0.003 against 0.544 for stars (-0.3 sigma): as concentrated as stars: unresolved.
+    L1 [SRC-411-3] Coincides with Gaia DR3 5420219762292942592 at 3.1 mas (0.1 sigma; chance probability 4.7e-08).
+    L2 [SRC-411-4] A star in the Milky Way: unresolved, and Gaia DR3 5420219762292942592 has a proper motion of 6.59 ± 0.36 mas/yr (18 sigma).
+
+  ... 536 more sources (use --json)
+
+Notes
+  - Gaia DR3 positions propagated to 2022-06-03T16:26:05.326 (from MJD-AVG)
+  - no SIMBAD records given: galaxies and nebulae stay hypotheses (L3)
+  - L1 = measured; L2 = inferred from measurements and a stated rule or catalogue record; L3 = hypothesis with the test that would decide it

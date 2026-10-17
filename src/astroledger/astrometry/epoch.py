@@ -68,6 +68,14 @@ def observation_epoch(source: ImageProduct | fits.Header) -> tuple[Time, str]:
     raise KeyError("no observation time keyword (MJD-AVG, EXPMID, EXPSTART/EXPEND, DATE-OBS)")
 
 
+def _unmasked(column, unit) -> u.Quantity:
+    """Plain float Quantity in ``unit`` with NaN where the column is masked."""
+    mask = np.ma.getmaskarray(column)
+    values = np.array(u.Quantity(getattr(column, "unmasked", column), unit).value, dtype=float)
+    values[mask] = np.nan
+    return values * unit
+
+
 def propagate(gaia: QTable, epoch: Time) -> QTable:
     """Gaia positions and their errors at ``epoch``.
 
@@ -86,10 +94,19 @@ def propagate(gaia: QTable, epoch: Time) -> QTable:
         Target epoch.
     """
     out = QTable(gaia, copy=True)
-    ref_epoch = np.asarray(u.Quantity(out["ref_epoch"], u.yr).value, dtype=float)
+    # masked entries (ECSV, astroquery) are unknown values: carry them as NaN, never as the
+    # fill value hidden under the mask
+    for name, unit in (
+        ("pmra", u.mas / u.yr),
+        ("pmdec", u.mas / u.yr),
+        ("pmra_error", u.mas / u.yr),
+        ("pmdec_error", u.mas / u.yr),
+    ):
+        out[name] = _unmasked(out[name], unit)
+    ref_epoch = _unmasked(out["ref_epoch"], u.yr).value
     dt = (epoch.tcb.jyear - ref_epoch) * u.yr
-    pmra = u.Quantity(out["pmra"], u.mas / u.yr)
-    pmdec = u.Quantity(out["pmdec"], u.mas / u.yr)
+    pmra = out["pmra"]
+    pmdec = out["pmdec"]
     missing = ~np.isfinite(pmra) | ~np.isfinite(pmdec)
     pmra = np.where(missing, 0.0, pmra.value) * pmra.unit
     pmdec = np.where(missing, 0.0, pmdec.value) * pmdec.unit

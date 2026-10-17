@@ -1,0 +1,90 @@
+# %ECSV 1.0
+# ---
+# datatype:
+# - {name: instrument, datatype: string}
+# - {name: filter_wheel, datatype: string}
+# - {name: pupil_wheel, datatype: string}
+# - {name: bandpass, datatype: string}
+# - {name: module, datatype: string}
+# - {name: pivot_um, datatype: float64, format: .5f}
+# - {name: source_file, datatype: string}
+# meta: !!omap
+# - {description: JWST pivot wavelengths computed from STScI throughput tables}
+# - {source_package: 'mirage 2.5.0 (STScI), PyPI wheel mirage-2.5.0-py3-none-any.whl'}
+# - {source_sha256: 1f31451d93b3b5a8d54708078009620c59b588424d0a323eb4f1cb665d0e6f1c}
+# - {definition: lambda_p^2 = int(T lambda dlambda) / int(T / lambda dlambda)}
+# - {throughput: 'NIRCam: filter + OTE per module; NIRISS: as tabulated'}
+# - {generated_utc: '2026-10-13T07:59:49Z'}
+# - {generator: scripts/build_jwst_pivots.py}
+# schema: astropy-2.0
+instrument filter_wheel pupil_wheel bandpass module pivot_um source_file
+NIRCAM F070W CLEAR F070W A 0.7046946552399854 mirage/config/F070W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F070W CLEAR F070W B 0.7046946552399854 mirage/config/F070W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F090W CLEAR F090W A 0.9023866863964426 mirage/config/F090W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F090W CLEAR F090W B 0.9023866863964426 mirage/config/F090W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F115W CLEAR F115W A 1.1540959163013043 mirage/config/F115W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F115W CLEAR F115W B 1.1540959163013043 mirage/config/F115W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F140M CLEAR F140M A 1.4053419692964604 mirage/config/F140M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F140M CLEAR F140M B 1.4053419692964604 mirage/config/F140M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F150W2 CLEAR F150W2 A 1.671295122342721 mirage/config/F150W2_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F150W2 CLEAR F150W2 B 1.671295122342721 mirage/config/F150W2_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F150W2 F162M F162M A 1.627227129801566 mirage/config/F150W2_F162M_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F150W2 F162M F162M B 1.627227129801566 mirage/config/F150W2_F162M_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F150W2 F164N F164N A 1.6445091333213453 mirage/config/F150W2_F164N_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F150W2 F164N F164N B 1.6445091333213453 mirage/config/F150W2_F164N_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F150W CLEAR F150W A 1.5009060480554293 mirage/config/F150W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F150W CLEAR F150W B 1.5009060480554293 mirage/config/F150W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F182M CLEAR F182M A 1.8452057577410022 mirage/config/F182M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F182M CLEAR F182M B 1.8452057577410022 mirage/config/F182M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F187N CLEAR F187N A 1.8740502868775935 mirage/config/F187N_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F187N CLEAR F187N B 1.8740502868775935 mirage/config/F187N_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F200W CLEAR F200W A 1.9875622318149575 mirage/config/F200W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F200W CLEAR F200W B 1.9875622318149575 mirage/config/F200W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F210M CLEAR F210M A 2.0955897815535116 mirage/config/F210M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F210M CLEAR F210M B 2.0955897815535116 mirage/config/F210M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F212N CLEAR F212N A 2.1212400114598164 mirage/config/F212N_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F212N CLEAR F212N B 2.1212400114598164 mirage/config/F212N_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F250M CLEAR F250M A 2.50324417827798 mirage/config/F250M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F250M CLEAR F250M B 2.5030278098192413 mirage/config/F250M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F277W CLEAR F277W A 2.7647306257160023 mirage/config/F277W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F277W CLEAR F277W B 2.7862774148653684 mirage/config/F277W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F300M CLEAR F300M A 2.99635496248934 mirage/config/F300M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F300M CLEAR F300M B 2.9958361828639055 mirage/config/F300M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F322W2 CLEAR F322W2 A 3.2642476240619898 mirage/config/F322W2_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F322W2 CLEAR F322W2 B 3.2293705522753595 mirage/config/F322W2_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F322W2 F323N F323N A 3.236298723426045 mirage/config/F322W2_F323N_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F322W2 F323N F323N B 3.237173978177984 mirage/config/F322W2_F323N_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F335M CLEAR F335M A 3.3585213400536786 mirage/config/F335M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F335M CLEAR F335M B 3.365583173284326 mirage/config/F335M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F356W CLEAR F356W A 3.567563839823185 mirage/config/F356W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F356W CLEAR F356W B 3.5635977541438315 mirage/config/F356W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F360M CLEAR F360M A 3.625159008927331 mirage/config/F360M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F360M CLEAR F360M B 3.6216163971511266 mirage/config/F360M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F410M CLEAR F410M A 4.073383172635929 mirage/config/F410M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F410M CLEAR F410M B 4.092456059985079 mirage/config/F410M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F430M CLEAR F430M A 4.28236789668442 mirage/config/F430M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F430M CLEAR F430M B 4.280311472633864 mirage/config/F430M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F444W CLEAR F444W A 4.380860431659189 mirage/config/F444W_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F444W CLEAR F444W B 4.421447966604568 mirage/config/F444W_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F444W F405N F405N A 4.050544102420392 mirage/config/F444W_F405N_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F444W F405N F405N B 4.055340781442091 mirage/config/F444W_F405N_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F444W F466N F466N A 4.654271201706967 mirage/config/F444W_F466N_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F444W F466N F466N B 4.654546617634526 mirage/config/F444W_F466N_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F444W F470N F470N A 4.7083076449788255 mirage/config/F444W_F470N_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F444W F470N F470N B 4.7072602234296035 mirage/config/F444W_F470N_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F460M CLEAR F460M A 4.634706421119034 mirage/config/F460M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F460M CLEAR F460M B 4.624884958105975 mirage/config/F460M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRCAM F480M CLEAR F480M A 4.792753288702666 mirage/config/F480M_CLEAR_nircam_plus_ote_throughput_moda_sorted.txt
+NIRCAM F480M CLEAR F480M B 4.834036343809202 mirage/config/F480M_CLEAR_nircam_plus_ote_throughput_modb_sorted.txt
+NIRISS "" "" F090W "" 0.9024571923907218 mirage/config/f090w_niriss_throughput1.txt
+NIRISS "" "" F115W "" 1.1495418680229907 mirage/config/f115w_niriss_throughput1.txt
+NIRISS "" "" F140M "" 1.404035471535106 mirage/config/f140m_niriss_throughput1.txt
+NIRISS "" "" F150W "" 1.493457274905231 mirage/config/f150w_niriss_throughput1.txt
+NIRISS "" "" F158M "" 1.5820114608904456 mirage/config/f158m_niriss_throughput1.txt
+NIRISS "" "" F200W "" 1.9929609735389282 mirage/config/f200w_niriss_throughput1.txt
+NIRISS "" "" F277W "" 2.764280545963727 mirage/config/f277w_niriss_throughput1.txt
+NIRISS "" "" F356W "" 3.5930039560772244 mirage/config/f356w_niriss_throughput1.txt
+NIRISS "" "" F380M "" 3.8252272419900106 mirage/config/f380m_niriss_throughput1.txt
+NIRISS "" "" F430M "" 4.283826569208844 mirage/config/f430m_niriss_throughput1.txt
+NIRISS "" "" F444W "" 4.427698891644291 mirage/config/f444w_niriss_throughput1.txt
+NIRISS "" "" F480M "" 4.815243632568992 mirage/config/f480m_niriss_throughput1.txt

@@ -33,6 +33,10 @@ legacy = [
     "scikit-image>=0.21",
     "photutils>=2.0",
 ]
+# The official JWST calibration pipeline, which astroledger wraps rather than reimplements.
+jwst = ["jwst>=1.16"]
+# Read-only MCP server exposing inspect/explain/search to Claude (astroledger mcp).
+mcp = ["mcp>=2.3,<3"]
 dev = ["pytest>=8", "ruff>=0.6"]
 
 [tool.hatch.build.targets.wheel]
@@ -57,6 +61,8 @@ extend-exclude = ["legacy", "docs"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "NPY", "RUF"]
+# Mathematical symbols used deliberately in scientific docstrings and labels.
+allowed-confusables = ["σ", "ρ", "π", "Σ", "−", "×"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["astroledger", "fits_factory"]

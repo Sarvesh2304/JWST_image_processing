@@ -27,3 +27,21 @@ programs in MAST's AWS copy (`s3://stpubdata/jwst/public/jwNNNNN/L3/t/...`), wit
 
 The coronagraphic `_i2d` files are 2-D images on disk. They show why the mode, not the array
 shape, decides whether image analysis is valid.
+
+## Headers of real HST and NIRISS imaging products (roadmap task 10)
+
+These were read on 2026-10-13 from MAST's public AWS copy (`s3://stpubdata/`). They let
+`astroledger inspect` be checked against real NIRCam, NIRISS, MIRI, WFC3 and ACS metadata in CI.
+
+| Files | Product |
+|-------|---------|
+| `ic0201010_drc.fits.{primary,sci}.txt` | WFC3/UVIS F658N drizzled product (program 13034), from the complete file |
+| `hst_14662_01_acs_wfc_f814w_jd8001ii_flc.fits.{primary,sci}.txt` | ACS/WFC F814W calibrated exposure, chip 1 (SCI,1), program 14662 (HAP single-visit product) |
+| `jw02736-o003_t001_niriss_clear-f115w_i2d.fits.sci.txt` | NIRISS F115W Stage-3 mosaic SCI header, program 2736 (the primary header is listed above) |
+
+The ACS and NIRISS SCI headers came from row cutouts made with `fetch_rows`. The cutout's own
+changes were reversed: the `CUT*` keywords were removed, `CRPIX2` was shifted back by the cutout
+offset, and `NAXIS2` was restored. Every other card is verbatim.
+
+The ACS header references distortion lookup tables in `D2IMARR`/`WCSDVARR` extensions. Those
+extensions are not stored here, which exercises the reader's fallback WCS.

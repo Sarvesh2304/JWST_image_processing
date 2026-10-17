@@ -70,6 +70,32 @@ def test_completeness_is_reproducible(tmp_path):
     assert a.table["n_recovered"][0] == b.table["n_recovered"][0]
 
 
+def test_callers_psf_is_not_modified(tmp_path):
+    from photutils.psf import CircularGaussianPRF
+
+    img = _field(tmp_path / "noise.fits", stars=[], noise=NOISE, seed=3)
+    psf = CircularGaussianPRF(fwhm=2.0)
+    before = (psf.x_0.value, psf.y_0.value, psf.flux.value)
+    injection_recovery(img, [_abmag_at_snr(img, 30.0)], n_per_level=5, psf=psf, seed=1)
+    assert (psf.x_0.value, psf.y_0.value, psf.flux.value) == before
+
+
+def test_uncalibrated_levels_keep_the_image_unit(tmp_path):
+    from astropy import units as u
+    from astropy.io import fits
+
+    from astroledger.io import open_image
+
+    path = tmp_path / "noise.fits"
+    _field(path, stars=[], noise=NOISE, seed=3)
+    fits.setval(path, "BUNIT", value="electron/s", extname="SCI")
+    fits.delval(path, "PIXAR_SR", extname="SCI")
+    img = open_image(path)
+    assert flux_conversion(img)[0] is None
+    result = injection_recovery(img, [50.0, 500.0], n_per_level=5, seed=1)
+    assert result.table["flux"].unit == u.electron / u.s
+
+
 def test_region_restricts_injections(tmp_path):
     img = _field(tmp_path / "noise.fits", stars=[], noise=NOISE, seed=3)
     region = np.zeros(img.data.shape, bool)
