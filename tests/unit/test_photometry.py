@@ -82,6 +82,12 @@ def test_no_positions_give_an_empty_table_with_the_documented_columns(tmp_path):
         assert t["flux"].unit == u.Jy and t.meta["bandpass"] == full.meta["bandpass"]
 
 
+def test_positions_must_be_n_by_2(tmp_path):
+    img = _star_image(tmp_path / "s.fits")
+    with pytest.raises(ValueError, match=r"shape \(N, 2\)"):
+        aperture_photometry_table(img, np.array([[40.3, 41.0, 42.0], [39.7, 39.0, 38.0]]), 4.0)
+
+
 def test_aperture_correction_is_explicit(tmp_path):
     img = _star_image(tmp_path / "s.fits")
     plain = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 3.0)

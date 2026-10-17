@@ -207,8 +207,14 @@ def astrometric_qa(
         matches["x"], matches["y"] = x, y
         matches["x_gaia"], matches["y_gaia"] = image.wcs.world_to_pixel(matched_gaia)
         if image.mask is not None and len(matches):
-            # pixels within mask_radius (Euclidean) of a masked pixel
-            grown = ndimage.distance_transform_edt(~np.asarray(image.mask, bool)) <= mask_radius
+            # pixels within mask_radius (Euclidean) of a masked pixel; with nothing masked the
+            # transform would measure from a point outside the corner, so skip it
+            masked = np.asarray(image.mask, bool)
+            grown = (
+                ndimage.distance_transform_edt(~masked) <= mask_radius
+                if masked.any()
+                else np.zeros_like(masked)
+            )
             ix = np.clip(np.rint(x).astype(int), 0, image.mask.shape[1] - 1)
             iy = np.clip(np.rint(y).astype(int), 0, image.mask.shape[0] - 1)
             near_mask = grown[iy, ix]

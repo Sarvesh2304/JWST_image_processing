@@ -232,3 +232,12 @@ def test_streamable_http_on_a_custom_path(root, monkeypatch):
     finally:
         proc.terminate()
         proc.wait(timeout=30)
+
+
+def test_redaction_matches_whole_paths_only():
+    from astroledger.mcp_server import _redact
+
+    root = Path("/srv/data")
+    assert _redact("'/srv/data/x.fits' missing", root) == "'<data root>/x.fits' missing"
+    assert _redact("/srv/data2/x.fits", root) == "/srv/data2/x.fits"
+    assert _redact("/etc/x", Path("/")) == "/etc/x"

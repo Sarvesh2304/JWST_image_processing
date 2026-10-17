@@ -131,7 +131,12 @@ def aperture_photometry_table(
             raise ValueError("sky positions need a WCS")
         xy = np.column_stack(image.wcs.world_to_pixel(positions))
     else:
-        xy = np.asarray(positions, dtype=float).reshape(-1, 2)
+        xy = np.asarray(positions, dtype=float)
+        if xy.size == 0:
+            xy = xy.reshape(0, 2)
+        xy = np.atleast_2d(xy)
+        if xy.ndim != 2 or xy.shape[1] != 2:
+            raise ValueError(f"pixel positions must have shape (N, 2) as (x, y); got {xy.shape}")
     empty = len(xy) == 0
     if empty:  # measure one placeholder so the empty table has the documented columns and units
         ny, nx = np.shape(image.data)

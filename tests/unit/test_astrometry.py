@@ -208,3 +208,24 @@ def test_one_star_gives_no_error_estimate():
     )
     assert "only 1 stars used" in " ".join(qa.notes)
     plot_astrometric_qa(qa)
+
+
+def test_unmasked_image_flags_no_star_as_near_the_mask(tmp_path):
+    """With nothing masked, no star (even next to pixel 0,0) is near the mask."""
+    from astropy.wcs import WCS
+
+    import fits_factory as ff
+    from astroledger.io import open_image
+
+    shape = (400, 400)
+    header = fits.Header(ff.tan_wcs((CENTRE.ra.deg, CENTRE.dec.deg), 0.5, shape))
+    path = tmp_path / "flat.fits"
+    fits.PrimaryHDU(np.ones(shape, "float32"), header).writeto(path)
+    image = open_image(path)
+    assert image.n_masked == 0
+    g = _gaia(20)
+    corner = WCS(header).pixel_to_world(1.2, 0.8)
+    g["ra"][0], g["dec"][0] = corner.ra.to(u.deg), corner.dec.to(u.deg)
+    g["pmra"][0] = g["pmdec"][0] = 0 * u.mas / u.yr
+    qa = astrometric_qa(_observed(g), g, epoch=EPOCH, image=image)
+    assert qa.summary["n_near_mask"] == 0

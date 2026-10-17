@@ -32,6 +32,7 @@ from pathlib import Path
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import QTable, Table
+from astropy.time import Time
 
 from astroledger.provenance import step
 
@@ -108,7 +109,13 @@ def _cached_table(service: str, endpoint: str, query: str, fetch, cache_dir) -> 
     table = QTable(result) if result is not None else QTable()
     table.meta = {"provenance": _provenance(service, endpoint, query, key)}
     cache.mkdir(parents=True, exist_ok=True)
-    table.write(path, format="ascii.ecsv", overwrite=True, serialize_method="data_mask")
+    # masked columns stored as data + mask (Time columns keep their own serialisation)
+    masked = {
+        name: "data_mask"
+        for name in table.colnames
+        if hasattr(table[name], "mask") and not isinstance(table[name], Time)
+    }
+    table.write(path, format="ascii.ecsv", overwrite=True, serialize_method=masked)
     table.meta["from_cache"] = False
     table.meta["cache_file"] = str(path)
     return table

@@ -20,6 +20,7 @@ authentication. Until OAuth is added, expose it only for public data, behind an 
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -50,6 +51,14 @@ def _resolve(root: Path, relative: str) -> Path:
     if not path.is_file():
         raise DataRootError(f"{relative!r} is not a file under the data root")
     return path
+
+
+def _redact(message: str, root: Path) -> str:
+    """Replace the data root's host path (as a whole path component) with ``<data root>``."""
+    if root == Path(root.anchor):  # a filesystem root: every absolute path would match
+        return message
+    pattern = re.compile(re.escape(str(root)) + r"(?=$|[/\\'\"\s:,)])")
+    return pattern.sub("<data root>", message)
 
 
 def _jsonable(value: Any) -> Any:
@@ -99,7 +108,7 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
                     return fn(*args, **kwargs)
                 except kinds as exc:
                     # the client sees paths relative to the root, never the host's layout
-                    message = str(exc).replace(str(root), "<data root>")
+                    message = _redact(str(exc), root)
                     raise ToolError(f"{type(exc).__name__}: {message}") from exc
 
             return inner

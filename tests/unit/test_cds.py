@@ -118,6 +118,23 @@ def test_cache_round_trip_keeps_empty_strings_and_masks(monkeypatch, tmp_path):
     assert cached["otype"][0] == "G" and np.ma.is_masked(cached["otype"][1])
 
 
+def test_cache_keeps_time_columns(monkeypatch, tmp_path):
+    from astropy.time import Time
+    from astropy.utils.masked import Masked
+    from astroquery.vizier import VizierClass
+
+    def with_time(self, coordinates, radius=None, catalog=None, **kwargs):
+        t = Table({"v": Masked([1.0, 2.0], mask=[False, True])})
+        t["epoch"] = Time([59000.0, 59001.0], format="mjd")
+        return [t]
+
+    monkeypatch.setattr(VizierClass, "query_region", with_time)
+    first = cds.vizier_cone("X/1/t", CENTRE, 10 * u.arcsec, cache_dir=tmp_path)
+    cached = cds.vizier_cone("X/1/t", CENTRE, 10 * u.arcsec, cache_dir=tmp_path)
+    assert cached.meta["from_cache"] and list(cached["epoch"].mjd) == list(first["epoch"].mjd)
+    assert list(np.ma.getmaskarray(cached["v"])) == [False, True]
+
+
 def test_identifiers_and_bibliography(simbad, tmp_path):
     ids = cds.simbad_identifiers(11, cache_dir=tmp_path)
     refs = cds.simbad_bibliography(11, cache_dir=tmp_path)
