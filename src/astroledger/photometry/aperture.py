@@ -131,7 +131,11 @@ def aperture_photometry_table(
             raise ValueError("sky positions need a WCS")
         xy = np.column_stack(image.wcs.world_to_pixel(positions))
     else:
-        xy = np.atleast_2d(np.asarray(positions, dtype=float))
+        xy = np.asarray(positions, dtype=float).reshape(-1, 2)
+    empty = len(xy) == 0
+    if empty:  # measure one placeholder so the empty table has the documented columns and units
+        ny, nx = np.shape(image.data)
+        xy = np.array([[(nx - 1) / 2, (ny - 1) / 2]])
     r = _pixel_radius(radius, image)
     mask = image.mask if image.mask is not None else ~np.isfinite(image.data)
     data = np.where(mask, 0.0, np.asarray(image.data, dtype=float))
@@ -225,4 +229,4 @@ def aperture_photometry_table(
             "source_file": image.source.filename,
         }
     )
-    return table
+    return table[:0] if empty else table

@@ -71,11 +71,18 @@ def _synthetic_partition():
     pix = hp12.lonlat_to_healpix(ra * u.deg, dec * u.deg).astype(np.int64)
     order4 = set((pix >> 16).tolist())
     assert len(order4) == 1, "test layout must stay in one partition"
-    source_id = (pix << 35) + np.arange(len(pix))
-    order = np.argsort(source_id)
+    hp29 = HEALPix(nside=2**29, order="nested").lonlat_to_healpix(ra * u.deg, dec * u.deg)
+    hp29 = hp29.astype(np.int64)
+    # As in Gaia DR3, a source_id encodes the level-12 pixel where the source was when its ID
+    # was assigned; for the first 3 near sources make that a pixel 5 away from where they are.
+    id_pix = pix.copy()
+    id_pix[:3] += 5
+    source_id = (id_pix << 35) + np.arange(len(pix))
+    order = np.argsort(hp29)  # real files are sorted by _healpix_29 (position)
     n = len(pix)
     table = pa.table(
         {
+            "_healpix_29": hp29[order],
             "source_id": source_id[order],
             "ra": ra[order],
             "dec": dec[order],
@@ -157,6 +164,12 @@ def test_gaia_cone_reads_only_needed_row_groups(bucket):
     groups = next(iter(result.meta["row_groups_read"].values()))
     assert 1 <= len(groups) < pq.ParquetFile(io.BytesIO(data)).num_row_groups
     assert result.meta["bytes_read"] == ledger.used_bytes < len(data)
+
+
+def test_gaia_cone_accepts_any_frame(bucket):
+    icrs = gaia.gaia_cone(CENTRE, 70 * u.arcsec)
+    galactic = gaia.gaia_cone(CENTRE.galactic, 70 * u.arcsec)
+    assert list(galactic["source_id"]) == list(icrs["source_id"])
 
 
 @pytest.mark.remote

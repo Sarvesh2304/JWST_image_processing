@@ -90,6 +90,34 @@ def test_results_are_cached(simbad, tmp_path):
     assert len(simbad.calls) == 2  # a different query is not served from the cache
 
 
+def test_cache_round_trip_keeps_empty_strings_and_masks(monkeypatch, tmp_path):
+    from astropy.table import MaskedColumn
+    from astropy.utils.masked import Masked
+
+    def table():
+        return Table(
+            {
+                "main_id": np.array(["A", ""]),  # a genuine empty string
+                "otype": MaskedColumn(["G", "PN"], mask=[False, True]),
+                "coo_err_maj": Masked([1.0, 2.0] * u.mas, mask=[True, False]),
+                "ra": [1.0, 2.0],
+            }
+        )
+
+    class Odd(FakeSimbad):
+        def query_tap(self, query, maxrec=10000):
+            return table()
+
+    monkeypatch.setattr(cds, "_simbad", lambda: Odd())
+    first = cds.simbad_cone(CENTRE, 5 * u.arcsec, cache_dir=tmp_path)
+    cached = cds.simbad_cone(CENTRE, 5 * u.arcsec, cache_dir=tmp_path)
+    assert cached.meta["from_cache"] is True
+    for name in first.colnames:
+        assert list(np.ma.getmaskarray(cached[name])) == list(np.ma.getmaskarray(first[name]))
+    assert list(cached["main_id"]) == ["A", ""] and not np.ma.is_masked(cached["main_id"][1])
+    assert cached["otype"][0] == "G" and np.ma.is_masked(cached["otype"][1])
+
+
 def test_identifiers_and_bibliography(simbad, tmp_path):
     ids = cds.simbad_identifiers(11, cache_dir=tmp_path)
     refs = cds.simbad_bibliography(11, cache_dir=tmp_path)
@@ -153,6 +181,19 @@ def test_vizier_cone_parameters(monkeypatch, tmp_path):
     assert list(seen["columns"]) == ["Source", "RA_ICRS"]
     assert table.colnames == ["Source", "RA_ICRS"]
     assert json.loads(table.meta["provenance"]["query"])["catalog"] == "I/355/gaiadr3"
+
+
+def test_vizier_refuses_several_tables(monkeypatch, tmp_path):
+    from astroquery.utils import TableList
+    from astroquery.vizier import VizierClass
+
+    def two_tables(self, coordinates, radius=None, catalog=None, **kwargs):
+        return TableList({"I/x/a": Table({"v": [1]}), "I/x/b": Table({"v": [2]})})
+
+    monkeypatch.setattr(VizierClass, "query_region", two_tables)
+    with pytest.raises(ValueError, match="2 tables"):
+        cds.vizier_cone("I/x", CENTRE, 10 * u.arcsec, cache_dir=tmp_path)
+    assert not list(tmp_path.glob("*.ecsv"))
 
 
 def test_calls_are_provenance_steps(simbad, tmp_path):

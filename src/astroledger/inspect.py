@@ -116,7 +116,8 @@ def fact_sheet(image: ImageProduct) -> dict[str, Any]:
             "shape": list(image.data.shape),
             "unit": str(image.unit) if image.unit is not None else None,
             "has_uncertainty": image.uncertainty is not None,
-            "masked_fraction": round(image.n_masked / image.data.size, 4),
+            "masked_pixels": int(image.n_masked),
+            "masked_fraction": float(f"{image.n_masked / image.data.size:.4g}"),
         },
         "measured": {},
         "notes": list(image.notes)

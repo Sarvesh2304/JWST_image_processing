@@ -75,6 +75,27 @@ def test_paths_outside_the_root_are_refused(root, path):
     assert "data root" in result.content[0].text
 
 
+def test_host_paths_are_not_disclosed(root):
+    listed = _run(_call(root, "list_files", {}))
+    assert listed.structured_content["root"] == root.name
+    assert str(root) not in str(listed.structured_content)
+    (root / "broken.fits").write_bytes(b"not a FITS file")
+    failed = _run(_call(root, "inspect", {"path": "broken.fits"}))
+    assert failed.is_error and str(root) not in failed.content[0].text
+
+
+def test_list_files_refuses_missing_or_file_subfolders(root):
+    for sub in ("nope", "synthetic_i2d.fits"):
+        result = _run(_call(root, "list_files", {"subfolder": sub}))
+        assert result.is_error and "not a folder" in result.content[0].text
+
+
+def test_malformed_gaia_table_is_reported(root):
+    (root / "bad.ecsv").write_text("this is not a table")
+    result = _run(_call(root, "explain", {"path": "synthetic_i2d.fits", "gaia_table": "bad.ecsv"}))
+    assert result.is_error and "Error" in result.content[0].text
+
+
 def test_inspect_returns_the_fact_sheet(root):
     result = _run(_call(root, "inspect", {"path": "jwst/jw02733002001_02101_00001_nrca1_cal.fits"}))
     assert not result.is_error

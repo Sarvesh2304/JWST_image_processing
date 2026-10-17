@@ -323,6 +323,34 @@ def test_nebula_rule_needs_line_band_and_catalogued_nebula(case):
     assert not [s for s in without.image if s.id == "IMG-5"]
 
 
+def test_nebula_record_must_lie_in_the_image(case):
+    image, gaia, _ = case
+    far = _records(image, [("SYNTH FAR PN", "PN", (150, 150))])
+    far["dec"] = far["dec"] + 2 * u.deg  # two degrees away: not in this image
+    result = explain(image, gaia=gaia, catalogue=far)
+    assert not [s for s in result.image if s.id == "IMG-5"]
+
+
+def test_galaxies_are_not_counted_as_nebular_emission(case):
+    image, gaia, _ = case
+    records = _records(image, [("SYNTH GAL 1", "G", BLOB), ("SYNTH PN", "PN", (150, 150))])
+    result = explain(image, gaia=gaia, catalogue=records)
+    n_other = result.summary["extended"] - result.summary["L2_galaxy"]
+    neb = [s for s in result.image if s.id == "IMG-5"]
+    if n_other == 0:
+        assert not neb  # the only extended source is the identified galaxy
+    else:
+        assert f"({n_other} extended sources not identified as galaxies)" in neb[0].text
+
+
+def test_empty_simbad_table_is_reported_as_such(case):
+    image, gaia, _ = case
+    empty = _records(image, [("X", "G", BLOB)])[:0]
+    result = explain(image, gaia=gaia, catalogue=empty)
+    assert any("no records for this field" in n for n in result.notes)
+    assert result.summary["L2_galaxy"] == 0
+
+
 def test_catalogue_names_only_from_records(case):
     image, gaia, _ = case
     records = _records(image, [("SYNTH GAL 1", "G", BLOB), ("SYNTH PN", "PN", (150, 150))])
@@ -356,3 +384,27 @@ def test_cli_reads_a_simbad_table_written_as_ecsv(case, tmp_path, capsys):
         s["text"] for v in payload["sources"].values() for s in v if s["level"] == "L2_INFERENCE"
     ]
     assert any("SYNTH GAL 1" in t for t in texts)
+
+
+def test_a_record_shared_by_two_detections_identifies_neither():
+    from astroledger.interpret.engine import _galaxy_matches
+
+    centre_ra, centre_dec = 151.757, -40.4365
+    detections = QTable(
+        {
+            "ra": [centre_ra, centre_ra + 0.05 / 3600] * u.deg,  # 0.04 arcsec apart
+            "dec": [centre_dec, centre_dec] * u.deg,
+            "semimajor_axis": [3.0, 3.0] * u.pix,
+        }
+    )
+    records = QTable(
+        {
+            "main_id": np.array(["SYNTH GAL"], dtype=object),
+            "otype": np.array(["G"], dtype=object),
+            "ra": [centre_ra] * u.deg,
+            "dec": [centre_dec] * u.deg,
+            "coo_err_maj": [50.0] * u.mas,
+        }
+    )
+    assert _galaxy_matches(detections, records, 0.063) == {}
+    assert len(_galaxy_matches(detections[:1], records, 0.063)) == 1

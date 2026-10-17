@@ -265,17 +265,20 @@ def _read_one(
 
     uncertainty = None
     err_hdu = _extension(hdul, "ERR", ver) if name == "SCI" else None
-    if err_hdu is None or err_hdu.data is None:
+    err = _plane(err_hdu, data.shape, notes)
+    if err_hdu is None:
         notes.append("no ERR extension: uncertainty unknown")
-    elif err_hdu.data.shape != data.shape:
-        notes.append(f"ERR shape {err_hdu.data.shape} differs from SCI {data.shape}: ignored")
+    elif err is None:
+        notes.append("ERR extension has no usable array: uncertainty unknown")
+    elif err.shape != data.shape:
+        notes.append(f"ERR shape {err.shape} differs from SCI {data.shape}: ignored")
     else:
         err_unit, _ = parse_bunit(err_hdu.header.get("BUNIT"))
         if err_unit is None or unit is None or err_unit == unit:
-            uncertainty = StdDevUncertainty(err_hdu.data, unit=unit)
+            uncertainty = StdDevUncertainty(err, unit=unit)
         elif err_unit.is_equivalent(unit):
             factor = float(err_unit.to(unit))
-            uncertainty = StdDevUncertainty(err_hdu.data * factor, unit=unit)
+            uncertainty = StdDevUncertainty(err * factor, unit=unit)
             notes.append(f"ERR unit {err_unit} converted to the SCI unit {unit} (x{factor:g})")
         else:
             notes.append(
@@ -288,12 +291,15 @@ def _read_one(
     )
     dq_hdu = _extension(hdul, "DQ", ver) if name == "SCI" else None
     dq = None
-    if dq_hdu is None or dq_hdu.data is None:
+    dq_plane = _plane(dq_hdu, data.shape, notes)
+    if dq_hdu is None:
         notes.append("no DQ extension: mask from non-finite pixels only")
-    elif dq_hdu.data.shape != data.shape:
-        notes.append(f"DQ shape {dq_hdu.data.shape} differs from SCI {data.shape}: ignored")
+    elif dq_plane is None:
+        notes.append("DQ extension has no usable array: mask from non-finite pixels only")
+    elif dq_plane.shape != data.shape:
+        notes.append(f"DQ shape {dq_plane.shape} differs from SCI {data.shape}: ignored")
     else:
-        dq = dq_hdu.data
+        dq = dq_plane
         bits = (
             bad_bits if bad_bits is not None else DEFAULT_BAD_BITS.get(_telescope(primary_header))
         )
@@ -362,6 +368,22 @@ def _celestial_wcs(header: fits.Header, hdul: fits.HDUList, notes: list[str]) ->
         notes.append(f"WCS has {wcs.naxis} axes: its celestial part is used")
         return wcs.celestial
     return wcs
+
+
+def _plane(hdu, shape: tuple[int, ...], notes: list[str]) -> np.ndarray | None:
+    """The array of an ERR/DQ HDU, or the constant plane HST stores as ``PIXVALUE``."""
+    if hdu is None:
+        return None
+    if hdu.data is not None:
+        return hdu.data
+    header = hdu.header
+    if "PIXVALUE" in header:
+        size = tuple(header.get(f"NPIX{i}") for i in (2, 1))
+        if size == tuple(shape):
+            notes.append(f"{hdu.name} is constant: PIXVALUE = {header['PIXVALUE']}")
+            dtype = np.int64 if hdu.name == "DQ" else np.float64
+            return np.full(shape, header["PIXVALUE"], dtype=dtype)
+    return None
 
 
 def _extension(hdul: fits.HDUList, name: str, ver: int) -> fits.hdu.base.ExtensionHDU | None:

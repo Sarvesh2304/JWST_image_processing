@@ -73,6 +73,15 @@ def test_sky_positions_equal_pixel_positions(tmp_path):
     assert c.meta["aperture_radius_pix"] == pytest.approx(4.0, rel=1e-3)
 
 
+def test_no_positions_give_an_empty_table_with_the_documented_columns(tmp_path):
+    img = _star_image(tmp_path / "s.fits")
+    full = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 4.0)
+    for positions in (np.empty((0, 2)), [], img.wcs.pixel_to_world([], [])):
+        t = aperture_photometry_table(img, positions, 4.0)
+        assert len(t) == 0 and t.colnames == full.colnames
+        assert t["flux"].unit == u.Jy and t.meta["bandpass"] == full.meta["bandpass"]
+
+
 def test_aperture_correction_is_explicit(tmp_path):
     img = _star_image(tmp_path / "s.fits")
     plain = aperture_photometry_table(img, np.array([[40.3, 39.7]]), 3.0)

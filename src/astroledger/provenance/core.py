@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import contextlib
 import contextvars
+import copy
 import functools
 import hashlib
 import inspect
@@ -43,6 +44,7 @@ from astropy import units as u
 __all__ = [
     "Activity",
     "ProvenanceStore",
+    "annotate",
     "describe",
     "environment",
     "last_activity",
@@ -57,6 +59,7 @@ _STORE: contextvars.ContextVar[ProvenanceStore | None] = contextvars.ContextVar(
     "store", default=None
 )
 _LAST: contextvars.ContextVar[Activity | None] = contextvars.ContextVar("last", default=None)
+_CURRENT: contextvars.ContextVar[Activity | None] = contextvars.ContextVar("current", default=None)
 
 
 @dataclass
@@ -226,17 +229,22 @@ def _jsonable(value: Any) -> Any:
 
 
 @functools.cache
-def environment() -> dict[str, Any]:
-    """Software environment of this process: Python, platform, package versions, git state."""
+def _software() -> dict[str, Any]:
     packages = {}
     for name in _PACKAGES:
         with contextlib.suppress(metadata.PackageNotFoundError):
             packages[name] = metadata.version(name)
-    env: dict[str, Any] = {
-        "python": sys.version.split()[0],
-        "platform": platform.platform(),
-        "packages": packages,
-    }
+    return {"python": sys.version.split()[0], "platform": platform.platform(), "packages": packages}
+
+
+def environment() -> dict[str, Any]:
+    """Software environment: Python, platform, package versions, and the git state now.
+
+    Package versions are read once per process; the git commit and whether the working tree
+    has uncommitted changes are read at every call, so a long session records edits made
+    during it.
+    """
+    env = copy.deepcopy(_software())
     source = Path(__file__).resolve().parents[3]
     if (source / ".git").exists():
         env["git"] = _git_state(source)
@@ -364,6 +372,16 @@ def use_store(store: ProvenanceStore | None) -> Iterator[ProvenanceStore | None]
         _STORE.reset(token)
 
 
+def annotate(**facts: Any) -> None:
+    """Add facts found while a step runs (e.g. a checksum it verified) to its record.
+
+    Outside a step this does nothing.
+    """
+    activity = _CURRENT.get()
+    if activity is not None:
+        activity.extra.update({k: _jsonable(v) for k, v in facts.items()})
+
+
 def last_activity() -> Activity | None:
     """The most recent activity recorded in this context (also when no store is active)."""
     return _LAST.get()
@@ -415,6 +433,7 @@ def step(name: str, version: str = "1") -> Callable[[Callable[..., Any]], Callab
                 environment=environment(),
             )
             t0 = time.perf_counter()
+            token = _CURRENT.set(activity)
             try:
                 result = fn(*args, **kwargs)
             except Exception as exc:
@@ -422,6 +441,8 @@ def step(name: str, version: str = "1") -> Callable[[Callable[..., Any]], Callab
                 activity.error = "".join(traceback.format_exception_only(exc)).strip()
                 _finish(activity, t0)
                 raise
+            finally:
+                _CURRENT.reset(token)
             results = result if isinstance(result, tuple) else (result,)
             activity.outputs = [describe(r) for r in results]
             activity.status = "ok"

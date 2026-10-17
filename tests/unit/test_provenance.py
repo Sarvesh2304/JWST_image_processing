@@ -90,8 +90,11 @@ def test_tables_and_files_are_entities(tmp_path):
     assert act.inputs["path"]["sha256"] == sha256_file(path)
 
 
-def test_environment_is_cached():
-    assert environment() is environment()
+def test_package_versions_are_read_once():
+    from astroledger.provenance import core
+
+    assert core._software() is core._software()
+    assert environment()["packages"] == core._software()["packages"]
 
 
 def test_image_entity_records_archive_ids_and_all_planes(tmp_path):
@@ -144,3 +147,13 @@ def test_quantity_arrays_keep_their_unit():
 
     entity = describe(np.arange(20.0) * u.MJy / u.sr)
     assert entity["kind"] == "array" and entity["unit"] == "MJy / sr"
+
+
+def test_git_state_is_current(monkeypatch):
+    from astroledger.provenance import core
+
+    states = iter([{"commit": "a", "dirty": False}, {"commit": "a", "dirty": True}])
+    monkeypatch.setattr(core, "_git_state", lambda repo: next(states))
+    if "git" not in environment():  # not a git checkout (e.g. installed wheel)
+        pytest.skip("no git checkout")
+    assert environment()["git"]["dirty"] is True

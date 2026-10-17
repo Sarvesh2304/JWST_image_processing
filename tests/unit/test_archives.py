@@ -128,6 +128,88 @@ def test_fetch_rows_matches_source_pixels_and_wcs(fake_s3, tmp_path):
     assert row_bytes == 3 * 30 * ff.SHAPE[1] * 4
 
 
+@pytest.mark.parametrize("dtype", ["uint16", "uint32", "int8", "uint64", "int16"])
+def test_fetch_rows_integer_conventions(tmp_path, monkeypatch, dtype):
+    """Unsigned (BZERO-offset) and signed-byte integer images come back exactly."""
+    info = np.iinfo(dtype)
+    rng = np.random.default_rng(0)
+    pixels = rng.integers(info.min, info.max, size=(20, 16), dtype=dtype, endpoint=True)
+    pixels[0, :2] = (info.min, info.max)
+    source = tmp_path / "src.fits"
+    fits.HDUList([fits.PrimaryHDU(), fits.ImageHDU(pixels, name="SCI")]).writeto(source)
+    monkeypatch.setattr(cloud.requests, "Session", lambda: FakeS3(source))
+    out = cloud.fetch_rows("k/src.fits", (0, 5), tmp_path / "out", extensions=("SCI",))
+    with fits.open(out) as cut:
+        got = cut["SCI"].data.dtype
+        assert (got.kind, got.itemsize) == (np.dtype(dtype).kind, np.dtype(dtype).itemsize)
+        np.testing.assert_array_equal(cut["SCI"].data, pixels[0:5])
+
+
+def test_fetch_rows_scaled_integers(tmp_path, monkeypatch):
+    hdu = fits.ImageHDU(np.arange(80, dtype="int16").reshape(8, 10), name="SCI")
+    hdu.header["BSCALE"], hdu.header["BZERO"] = 0.5, 100.0
+    source = tmp_path / "scaled.fits"
+    fits.HDUList([fits.PrimaryHDU(), hdu]).writeto(source)
+    with fits.open(source) as src:
+        expected = src["SCI"].data[2:4].copy()
+    monkeypatch.setattr(cloud.requests, "Session", lambda: FakeS3(source))
+    out = cloud.fetch_rows("k/scaled.fits", (2, 4), tmp_path / "out", extensions=("SCI",))
+    with fits.open(out) as cut:
+        np.testing.assert_allclose(cut["SCI"].data, expected)
+
+
+@pytest.mark.parametrize("cols", [(-5, 10), (20, 10), (30, 200)])
+def test_fetch_rows_refuses_columns_outside_the_image(fake_s3, tmp_path, cols):
+    with pytest.raises(ValueError, match="columns"):
+        cloud.fetch_rows("k/x.fits", (0, 5), tmp_path, cols=cols)
+
+
+class _Stream(_Response):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def iter_content(self, size):
+        for i in range(0, len(self.content), size):
+            yield self.content[i : i + size]
+
+
+class FakeObject:
+    """Whole-object GET with a given advertised size and ETag; ``body`` is what arrives."""
+
+    def __init__(self, body, size, etag):
+        self.body, self.size, self.etag = body, size, etag
+
+    def head(self, url, timeout=None):
+        return _Response(headers={"Content-Length": str(self.size), "ETag": f'"{self.etag}"'})
+
+    def get(self, url, stream=False, timeout=None, **kw):
+        return _Stream(self.body)
+
+
+def test_fetch_records_the_etag_check(tmp_path, monkeypatch):
+    from astroledger.provenance import last_activity
+
+    body = b"x" * 1000
+    server = FakeObject(body, len(body), hashlib.md5(body).hexdigest())
+    monkeypatch.setattr(cloud.requests, "Session", lambda: server)
+    path = cloud.fetch("hst/public/abcd/x_flt.fits", tmp_path)
+    assert path.name == "x_flt.fits" and path.read_bytes() == body
+    extra = last_activity().extra
+    assert extra["etag_check"] == "verified" and extra["size_bytes"] == 1000
+
+
+def test_fetch_removes_a_truncated_multipart_download(tmp_path, monkeypatch):
+    full = 20 * 1024 * 1024
+    server = FakeObject(b"\0" * (15 * 1024 * 1024), full, "0" * 32 + "-3")
+    monkeypatch.setattr(cloud.requests, "Session", lambda: server)
+    with pytest.raises(OSError, match="received"):
+        cloud.fetch("k/big.fits", tmp_path, ledger=cloud.DownloadLedger(budget_bytes=10**9))
+    assert not (tmp_path / "big.fits").exists()
+
+
 def test_fetch_rows_respects_budget(fake_s3, tmp_path):
     with pytest.raises(cloud.BudgetExceededError):
         cloud.fetch_rows(
@@ -148,10 +230,30 @@ def test_fetch_rows_respects_budget(fake_s3, tmp_path):
         ("NIRISS/IMAGE", "CLEAR;F150W", "F150W"),
         ("MIRI/IMAGE", "F770W", "F770W"),
         ("NIRCAM/IMAGE", "F150W2;F444W", None),
+        ("ACS/WFC", "F814W;CLEAR2L", "F814W"),
+        ("ACS/WFC", "CLEAR1L;F606W", "F606W"),
     ],
 )
 def test_bandpass_from_mast(instrument, filters, expected):
     assert mast.bandpass_from_mast(instrument, filters) == expected
+
+
+def test_search_keeps_masked_filters_unknown(monkeypatch):
+    from astropy.table import MaskedColumn
+
+    class FakeObservations:
+        @staticmethod
+        def query_criteria(**criteria):
+            return Table(
+                {
+                    "obs_id": ["a", "b"],
+                    "instrument_name": ["NIRCAM/IMAGE", "NIRCAM/IMAGE"],
+                    "filters": MaskedColumn(["F444W;F405N", "x"], mask=[False, True]),
+                }
+            )
+
+    monkeypatch.setattr(mast, "_observations", lambda: FakeObservations)
+    assert list(mast.search("t")["bandpass"]) == ["F405N", ""]
 
 
 def test_search_builds_criteria_and_resolves_bandpass(monkeypatch):
@@ -194,3 +296,17 @@ def test_live_list_program_2733_level3():
 def test_live_mast_search_ngc3132():
     table = mast.search("NGC 3132", instrument="NIRCAM/IMAGE", proposal_id="2733")
     assert "F405N" in set(table["bandpass"])
+
+
+def test_ignored_range_is_still_counted(tmp_path, monkeypatch):
+    class IgnoresRange(FakeS3):
+        def get(self, url, headers=None, timeout=None, **kw):
+            return _Response(self.data, status=200)
+
+    source = tmp_path / "x.fits"
+    source.write_bytes(b"\0" * 5000)
+    monkeypatch.setattr(cloud.requests, "Session", lambda: IgnoresRange(source))
+    ledger = cloud.DownloadLedger()
+    with pytest.raises(OSError, match="returned 200"):
+        cloud._get_range("k/x.fits", 0, 100, cloud.requests.Session(), ledger, "test")
+    assert ledger.used_bytes == 5000

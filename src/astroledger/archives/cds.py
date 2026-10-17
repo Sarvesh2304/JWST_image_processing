@@ -62,8 +62,12 @@ def default_cache_dir() -> Path:
     return Path(base) / "cds" if base else Path("data") / "cds_cache"
 
 
+#: Cache format; part of the key so files written by an older format are never misread.
+_CACHE_FORMAT = "ecsv-data-mask-1"
+
+
 def _key(service: str, query: str) -> str:
-    return hashlib.sha256(f"{service}\n{query}".encode()).hexdigest()[:24]
+    return hashlib.sha256(f"{_CACHE_FORMAT}\n{service}\n{query}".encode()).hexdigest()[:24]
 
 
 def _versions() -> dict:
@@ -95,7 +99,8 @@ def _cached_table(service: str, endpoint: str, query: str, fetch, cache_dir) -> 
     key = _key(service, query)
     path = cache / f"{service.lower()}_{key}.ecsv"
     if path.exists():
-        table = QTable.read(path, format="ascii.ecsv")
+        # masks are stored as explicit columns, so an empty string stays an empty string
+        table = QTable.read(path, format="ascii.ecsv", fill_values=None)
         table.meta["from_cache"] = True
         table.meta["cache_file"] = str(path)
         return table
@@ -103,7 +108,7 @@ def _cached_table(service: str, endpoint: str, query: str, fetch, cache_dir) -> 
     table = QTable(result) if result is not None else QTable()
     table.meta = {"provenance": _provenance(service, endpoint, query, key)}
     cache.mkdir(parents=True, exist_ok=True)
-    table.write(path, format="ascii.ecsv", overwrite=True)
+    table.write(path, format="ascii.ecsv", overwrite=True, serialize_method="data_mask")
     table.meta["from_cache"] = False
     table.meta["cache_file"] = str(path)
     return table
@@ -226,7 +231,8 @@ def vizier_cone(
 ) -> QTable:
     """Rows of a VizieR catalogue (e.g. ``"I/355/gaiadr3"``) within ``radius`` of ``center``.
 
-    ``columns=("**",)`` returns every column of the catalogue.
+    ``columns=("**",)`` returns every column of the catalogue. ``catalog`` must name one
+    table; a name matching several (e.g. a whole catalogue with sub-tables) is refused.
     """
     from astroquery.vizier import Vizier
 
@@ -246,6 +252,11 @@ def vizier_cone(
 
     def fetch():
         result = vizier.query_region(c, radius=u.Quantity(radius), catalog=catalog)
+        if len(result) > 1:  # never pick one silently
+            raise ValueError(
+                f"VizieR returned {len(result)} tables for {catalog!r} "
+                f"({', '.join(result.keys())}); ask for one of them"
+            )
         return result[0] if len(result) else Table()
 
     return _cached_table(

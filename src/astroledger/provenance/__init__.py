@@ -3,6 +3,7 @@
 from astroledger.provenance.core import (
     Activity,
     ProvenanceStore,
+    annotate,
     describe,
     environment,
     last_activity,
@@ -15,6 +16,7 @@ from astroledger.provenance.core import (
 __all__ = [
     "Activity",
     "ProvenanceStore",
+    "annotate",
     "describe",
     "environment",
     "last_activity",

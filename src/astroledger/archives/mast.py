@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
@@ -55,7 +56,8 @@ def bandpass_from_mast(instrument_name: str, filters: str) -> str | None:
         pupil_filters = [e for e in elements if e in NIRCAM_PUPIL_FILTER_PAIRS]
         if len(pupil_filters) == 1:
             return pupil_filters[0]
-    real = [e for e in elements if e not in _CLEAR]
+    # CLEAR positions, including the ACS wheels' CLEAR1L/CLEAR1S/CLEAR2L/CLEAR2S
+    real = [e for e in elements if e not in _CLEAR and not e.startswith("CLEAR")]
     return real[0] if len(real) == 1 else None
 
 
@@ -114,10 +116,15 @@ def search(
         criteria["radius"] = radius
     table = _observations().query_criteria(**criteria)
     table["bandpass"] = [
-        bandpass_from_mast(str(i), str(f)) or ""
+        bandpass_from_mast(_text(i), _text(f)) or ""
         for i, f in zip(table["instrument_name"], table["filters"], strict=True)
     ]
     return table[[c for c in SEARCH_COLUMNS if c in table.colnames]]
+
+
+def _text(value) -> str:
+    """A table cell as text; masked (unknown) cells are empty, never the string '--'."""
+    return "" if value is np.ma.masked or np.ma.is_masked(value) else str(value)
 
 
 def products(observations: Table, *, suffixes: tuple[str, ...] = ("I2D", "CAT")) -> Table:

@@ -98,13 +98,17 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
                 try:
                     return fn(*args, **kwargs)
                 except kinds as exc:
-                    raise ToolError(f"{type(exc).__name__}: {exc}") from exc
+                    # the client sees paths relative to the root, never the host's layout
+                    message = str(exc).replace(str(root), "<data root>")
+                    raise ToolError(f"{type(exc).__name__}: {message}") from exc
 
             return inner
 
         return wrap
 
-    local_errors = (DataRootError, ProductError, OSError, ValueError, KeyError)
+    from astropy.io.registry import IORegistryError
+
+    local_errors = (DataRootError, ProductError, OSError, ValueError, KeyError, IORegistryError)
     local = ToolAnnotations(read_only_hint=True, destructive_hint=False, open_world_hint=False)
     remote = ToolAnnotations(read_only_hint=True, destructive_hint=False, open_world_hint=True)
 
@@ -115,6 +119,8 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
         base = (root / subfolder).resolve()
         if base != root and root not in base.parents:
             raise DataRootError(f"{subfolder!r} is outside the data root")
+        if not base.is_dir():
+            raise DataRootError(f"{subfolder!r} is not a folder under the data root")
         files = sorted(
             p
             for p in base.rglob("*")
@@ -123,7 +129,7 @@ def build_server(root: str | Path, *, explain_source_limit: int = 50):
             and root in p.resolve().parents  # links pointing outside the root are not offered
         )
         return {
-            "root": str(root),
+            "root": root.name,  # the folder's name only: the host path is not disclosed
             "files": [
                 {"path": str(p.relative_to(root)), "size_mb": round(p.stat().st_size / 1e6, 2)}
                 for p in files

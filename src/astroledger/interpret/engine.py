@@ -6,19 +6,24 @@ strongest level the evidence supports (roadmap §14.3):
 - **L1**: position and flux, size compared with the measured PSF, coincidence with a Gaia DR3
   record (separation, chance probability).
 - **L2 star**: point-like **and** a Gaia DR3 counterpart whose proper motion is significant at
-  more than 5σ (rule R-STAR-PM). This is the only L2 rule in v1.
+  more than 5σ (rule R-STAR-PM).
+- **L2 galaxy** (with SIMBAD records): extended **and** coinciding with a record of a galaxy
+  type, chance probability ≤ 1% and reliability ≥ 0.9 (rule R-GAL-CAT).
+- **L2 nebula** (image level, with SIMBAD records): extended sources that are not galaxies, in
+  a band containing a diagnostic line, and a nebula record whose position is inside the image
+  (rule R-NEB-CAT).
 - **L3**, each with the test that would decide it:
   - point-like sources without such evidence;
   - extended sources (galaxy, nebular structure or blend);
   - extended emission in a band that contains a diagnostic line;
   - possible PSF artefacts near bright stars.
 
-  Galaxy and nebula identifications need catalogue records (NED, SIMBAD) and are left at L3
-  until those adapters exist.
+  Without SIMBAD records, galaxies and nebulae stay at L3.
 
 Identities are never generated: the only identifiers in the output are Gaia DR3 ``source_id``
-values copied from the input table, and the observer's target designation from the header,
-which is reported as a label, not as an identification.
+values and SIMBAD ``main_id`` / ``otype`` values copied from the input tables, and the
+observer's target designation from the header, which is reported as a label, not as an
+identification.
 """
 
 from __future__ import annotations
@@ -58,9 +63,9 @@ RULES = {
         "a chance-coincidence probability below 1%, is that catalogued galaxy."
     ),
     "R-NEB-CAT": (
-        "Extended emission in a band containing a diagnostic emission line, in a field that "
-        "contains a catalogued nebula, is attributed to that nebula; whether it is line or "
-        "continuum emission still needs a continuum-subtracted image."
+        "Extended emission in a band containing a diagnostic emission line, in an image whose "
+        "footprint contains the catalogue position of a nebula, is attributed to that nebula; "
+        "whether it is line or continuum emission still needs a continuum-subtracted image."
     ),
 }
 
@@ -262,6 +267,8 @@ def _galaxy_matches(catalog: QTable, records: QTable, scale_arcsec: float) -> di
         best = result.best[row]
         if best["b_index"] < 0 or best["p_chance"] > 0.01 or best["reliability"] < 0.9:
             continue
+        if "counterpart shared" in str(best["flags"]):  # two detections, one record: no identity
+            continue
         rec = galaxies[int(best["b_index"])]
         out[row] = (
             str(rec["main_id"]).strip(),
@@ -272,21 +279,43 @@ def _galaxy_matches(catalog: QTable, records: QTable, scale_arcsec: float) -> di
     return out
 
 
-def _nebula_statement(records: QTable | None, band, n_extended: int) -> Statement | None:
-    """Image-level L2: extended emission in a line band, in a field with a catalogued nebula."""
-    if records is None or n_extended == 0 or band.name not in LINES_IN_BAND:
+def _nebula_statement(
+    records: QTable | None, band, image: ImageProduct, extended: list[SkyCoord]
+) -> Statement | None:
+    """Image-level L2: extended emission in a line band, in a field with a catalogued nebula.
+
+    ``extended`` holds the positions of the extended sources not already identified as
+    galaxies. Only nebula records whose catalogue position lies inside the image footprint
+    count; the one nearest the extended emission is cited.
+    """
+    if records is None or not extended or band.name not in LINES_IN_BAND or image.wcs is None:
         return None
     nebulae = [r for r in records if _otype(r["otype"]) in SIMBAD_NEBULA_TYPES]
     if not nebulae:
         return None
-    rec = nebulae[0]
+    where = SkyCoord(
+        [u.Quantity(r["ra"], u.deg).value for r in nebulae] * u.deg,
+        [u.Quantity(r["dec"], u.deg).value for r in nebulae] * u.deg,
+    )
+    inside = np.asarray(image.wcs.footprint_contains(where), bool)
+    if not inside.any():
+        return None
+    emission = SkyCoord(extended)
+    centre = SkyCoord(*emission.cartesian.xyz.mean(axis=1), representation_type="cartesian")
+    centre = SkyCoord(centre.spherical.lon, centre.spherical.lat)
+    distance = np.where(inside, where.separation(centre).arcsec, np.inf)
+    best = int(np.argmin(distance))
+    rec = nebulae[best]
     name, otype = str(rec["main_id"]).strip(), _otype(rec["otype"])
     line, wavelength = LINES_IN_BAND[band.name]
+    n_extended = len(extended)
     return Statement(
         "IMG-5",
-        f"The extended emission ({n_extended} extended sources) lies in a field containing the "
-        f"catalogued nebula SIMBAD '{name}' (otype {otype}); {band.name} contains {line} "
-        f"({wavelength} micron). Line versus continuum emission is not yet separated.",
+        f"The extended emission ({n_extended} extended sources not identified as galaxies) lies "
+        f"in a field containing the catalogued nebula SIMBAD '{name}' (otype {otype}), whose "
+        f"catalogue position is in this image, {distance[best]:.0f} arcsec from the centre of "
+        f"that emission; {band.name} contains {line} ({wavelength} micron). Line versus "
+        "continuum emission is not yet separated.",
         Level.L2_INFERENCE,
         (
             EvidenceRef("measurement", "extended sources", str(n_extended)),
@@ -386,8 +415,13 @@ def explain(
         notes.append("Gaia DR3 not used: no star can be established (L2) without it")
     records = _catalogue_records(catalogue)
     galaxy_match = _galaxy_matches(catalog, records, scale) if records is not None else {}
-    if records is None:
+    if catalogue is None:
         notes.append("no SIMBAD records given: galaxies and nebulae stay hypotheses (L3)")
+    elif records is None:
+        notes.append(
+            "the SIMBAD table has no records for this field: galaxies and nebulae stay "
+            "hypotheses (L3)"
+        )
     if psf is None:
         notes.append(
             "sizes not assessed: "
@@ -400,6 +434,7 @@ def explain(
         )
 
     sources: dict[int, list[Statement]] = {}
+    nebular_candidates: list[SkyCoord] = []  # extended sources not identified as galaxies
     counts = {
         "L2_galaxy": 0,
         "L2_nebula": 0,
@@ -515,6 +550,8 @@ def explain(
                     )
                 )
                 pm_missing = bool(best["b_pm_missing"])
+                # one Gaia record matched by several detections identifies none of them
+                shared = "counterpart shared" in str(best["flags"])
                 if not pm_missing:
                     pmra, pmdec = _value(best["b_pmra"]), _value(best["b_pmdec"])
                     pm = float(np.hypot(pmra, pmdec))
@@ -528,7 +565,7 @@ def explain(
                     significance = pm / max(pm_err, 1e-9)
                 else:
                     significance = 0.0
-                if point_like and not pm_missing and significance > PM_SIGNIFICANCE:
+                if point_like and not pm_missing and not shared and significance > PM_SIGNIFICANCE:
                     counts["L2_star"] += 1
                     items.append(
                         Statement(
@@ -545,6 +582,17 @@ def explain(
                                 EvidenceRef("rule", "R-STAR-PM", RULES["R-STAR-PM"]),
                             ),
                             uncertainty=f"proper-motion significance {significance:.0f} sigma",
+                        )
+                    )
+                elif point_like and shared:
+                    items.append(
+                        Statement(
+                            f"{sid}-4",
+                            f"Possibly {gid}, but that record also matches another detection, "
+                            "so neither is identified with it.",
+                            Level.L3_HYPOTHESIS,
+                            test="deblend the detections or compare at higher resolution, then "
+                            "repeat the match",
                         )
                     )
                 elif point_like:
@@ -602,6 +650,7 @@ def explain(
                 )
             )
         elif extended:
+            nebular_candidates.append(SkyCoord(ra * u.deg, dec * u.deg))
             items.append(
                 Statement(
                     f"{sid}-5",
@@ -638,7 +687,7 @@ def explain(
         sources[label] = items
 
     image_statements = _image_statements(image, psf, len(catalog), scale)
-    nebula = _nebula_statement(records, band, counts["extended"])
+    nebula = _nebula_statement(records, band, image, nebular_candidates)
     if nebula is not None:
         image_statements.append(nebula)
         counts["L2_nebula"] = 1

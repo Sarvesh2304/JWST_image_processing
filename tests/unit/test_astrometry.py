@@ -197,3 +197,14 @@ def test_plot_without_image():
     g = _gaia(20)
     fig = plot_astrometric_qa(astrometric_qa(_observed(g), g, epoch=EPOCH), title="synthetic")
     assert len(fig.axes) == 1
+
+
+def test_one_star_gives_no_error_estimate():
+    g = _gaia(1)
+    qa = astrometric_qa(_observed(g), g, epoch=EPOCH)
+    assert qa.summary["n_used"] == 1
+    assert np.isnan(qa.summary["median_dra_err_mas"]) and np.isnan(
+        qa.summary["robust_sigma_dra_mas"]
+    )
+    assert "only 1 stars used" in " ".join(qa.notes)
+    plot_astrometric_qa(qa)

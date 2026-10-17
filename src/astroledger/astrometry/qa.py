@@ -207,7 +207,8 @@ def astrometric_qa(
         matches["x"], matches["y"] = x, y
         matches["x_gaia"], matches["y_gaia"] = image.wcs.world_to_pixel(matched_gaia)
         if image.mask is not None and len(matches):
-            grown = ndimage.binary_dilation(image.mask, iterations=mask_radius)
+            # pixels within mask_radius (Euclidean) of a masked pixel
+            grown = ndimage.distance_transform_edt(~np.asarray(image.mask, bool)) <= mask_radius
             ix = np.clip(np.rint(x).astype(int), 0, image.mask.shape[1] - 1)
             iy = np.clip(np.rint(y).astype(int), 0, image.mask.shape[0] - 1)
             near_mask = grown[iy, ix]
@@ -255,6 +256,8 @@ def astrometric_qa(
     if n_used:
         mx, sx = _robust(dx[used])
         my, sy = _robust(dy[used])
+        if n_used < 3:  # no meaningful scatter (one star gives a MAD of 0): unknown, not zero
+            sx = sy = float("nan")
         gaia_err = np.hypot(
             matches["gaia_ra_error"].to_value(u.mas), matches["gaia_dec_error"].to_value(u.mas)
         )
@@ -317,7 +320,8 @@ def plot_astrometric_qa(qa: AstrometricQA, *, title: str = "", arrow_mas: float 
     ax.set_facecolor("#fcfcfb")
     if s["n_used"]:
         cx, cy = s["median_dra_mas"], s["median_ddec_mas"]
-        half = max(6 * max(s["robust_sigma_dra_mas"], s["robust_sigma_ddec_mas"]), 15.0)
+        sigma = np.nan_to_num(max(s["robust_sigma_dra_mas"], s["robust_sigma_ddec_mas"]))
+        half = max(6 * sigma, 15.0)
         half = max(half, 1.2 * np.hypot(cx, cy))  # keep the origin (Gaia) in view
         cx, cy = cx / 2, cy / 2
     else:
