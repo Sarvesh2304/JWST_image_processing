@@ -101,15 +101,33 @@ def _sha256_array(array: np.ndarray) -> str:
     return digest.hexdigest()
 
 
+#: Header keywords recorded with every image entity when present: archive identifiers and
+#: calibration software / reference-file versions (JWST and HST).
+_ARCHIVE_KEYWORDS = (
+    "OBS_ID",
+    "ROOTNAME",
+    "ASN_ID",
+    "PROGRAM",
+    "PROPOSID",
+    "CAL_VER",
+    "CRDS_VER",
+    "CRDS_CTX",
+)
+
+
 def describe(value: Any) -> dict[str, Any]:
     """Describe a value as a provenance entity (data) or a parameter.
 
     Returns a dict with ``"kind"``: ``image``, ``file``, ``array``, ``table`` (entities, with
-    checksums) or ``param`` (with a JSON-safe ``value``).
+    checksums), ``collection`` (a list or tuple holding entities, described item by item) or
+    ``param`` (with a JSON-safe ``value``).
     """
+    from astropy import units as u
+
     from astroledger.core.product import ImageProduct
 
     if isinstance(value, ImageProduct):
+        uncertainty = getattr(value.uncertainty, "array", None)
         return {
             "kind": "image",
             "file": value.source.filename,
@@ -117,8 +135,22 @@ def describe(value: Any) -> dict[str, Any]:
             "sha256": value.source.sha256,
             "extension": list(value.source.extension),
             "bandpass": value.bandpass.key,
+            "unit": None if value.unit is None else str(value.unit),
+            # archive identifiers and calibration versions (CLAUDE.md rule 5), as the header says
+            "archive": {
+                key: _jsonable(value.keyword(key))
+                for key in _ARCHIVE_KEYWORDS
+                if value.keyword(key) not in (None, "")
+            },
             "data_sha256": _sha256_array(np.asarray(value.data)),
+            "mask_sha256": None if value.mask is None else _sha256_array(np.asarray(value.mask)),
+            "uncertainty_sha256": None if uncertainty is None else _sha256_array(uncertainty),
+            "dq_sha256": None if value.dq is None else _sha256_array(np.asarray(value.dq)),
         }
+    if isinstance(value, list | tuple) and value:
+        items = [describe(v) for v in value]
+        if any(item["kind"] != "param" for item in items):
+            return {"kind": "collection", "items": items}
     if isinstance(value, Path) or (
         isinstance(value, str) and len(value) < 4096 and _is_file(value)
     ):
@@ -132,12 +164,15 @@ def describe(value: Any) -> dict[str, Any]:
             }
         return {"kind": "param", "value": str(path)}
     if isinstance(value, np.ndarray) and value.ndim > 0 and value.size > 8:
-        return {
+        described = {
             "kind": "array",
             "shape": list(value.shape),
             "dtype": str(value.dtype),
-            "sha256": _sha256_array(value),
+            "sha256": _sha256_array(np.asarray(value)),
         }
+        if isinstance(value, u.Quantity):
+            described["unit"] = str(value.unit)
+        return described
     try:
         from astropy.table import Table
 
@@ -255,6 +290,7 @@ class ProvenanceStore:
     def add(self, activity: Activity) -> None:
         rows = [("input", k, v) for k, v in activity.inputs.items()]
         rows += [("output", str(i), v) for i, v in enumerate(activity.outputs)]
+        rows = [row for role, name, e in rows for row in _flatten(role, name, e)]
         with self._connect() as db:
             db.execute(
                 "INSERT INTO activities VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
@@ -305,6 +341,17 @@ class ProvenanceStore:
                 )
             ]
         return [self.get(i) for i in ids]
+
+
+def _flatten(role: str, name: str, entity: dict[str, Any]) -> list[tuple[str, str, dict]]:
+    """One entity row per item of a collection (``name[i]``), so each keeps its checksum."""
+    if entity.get("kind") != "collection":
+        return [(role, name, entity)]
+    return [
+        row
+        for i, item in enumerate(entity["items"])
+        for row in _flatten(role, f"{name}[{i}]", item)
+    ]
 
 
 @contextlib.contextmanager

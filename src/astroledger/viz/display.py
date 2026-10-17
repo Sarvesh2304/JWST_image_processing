@@ -211,10 +211,12 @@ def make_rgb(
         Per-channel display scaling (see :func:`display_norm`), applied after reprojection.
         ``stretch="lupton"`` instead applies one common asinh scaling to all three channels
         (Lupton et al. 2004, astropy ``make_lupton_rgb``), which preserves colour ratios; it
-        needs the three images in the same unit. Its softening is ``q``, and the bright end is
-        set by the ``percentile`` of the summed channels.
+        needs the three images in the same, known unit. Black is each channel's sky level
+        (3-sigma-clipped median); the brightest ``100 - percentile`` % of pixels are white.
     q : float
-        Lupton softening parameter (``stretch="lupton"`` only).
+        Lupton softening parameter (``stretch="lupton"`` only). For a grey pixel, an intensity
+        1/40 of the one shown white is drawn at about 5% of full scale for ``q=2`` and about
+        50% for ``q=8``: larger values lift faint structure, and the noise with it.
     """
     from reproject import reproject_interp
 
@@ -293,23 +295,21 @@ def _lupton(raw, channels, ref, *, percentile: float, q: float) -> RGBComposite:
     minimum = [
         float(sigma_clipped_stats(f, sigma=3.0)[1]) for f in (finite[2], finite[1], finite[0])
     ]
-    # mean intensity above the black points, as astropy's AsinhMapping computes it
-    intensity = (red + green + blue - sum(minimum)) / 3.0
-    bright = float(np.percentile(intensity[np.isfinite(intensity)], percentile))
-    bright = bright if bright > 0 else 1.0
-    # AsinhMapping maps a grey pixel of intensity I to 255 * 0.1 asinh(Q I / stretch) / asinh(0.1 Q)
-    # (its "stretch" is a slope, not the bright end): choose stretch so that I = bright is white
-    q_eff = q if abs(q) >= 2**-23 else 0.1  # astropy replaces Q = 0 by 0.1
-    stretch = q_eff * bright / np.sinh(np.arcsinh(0.1 * q_eff) / 0.1)
+    stretch, grey_white = _lupton_stretch(
+        [red - minimum[0], green - minimum[1], blue - minimum[2]],
+        valid=np.all([np.isfinite(p) for p in raw], axis=0),
+        white_fraction=(100.0 - percentile) / 100.0,
+        q=q,
+    )
     rgb8 = make_lupton_rgb(red, green, blue, minimum=minimum, stretch=stretch, Q=q)
     for channel, low in zip(reversed(channels), minimum, strict=True):  # red, green, blue
         # black point, and the value at which a grey pixel (all channels equal) becomes white
-        channel["interval"] = (low, low + bright)
+        channel["interval"] = (low, low + grey_white)
     method = (
         f"reprojected onto the grid of {ref.source.filename} with reproject_interp; one common "
         f"asinh scaling for all channels (Lupton et al. 2004, Q={q}); black at each "
-        f"channel's sky level (3-sigma-clipped median), white at the {percentile:g}th "
-        "percentile of the mean intensity; preserving colour ratios"
+        f"channel's sky level (3-sigma-clipped median), the brightest "
+        f"{100 - percentile:g}% of pixels white; preserving colour ratios"
     )
     return RGBComposite(
         rgb=rgb8.astype(float) / 255.0,
@@ -317,6 +317,39 @@ def _lupton(raw, channels, ref, *, percentile: float, q: float) -> RGBComposite:
         channels=tuple(reversed(channels)),
         method=method,
     )
+
+
+def _lupton_stretch(
+    planes: list[np.ndarray], *, valid: np.ndarray, white_fraction: float, q: float
+) -> tuple[float, float]:
+    """Stretch for astropy's ``AsinhMapping`` that makes ``white_fraction`` of pixels white.
+
+    ``AsinhMapping`` scales each channel ``c`` of a pixel by ``F(I) / I``, with ``I`` the mean
+    of the channels and ``F(I) = 255 * 0.1 * asinh(Q I / stretch) / asinh(0.1 Q)``; a pixel is
+    white when its brightest channel reaches 255. That fraction falls monotonically as the
+    stretch grows, so the stretch is found by bisection (in log). Returns the stretch and the
+    intensity at which a grey pixel (all channels equal) becomes white.
+    """
+    q_eff = q if abs(q) >= 2**-23 else 0.1  # astropy replaces Q = 0 by 0.1
+    intensity = (planes[0] + planes[1] + planes[2]) / 3.0
+    brightest = np.maximum(np.maximum(planes[0], planes[1]), planes[2])
+    use = valid & (intensity > 0)
+    intensity, brightest = intensity[use], brightest[use]
+    n_valid = int(np.count_nonzero(valid))
+    if intensity.size == 0 or n_valid == 0:
+        return 1.0, np.sinh(10 * np.arcsinh(0.1 * q_eff)) / q_eff
+    norm = 0.1 / np.arcsinh(0.1 * q_eff)
+
+    def white(stretch: float) -> float:
+        level = brightest * norm * np.arcsinh(q_eff * intensity / stretch) / intensity
+        return np.count_nonzero(level >= 1.0) / n_valid
+
+    lo, hi = np.log(intensity.max()) - 40.0, np.log(intensity.max()) + 40.0
+    for _ in range(100):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (mid, hi) if white(np.exp(mid)) > white_fraction else (lo, mid)
+    stretch = float(np.exp(hi))
+    return stretch, stretch * float(np.sinh(10 * np.arcsinh(0.1 * q_eff))) / q_eff
 
 
 def show_rgb(composite: RGBComposite, *, title: str = "", caption: str = "") -> plt.Figure:

@@ -285,10 +285,11 @@ def astrometric_qa(
     if n_used < 5:
         notes.append(f"only {n_used} stars used: statistics are indicative only")
     if n_used >= min_fit:
-        centre = SkyCoord(matches["ra_gaia"][used], matches["dec_gaia"][used])
-        frame = SkyCoord(
-            np.median(centre.ra.deg) * u.deg, np.median(centre.dec.deg) * u.deg
-        ).skyoffset_frame()
+        stars = SkyCoord(matches["ra_gaia"][used], matches["dec_gaia"][used])
+        # centre on the mean direction (unit vectors), which is correct across RA = 0/360
+        xyz = stars.cartesian.xyz.mean(axis=1)
+        frame = SkyCoord(*xyz, representation_type="cartesian").spherical
+        frame = SkyCoord(frame.lon, frame.lat).skyoffset_frame()
         offsets = SkyCoord(matches["ra_gaia"], matches["dec_gaia"]).transform_to(frame)
         xi = offsets.lon.to_value(u.arcsec)
         eta = offsets.lat.to_value(u.arcsec)

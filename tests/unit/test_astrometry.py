@@ -142,6 +142,26 @@ def test_qa_fit_recovers_rotation():
     assert abs(qa.fit["scale_ppm"]) < 4 * qa.fit["scale_err_ppm"] + 1
 
 
+def test_qa_fit_across_ra_zero(monkeypatch):
+    """A field straddling RA = 0/360: the tangent point must not jump to RA = 180."""
+    import sys
+
+    monkeypatch.setattr(sys.modules[__name__], "CENTRE", SkyCoord(0.0 * u.deg, 30.0 * u.deg))
+    from astropy.coordinates import Longitude
+    from astropy.table import vstack
+
+    half = _gaia(30, radius_arcsec=120)
+    half = half[half["ra"] < 180 * u.deg]  # east of RA = 0 ...
+    mirror = half.copy()
+    mirror["ra"] = Longitude((360.0 - half["ra"].to_value(u.deg)) * u.deg)  # ... mirrored west
+    mirror["source_id"] += 10_000
+    g = vstack([half, mirror])  # exactly half the stars on each side: the median RA is 180
+    qa = astrometric_qa(
+        _observed(g, offset=(0, 0), rotation_arcsec=20.0, noise=0.5), g, epoch=EPOCH
+    )
+    assert qa.fit["rotation_arcsec"] == pytest.approx(20.0, abs=4 * qa.fit["rotation_err_arcsec"])
+
+
 def test_qa_excludes_stars_without_proper_motion():
     g = _gaia(20)
     cat = _observed(g)
@@ -149,6 +169,22 @@ def test_qa_excludes_stars_without_proper_motion():
     qa = astrometric_qa(cat, g, epoch=EPOCH)
     assert qa.summary["n_no_pm"] == 5
     assert not np.any(qa.matches["used"][qa.matches["pm_missing"]])
+
+
+def test_masked_proper_motions_are_missing_not_fill_values():
+    """Gaia tables from ECSV/astroquery mark two-parameter solutions as masked, not NaN."""
+    from astropy.table import Table
+
+    g = _gaia(20)
+    cat = _observed(g)
+    masked = Table(g, masked=True)  # plain columns with units, as read from ECSV
+    for name in ("pmra", "pmdec", "pmra_error", "pmdec_error"):
+        masked[name].mask[:3] = True
+    moved = propagate(masked, EPOCH)
+    assert moved["pm_missing"][:3].all() and not moved["pm_missing"][3:].any()
+    assert np.isnan(moved["pmra"][:3]).all()
+    qa = astrometric_qa(cat, masked, epoch=EPOCH)
+    assert qa.summary["n_no_pm"] == 3
 
 
 def test_qa_needs_epoch_or_image():

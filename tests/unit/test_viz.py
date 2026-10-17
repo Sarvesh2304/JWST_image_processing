@@ -113,7 +113,7 @@ def test_lupton_composite_uses_common_scaling_and_leaves_data_unchanged(tmp_path
         for seed, band in enumerate(("F470N", "F405N", "F356W"), start=1)
     ]
     digests = [_digest(i) for i in images]
-    comp = make_rgb(images, stretch="lupton", q=8)
+    comp = make_rgb(images, stretch="lupton")
     assert comp.rgb.shape == (*ff.SHAPE, 3)
     assert 0 <= np.nanmin(comp.rgb) and np.nanmax(comp.rgb) <= 1
     assert "Lupton" in comp.method
@@ -154,7 +154,7 @@ def test_lupton_white_point_is_the_stated_percentile(tmp_path):
     finite = images[0].data[np.isfinite(images[0].data)]
     sky = sigma_clipped_stats(finite, sigma=3.0)[1]
     assert low == pytest.approx(sky)
-    assert high == pytest.approx(np.percentile(finite, 99), rel=0.05)
+    assert 0.008 < np.mean(finite >= high) < 0.012  # grey pixels: white from the 99th percentile
 
 
 def test_lupton_refuses_unknown_units(tmp_path):

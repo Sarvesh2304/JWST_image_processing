@@ -240,7 +240,7 @@ def crossmatch(
 
     rho_pair = rho[ia]
     s2 = (sigma.to_value(u.arcsec)) ** 2
-    lr = np.exp(-0.5 * (sep.value**2) / s2) / (2 * np.pi * s2) / rho_pair
+    f_over_rho = np.exp(-0.5 * (sep.value**2) / s2) / (2 * np.pi * s2) / rho_pair
     p_chance = 1 - np.exp(-np.pi * sep.value**2 * rho_pair)
     radius = k * sigma
 
@@ -257,6 +257,9 @@ def crossmatch(
         q = float(prior) if prior is not None else 1.0
         q_method = "given"
 
+    # Sutherland & Saunders (1992): LR = q f / n, where q (no magnitude term here) integrates to
+    # Q; then R_j = LR_j / (sum LR + 1 - Q)
+    lr = q * f_over_rho
     reliability = np.zeros(len(ia))
     rank = np.zeros(len(ia), int)
     for i in np.unique(ia):
@@ -294,11 +297,21 @@ def crossmatch(
     best["evidence_level"][rows] = "L1 positional coincidence"
     unmatched = np.asarray(best["b_index"]) < 0
     for name in copy_columns:  # verbatim from B; masked where there is no counterpart
-        column = b[name][np.maximum(np.asarray(best["b_index"]), 0)]
-        if isinstance(column, u.Quantity):
-            best[f"b_{name}"] = Masked(column, mask=unmatched)
+        source = b[name]
+        if len(b) == 0:  # nothing to copy: every row is unmatched
+            fill = np.zeros(len(a), dtype=np.asarray(source).dtype)
+            column = fill * source.unit if isinstance(source, u.Quantity) else fill
+            own_mask = np.zeros(len(a), bool)
         else:
-            best[f"b_{name}"] = MaskedColumn(np.asarray(column), mask=unmatched)
+            take = np.maximum(np.asarray(best["b_index"]), 0)
+            column = source[take]
+            own_mask = np.ma.getmaskarray(source)[take]  # B's own unknowns stay unknown
+            if isinstance(column, u.Quantity) and hasattr(column, "unmasked"):
+                column = column.unmasked
+        if isinstance(column, u.Quantity):
+            best[f"b_{name}"] = Masked(column, mask=unmatched | own_mask)
+        else:
+            best[f"b_{name}"] = MaskedColumn(np.ma.getdata(column), mask=unmatched | own_mask)
 
     conflicts = []
     flags: list[list[str]] = [[] for _ in range(len(a))]

@@ -226,3 +226,56 @@ def test_registration_needs_enough_pairs():
 def _coords_table(table, *, dra, ddec):
     c = SkyCoord(table["ra"], table["dec"]).spherical_offsets_by(dra * u.arcsec, ddec * u.arcsec)
     return QTable({"ra": c.ra.to(u.deg), "dec": c.dec.to(u.deg)})
+
+
+def test_reliability_is_calibrated_when_few_sources_have_counterparts():
+    """Q = 0.2 in a crowded field: reliabilities must include the prior (LR = Q f / rho)."""
+    rng = np.random.default_rng(3)
+    half, margin, n_a, q, rho, sig = 200.0, 30.0, 3000, 0.2, 0.01, 0.5
+    n_b = rng.poisson(rho * (2 * half) ** 2)
+    xb, yb = rng.uniform(-half, half, (2, n_b))
+    has = rng.uniform(size=n_a) < q
+    inner = np.flatnonzero((np.abs(xb) < half - margin) & (np.abs(yb) < half - margin))
+    pick = rng.choice(inner, has.sum(), replace=False)
+    xa, ya = rng.uniform(-half + margin, half - margin, (2, n_a))
+    xa[has] = xb[pick] + rng.normal(0, np.hypot(sig, sig), has.sum())
+    ya[has] = yb[pick] + rng.normal(0, np.hypot(sig, sig), has.sum())
+    truth = np.full(n_a, -1)
+    truth[has] = pick
+    m = crossmatch(
+        _table(xa, ya), _table(xb, yb), sigma_a=sig * u.arcsec, sigma_b=sig * u.arcsec, k=3.0
+    )
+    matched = np.asarray(m.best["b_index"]) >= 0
+    rel = np.asarray(m.best["reliability"])[matched]
+    correct = (np.asarray(m.best["b_index"]) == truth)[matched]
+    sd = np.sqrt(correct.mean() * (1 - correct.mean()) / matched.sum())
+    assert abs(rel.mean() - correct.mean()) < 3 * sd + 0.01  # without Q in LR: 0.85 vs 0.63
+
+
+def test_copied_columns_keep_the_catalogues_own_mask():
+    from astropy.table import MaskedColumn
+    from astropy.utils.masked import Masked
+
+    a = _table(np.array([0.0, 50.0]), np.array([0.0, 0.0]))
+    b = _table(np.array([0.0, 50.0]), np.array([0.0, 0.0]))
+    b["otype"] = MaskedColumn(["G", "PN"], mask=[True, False])
+    b["vmag"] = Masked([99.0, 12.0] * u.mag, mask=[True, False])
+    m = crossmatch(
+        a, b, sigma_a=0.1 * u.arcsec, sigma_b=0.1 * u.arcsec, copy_columns=("otype", "vmag")
+    )
+    assert list(m.best["b_index"]) == [0, 1]
+    assert np.ma.getmaskarray(m.best["b_otype"]).tolist() == [True, False]
+    assert m.best["b_otype"][1] == "PN"
+    assert np.ma.getmaskarray(m.best["b_vmag"]).tolist() == [True, False]
+
+
+def test_copy_columns_from_an_empty_catalogue():
+    a = _table(np.array([0.0]), np.array([0.0]))
+    b = _table(np.array([1.0]), np.array([0.0]))[:0]
+    b["name"] = np.array([], dtype="<U8")
+    b["mag"] = np.array([]) * u.mag
+    m = crossmatch(
+        a, b, sigma_a=0.1 * u.arcsec, sigma_b=0.1 * u.arcsec, copy_columns=("name", "mag")
+    )
+    assert np.ma.getmaskarray(m.best["b_name"]).tolist() == [True]
+    assert np.ma.getmaskarray(m.best["b_mag"]).tolist() == [True]

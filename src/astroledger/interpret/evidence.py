@@ -71,6 +71,10 @@ class Statement:
     test: str | None = None
 
     def __post_init__(self) -> None:
+        try:  # a plain 1/2/3 (or a Level) becomes a Level, so the checks below always apply
+            object.__setattr__(self, "level", Level(self.level))
+        except ValueError:
+            raise EvidenceError(f"{self.id}: unknown evidence level {self.level!r}") from None
         kinds = {e.kind for e in self.evidence}
         if self.level is Level.L1_OBSERVATION and not kinds & OBSERVATION_KINDS:
             raise EvidenceError(f"{self.id}: L1 needs a measurement or metadata entity")

@@ -157,6 +157,14 @@ def test_levels_require_their_evidence():
         Statement("f", "hypothesis without a test", Level.L3_HYPOTHESIS)
     with pytest.raises(EvidenceError):
         EvidenceRef("hunch", "x")
+    # plain integers get the same checks (and become a Level)
+    with pytest.raises(EvidenceError):
+        Statement("g", "A galaxy.", 2)
+    with pytest.raises(EvidenceError):
+        Statement("h", "claim", 3)
+    with pytest.raises(EvidenceError):
+        Statement("i", "claim", 4, test="t")
+    assert Statement("j", "measured", 1, (measured,)).level is Level.L1_OBSERVATION
 
 
 def test_downgrade_only():
